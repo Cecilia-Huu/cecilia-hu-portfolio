@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>胡敏雪 (Cecilia Hu) - Product Manager Portfolio</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React & ReactDOM CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel CDN (浏览器解析 JSX) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+      scroll-padding-top: 104px;
+    }
+    .portfolio-section {
+      scroll-snap-align: start;
+      scroll-margin-top: 104px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(4deg); }
+    }
+    @keyframes floatReverse {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(14px) rotate(-5deg); }
+    }
+    .animate-float-1 { animation: floatSlow 6s ease-in-out infinite; }
+    .animate-float-2 { animation: floatReverse 7s ease-in-out infinite 1s; }
+    .animate-float-3 { animation: floatSlow 5.5s ease-in-out infinite 0.5s; }
+
+    /* Home: tactile 3D objects + personal-fact interaction */
+    .home-object-button {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .home-object-motion {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 260ms cubic-bezier(.2,.75,.25,1), filter 260ms ease;
+      filter: saturate(.98);
+      will-change: transform;
+    }
+    .home-object-button:hover .home-object-motion,
+    .home-object-button:focus-visible .home-object-motion,
+    .home-object-button[data-active="true"] .home-object-motion {
+      transform: translateY(-6px) scale(1.05) rotate(var(--fact-hover-rotate, 1deg));
+      filter: saturate(1.06) brightness(1.015);
+    }
+    .home-object-button:focus-visible {
+      outline: 3px solid rgba(255, 85, 0, .25);
+      outline-offset: 8px;
+      border-radius: 28px;
+    }
+    .home-object-floor-shadow {
+      position: absolute;
+      left: 14%;
+      right: 14%;
+      bottom: -8%;
+      height: 18%;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, .19);
+      filter: blur(10px);
+      transform: scaleX(.88);
+      transition: opacity 260ms ease, transform 260ms ease, filter 260ms ease;
+      opacity: .52;
+    }
+    .home-object-button:hover .home-object-floor-shadow,
+    .home-object-button:focus-visible .home-object-floor-shadow,
+    .home-object-button[data-active="true"] .home-object-floor-shadow {
+      opacity: .7;
+      transform: scaleX(1.03) translateY(5px);
+      filter: blur(12px);
+    }
+    .home-sphere-3d {
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 27% 20%, rgba(255,255,255,.96) 0 5%, rgba(255,255,255,.46) 9%, transparent 24%),
+        radial-gradient(circle at 34% 30%, #d8c8ff 0%, #a67cf0 31%, #7953df 58%, #5130b9 78%, #2f267f 100%);
+      box-shadow:
+        inset 13px 12px 23px rgba(255,255,255,.38),
+        inset -18px -22px 30px rgba(40,22,110,.30),
+        0 22px 34px rgba(91,55,190,.24);
+    }
+    .home-cylinder-3d {
+      position: relative;
+      width: 74%;
+      height: 92%;
+      margin: 4% auto 0;
+      border-radius: 30px 30px 34px 34px;
+      transform: rotate(-12deg);
+      background:
+        linear-gradient(90deg, #1f67bd 0%, #3e91e7 24%, #70b6f3 48%, #2f84db 72%, #15549d 100%);
+      box-shadow:
+        inset 12px 0 18px rgba(255,255,255,.25),
+        inset -14px -8px 20px rgba(6,45,105,.31),
+        0 22px 28px rgba(37,99,235,.24);
+    }
+    .home-cylinder-3d::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -7%;
+      height: 23%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 38% 28%, #b9e3ff 0%, #73b9ef 38%, #348ad1 72%, #175693 100%);
+      box-shadow: inset 0 -6px 10px rgba(15,68,128,.25), inset 6px 5px 8px rgba(255,255,255,.34);
+    }
+    .home-cylinder-3d::after {
+      content: '';
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 8%;
+      height: 55%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,255,255,.24), transparent);
+      filter: blur(3px);
+    }
+    .home-cube-3d {
+      position: relative;
+      width: 82%;
+      height: 82%;
+      margin: 9%;
+      border-radius: 27%;
+      transform: rotate(var(--cube-rotate, 12deg)) skewY(-2deg);
+      background: var(--cube-background);
+      box-shadow:
+        inset 11px 9px 18px rgba(255,255,255,.36),
+        inset -17px -18px 25px rgba(15,23,42,.16),
+        0 22px 28px var(--cube-shadow);
+      overflow: hidden;
+    }
+    .home-cube-3d::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,.44) 0%, transparent 36%, rgba(15,23,42,.13) 100%);
+      clip-path: polygon(0 0, 100% 0, 82% 27%, 18% 30%);
+    }
+    .home-cube-3d::after {
+      content: '';
+      position: absolute;
+      width: 34%;
+      height: 70%;
+      right: -4%;
+      top: 19%;
+      border-radius: 50%;
+      background: rgba(15,23,42,.11);
+      filter: blur(10px);
+      transform: rotate(12deg);
+    }
+    .home-fact-card {
+      transition: opacity 220ms ease-out, transform 220ms ease-out;
+      pointer-events: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .animate-float-1, .animate-float-2, .animate-float-3 { animation: none; }
+      .home-object-motion, .home-object-floor-shadow, .home-fact-card { transition-duration: 1ms; }
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 font-sans antialiased selection:bg-teal-100 overflow-x-hidden min-h-screen flex flex-col justify-between">
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    function App() {
+      const [activeTab, setActiveTab] = useState('HOME');
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const navRef = useRef(null);
+      const navButtonRefs = useRef({});
+      const sectionVisibilityRef = useRef({});
+      const [activePill, setActivePill] = useState({ left: 0, width: 0, opacity: 0 });
+
+      const navItems = [
+        { id: 'HOME', label: 'Home', sectionId: 'home' },
+        { id: 'EDUCATION', label: 'Education', sectionId: 'education' },
+        { id: 'EXPERIENCE', label: 'Experience', sectionId: 'experience' },
+        { id: 'PROJECTS', label: 'Projects', sectionId: 'projects' },
+        { id: 'SKILLS', label: 'Skills', sectionId: 'skills' },
+      ];
+
+      const updateActivePill = () => {
+        const nav = navRef.current;
+        const button = navButtonRefs.current[activeTab];
+        if (!nav || !button) return;
+        setActivePill({
+          left: button.offsetLeft,
+          width: button.offsetWidth,
+          opacity: 1,
+        });
+      };
+
+      useEffect(() => {
+        updateActivePill();
+        const observer = typeof ResizeObserver !== 'undefined'
+          ? new ResizeObserver(updateActivePill)
+          : null;
+        if (observer && navRef.current) observer.observe(navRef.current);
+        window.addEventListener('resize', updateActivePill);
+        return () => {
+          if (observer) observer.disconnect();
+          window.removeEventListener('resize', updateActivePill);
+        };
+      }, [activeTab]);
+
+      useEffect(() => {
+        const sections = navItems
+          .map((item) => document.getElementById(item.sectionId))
+          .filter(Boolean);
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            sectionVisibilityRef.current[entry.target.id] = entry.isIntersecting
+              ? entry.intersectionRatio
+              : 0;
+          });
+
+          const visibleItem = navItems.reduce((best, item) => {
+            const ratio = sectionVisibilityRef.current[item.sectionId] || 0;
+            return ratio > best.ratio ? { id: item.id, ratio } : best;
+          }, { id: activeTab, ratio: 0 });
+
+          if (visibleItem.ratio > 0) {
+            setActiveTab((current) => current === visibleItem.id ? current : visibleItem.id);
+            const visibleSection = navItems.find((item) => item.id === visibleItem.id);
+            const nextHash = visibleSection ? '#' + visibleSection.sectionId : '';
+            if (nextHash && window.location.hash !== nextHash) {
+              window.history.replaceState(null, '', nextHash);
+            }
+          }
+        }, {
+          rootMargin: '-18% 0px -52% 0px',
+          threshold: [0, 0.1, 0.25, 0.5, 0.75],
+        });
+
+        sections.forEach((section) => observer.observe(section));
+
+        const initialHash = window.location.hash.replace('#', '').toLowerCase();
+        if (navItems.some((item) => item.sectionId === initialHash)) {
+          window.requestAnimationFrame(() => {
+            document.getElementById(initialHash)?.scrollIntoView({ behavior: 'auto', block: 'start' });
+          });
+        }
+
+        return () => observer.disconnect();
+      }, []);
+
+      const handleNavigate = (item) => {
+        const target = document.getElementById(item.sectionId);
+        if (!target) return;
+        setActiveTab(item.id);
+        window.history.replaceState(null, '', '#' + item.sectionId);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col justify-between relative">
+          
+          {/* 1. 顶部悬浮胶囊导航 */}
+          <header className="fixed top-5 left-0 right-0 z-40 flex justify-center px-4">
+            <div className="bg-white/90 backdrop-blur-xl border border-slate-200/80 rounded-full px-5 py-2.5 shadow-xl shadow-slate-100 flex items-center space-x-6">
+              
+              <div 
+                className="font-bold text-xs tracking-wider uppercase text-slate-900 cursor-pointer flex items-center space-x-2"
+                onClick={() => handleNavigate(navItems[0])}
+              >
+                <div className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[10px]">胡</div>
+                <span>胡敏雪 (CECILIA HU)</span>
+              </div>
+
+              <nav ref={navRef} aria-label="Portfolio sections" className="relative flex items-center space-x-1 sm:space-x-2 text-xs font-medium text-slate-600">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-0 top-0 rounded-full bg-[#FF5500] shadow-md transition-all duration-[260ms] ease-out"
+                  style={{ left: activePill.left, width: activePill.width, opacity: activePill.opacity }}
+                />
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    ref={(node) => { navButtonRefs.current[item.id] = node; }}
+                    onClick={() => handleNavigate(item)}
+                    aria-current={activeTab === item.id ? 'page' : undefined}
+                    className={`relative z-10 px-3.5 py-1.5 rounded-full transition-colors duration-200 ${
+                      activeTab === item.id
+                        ? 'text-white font-bold'
+                        : 'hover:text-slate-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+
+              <ContactMenu />
+            </div>
+          </header>
+
+          {/* 2. 单页连续浏览：Navbar 快捷跳转 + 自然纵向滚动 */}
+          <main>
+            <section id="home" data-section="HOME" className="portfolio-section min-h-screen pt-28 pb-16 flex items-center">
+              <div className="w-full">
+              <HomeLarryStyle 
+                onOpenMatcher={() => setIsModalOpen(true)} 
+              />
+              </div>
+            </section>
+
+            <section id="education" data-section="EDUCATION" className="portfolio-section min-h-[calc(100vh-5rem)] py-20 flex items-center">
+              <div className="w-full"><EducationSection /></div>
+            </section>
+
+            <section id="experience" data-section="EXPERIENCE" className="portfolio-section py-24">
+              <ExperienceSection />
+            </section>
+
+            <section id="projects" data-section="PROJECTS" className="portfolio-section py-24">
+              <ProjectsSection />
+            </section>
+
+            <section id="skills" data-section="SKILLS" className="portfolio-section min-h-[calc(100vh-5rem)] scroll-mt-0 pt-16 pb-12 flex items-center">
+              <div className="w-full"><SkillsSection /></div>
+            </section>
+          </main>
+
+          {/* 3. 页脚 */}
+          <footer className="py-6 border-t border-slate-100 text-center text-xs text-slate-400 font-mono">
+            © 2026 CECILIA HU (胡敏雪) · Product Manager Portfolio
+          </footer>
+
+          {/* 4. AI 岗位匹配器 Modal 弹窗 */}
+          {isModalOpen && <AIMatcherModal onClose={() => setIsModalOpen(false)} />}
+
+        </div>
+      );
+    }
+
+    function ContactMenu() {
+      const email = 'hmxdxyx@163.com';
+      const wechatId = 'cecilia1205hmx';
+      const [isOpen, setIsOpen] = useState(false);
+      const [copiedItem, setCopiedItem] = useState(null);
+      const menuRef = useRef(null);
+      const copyTimerRef = useRef(null);
+
+      useEffect(() => {
+        const handleOutsideClick = (event) => {
+          if (menuRef.current && !menuRef.current.contains(event.target)) setIsOpen(false);
+        };
+        const handleEscape = (event) => {
+          if (event.key === 'Escape') setIsOpen(false);
+        };
+        document.addEventListener('mousedown', handleOutsideClick);
+        document.addEventListener('keydown', handleEscape);
+        return () => {
+          document.removeEventListener('mousedown', handleOutsideClick);
+          document.removeEventListener('keydown', handleEscape);
+          if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+        };
+      }, []);
+
+      const copyContact = async (value, item) => {
+        try {
+          await navigator.clipboard.writeText(value);
+        } catch (error) {
+          const input = document.createElement('textarea');
+          input.value = value;
+          input.style.position = 'fixed';
+          input.style.opacity = '0';
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          document.body.removeChild(input);
+        }
+        setCopiedItem(item);
+        if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+        copyTimerRef.current = window.setTimeout(() => setCopiedItem(null), 1800);
+      };
+
+      return (
+        <div ref={menuRef} className="relative">
+          <button
+            type="button"
+            aria-expanded={isOpen}
+            aria-controls="contact-popover"
+            onClick={() => setIsOpen(!isOpen)}
+            className="group flex items-center gap-1.5 rounded-full bg-[#FF5500] px-4 py-1.5 text-xs font-bold text-white shadow-[0_8px_20px_rgba(255,85,0,.22)] transition-all duration-200 hover:px-5 hover:bg-[#E94E00] hover:shadow-[0_10px_24px_rgba(255,85,0,.30)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-2"
+          >
+            Let’s Talk
+            <span className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true">↗</span>
+          </button>
+
+          {isOpen && (
+            <div id="contact-popover" role="dialog" aria-label="Contact Cecilia" className="absolute right-0 top-full z-50 mt-2.5 w-[300px] max-w-[calc(100vw-1.5rem)] rounded-3xl border border-slate-200/50 bg-white/[0.92] p-4 shadow-[0_20px_48px_rgba(15,23,42,.10)] backdrop-blur-md">
+              <div className="absolute -top-1.5 right-7 h-3 w-3 rotate-45 border-l border-t border-slate-200/50 bg-white/[0.92]" />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-base font-extrabold text-slate-900">Say hi! <span aria-hidden="true">👋</span></p>
+                  <p className="mt-0.5 text-[10px] text-slate-400">I’d love to hear from you.</p>
+                </div>
+                <button type="button" onClick={() => setIsOpen(false)} aria-label="关闭联系卡片" className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-[10px] text-slate-500 transition-colors hover:bg-slate-200">✕</button>
+              </div>
+
+              <div className="mt-4 space-y-2">
+                <div className="flex h-11 items-center gap-2.5 rounded-xl px-2.5 transition-colors duration-200 hover:bg-slate-50">
+                  <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg border border-slate-200 text-[12px] text-slate-600" aria-hidden="true">✉</span>
+                  <a href={'mailto:' + email} className="min-w-0 flex-1 truncate text-[11px] font-semibold text-slate-700 transition-colors hover:text-[#FF5500]">{email}</a>
+                  <button type="button" aria-label="Copy email address" onClick={() => copyContact(email, 'email')} className="min-w-[66px] rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[9px] font-bold text-slate-600 transition-all hover:border-orange-200 hover:text-[#FF5500] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" aria-live="polite">
+                    {copiedItem === 'email' ? 'Copied! ✓' : 'Copy'}
+                  </button>
+                </div>
+
+                <a aria-label="Open Cecilia's LinkedIn" href="https://www.linkedin.com/in/minxue-hu-986b5a38b" target="_blank" rel="noopener noreferrer" className="flex h-11 items-center gap-2.5 rounded-xl px-2.5 text-[11px] font-semibold text-slate-700 transition-colors duration-200 hover:bg-slate-50 hover:text-[#0A66C2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300">
+                  <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg border border-slate-200 font-serif text-[10px] font-bold text-slate-600" aria-hidden="true">in</span>
+                  <span className="flex-1">LinkedIn</span>
+                  <span className="pr-2 text-slate-400" aria-hidden="true">↗</span>
+                </a>
+
+                <div className="flex h-11 items-center gap-2.5 rounded-xl px-2.5 transition-colors duration-200 hover:bg-white/55">
+                  <img src="assets/wechat-contact-icon.png" alt="" aria-hidden="true" className="h-7 w-7 flex-none object-contain" />
+                  <span className="min-w-0 flex-1 truncate text-[11px] font-semibold text-slate-700">{wechatId}</span>
+                  <button type="button" aria-label="Copy WeChat ID" onClick={() => copyContact(wechatId, 'wechat')} className="min-w-[66px] rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[9px] font-bold text-slate-600 transition-all hover:border-orange-200 hover:text-[#FF5500] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" aria-live="polite">
+                    {copiedItem === 'wechat' ? 'Copied! ✓' : 'Copy'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* =========================================================================
+       01. HOME SECTION (Larry 风格，去除了图片上面的文字)
+       ========================================================================= */
+    const HOME_FACTS = [
+      {
+        id: 'drive', category: 'DRIVE', fact: '同济考研初试第一', accent: '#FF6A18', shape: 'pyramid',
+        position: 'top-4 left-[6%]', size: 'w-20 h-20 sm:w-28 sm:h-28', float: 'animate-float-1',
+        cardPosition: 'left-[74%] top-[82%]', hoverRotate: '-1.5deg',
+      },
+      {
+        id: 'consistency', category: 'CONSISTENCY', fact: '连续三年一等奖学金', accent: '#7C5CE0', shape: 'sphere',
+        position: 'top-[40%] left-[2%] sm:left-[6%]', size: 'w-20 h-20 sm:w-32 sm:h-32', float: 'animate-float-2',
+        cardPosition: 'left-[88%] top-[15%]', hoverRotate: '1deg',
+      },
+      {
+        id: 'personality', category: 'PERSONALITY', fact: '工作 ENTJ · 生活 ENTP', accent: '#2F83DA', shape: 'cylinder',
+        position: 'bottom-6 left-[8%] sm:left-[12%]', size: 'w-20 h-28 sm:w-28 sm:h-36', float: 'animate-float-3',
+        cardPosition: 'left-[20%] bottom-[10%]', hoverRotate: '-1deg',
+      },
+      {
+        id: 'global', category: 'GLOBAL', fact: '去过 20+ 个国家', accent: '#139F95', shape: 'star',
+        position: 'top-4 right-[6%]', size: 'w-20 h-20 sm:w-28 sm:h-28', float: 'animate-float-2',
+        cardPosition: 'right-[-30%] top-[80%]', hoverRotate: '1.5deg',
+      },
+      {
+        id: 'academics', category: 'ACADEMICS', fact: '专业 Top 5%', accent: '#22A96A', shape: 'green-cube',
+        position: 'top-[42%] right-[3%] sm:right-[7%]', size: 'w-20 h-20 sm:w-24 sm:h-24', float: 'animate-float-1',
+        cardPosition: 'right-[-58%] top-[104%]', hoverRotate: '-1deg',
+      },
+      {
+        id: 'research', category: 'RESEARCH', fact: '连续两年入选全球政治学顶会', accent: '#F3AD36', shape: 'yellow-cube',
+        position: 'bottom-8 right-[10%] sm:right-[14%]', size: 'w-20 h-20 sm:w-28 sm:h-28', float: 'animate-float-3',
+        cardPosition: 'right-[-38%] bottom-[104%]', hoverRotate: '1deg',
+      },
+    ];
+
+    function HomeFactShape({ shape }) {
+      if (shape === 'pyramid') {
+        return (
+          <svg viewBox="0 0 120 110" className="relative z-10 h-full w-full overflow-visible" aria-hidden="true">
+            <defs>
+              <linearGradient id="home-pyramid-left" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stopColor="#FFD08B" />
+                <stop offset="0.48" stopColor="#FF9B32" />
+                <stop offset="1" stopColor="#E96220" />
+              </linearGradient>
+              <linearGradient id="home-pyramid-right" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stopColor="#FFB13D" />
+                <stop offset="0.55" stopColor="#FF6B12" />
+                <stop offset="1" stopColor="#D9430B" />
+              </linearGradient>
+              <linearGradient id="home-pyramid-base" x1="0" y1="0" x2="0.8" y2="1">
+                <stop offset="0" stopColor="#FF7C24" />
+                <stop offset="1" stopColor="#BC350F" />
+              </linearGradient>
+            </defs>
+            <path d="M60 7 L12 86 L59 72 Z" fill="url(#home-pyramid-left)" />
+            <path d="M60 7 L108 94 L59 72 Z" fill="url(#home-pyramid-right)" />
+            <path d="M12 86 L59 72 L108 94 L48 105 Z" fill="url(#home-pyramid-base)" />
+            <path d="M60 8 L59 72" stroke="rgba(255,255,255,.58)" strokeWidth="2" />
+            <path d="M23 80 C33 55 45 31 58 13" stroke="rgba(255,255,255,.22)" strokeWidth="5" strokeLinecap="round" fill="none" />
+          </svg>
+        );
+      }
+
+      if (shape === 'sphere') return <div className="home-sphere-3d relative z-10 h-full w-full" aria-hidden="true" />;
+      if (shape === 'cylinder') return <div className="home-cylinder-3d relative z-10" aria-hidden="true" />;
+
+      if (shape === 'star') {
+        return (
+          <svg viewBox="0 0 120 120" className="relative z-10 h-full w-full overflow-visible" aria-hidden="true">
+            <defs>
+              <radialGradient id="home-star-fill" cx="31%" cy="24%" r="78%">
+                <stop offset="0" stopColor="#BFF6EE" />
+                <stop offset="0.28" stopColor="#65D4CB" />
+                <stop offset="0.62" stopColor="#20A99F" />
+                <stop offset="1" stopColor="#08736F" />
+              </radialGradient>
+              <filter id="home-star-soft" x="-30%" y="-30%" width="160%" height="170%">
+                <feDropShadow dx="0" dy="12" stdDeviation="8" floodColor="#08736F" floodOpacity=".25" />
+              </filter>
+            </defs>
+            <path d="M60 5 C65 37 76 49 111 58 C77 64 66 76 58 114 C52 78 40 66 7 59 C39 51 51 38 60 5 Z" fill="url(#home-star-fill)" filter="url(#home-star-soft)" />
+            <path d="M57 17 C52 36 43 47 25 54" stroke="rgba(255,255,255,.55)" strokeWidth="7" strokeLinecap="round" fill="none" />
+            <path d="M91 64 C81 72 72 84 65 101" stroke="rgba(0,75,75,.16)" strokeWidth="9" strokeLinecap="round" fill="none" />
+          </svg>
+        );
+      }
+
+      const isGreen = shape === 'green-cube';
+      return (
+        <div
+          className="home-cube-3d relative z-10"
+          aria-hidden="true"
+          style={{
+            '--cube-rotate': isGreen ? '12deg' : '-12deg',
+            '--cube-background': isGreen
+              ? 'radial-gradient(circle at 26% 20%, #D7FA83 0%, #8CD65B 32%, #29B66F 66%, #07865D 100%)'
+              : 'radial-gradient(circle at 25% 18%, #FFF2A1 0%, #FFD15C 34%, #F7AD3D 65%, #D77B25 100%)',
+            '--cube-shadow': isGreen ? 'rgba(5,150,105,.25)' : 'rgba(234,138,35,.25)',
+          }}
+        />
+      );
+    }
+
+    function HomeFactObject({ item, active, onToggle }) {
+      return (
+        <div className={`absolute ${item.position} ${item.size} ${item.float} z-10 hover:z-30 focus-within:z-30`}>
+          <div className="group relative h-full w-full">
+            <button
+              type="button"
+              className="home-object-button"
+              style={{ '--fact-hover-rotate': item.hoverRotate }}
+              data-active={active ? 'true' : 'false'}
+              aria-label={`${item.category}: ${item.fact}`}
+              aria-expanded={active}
+              onClick={(event) => {
+                event.stopPropagation();
+                onToggle(item.id);
+              }}
+            >
+              <span className="home-object-motion block">
+                <span className="home-object-floor-shadow" aria-hidden="true" />
+                <HomeFactShape shape={item.shape} />
+              </span>
+            </button>
+
+            <div
+              className={`home-fact-card absolute ${item.cardPosition} hidden w-[204px] rounded-[20px] border border-white/80 bg-white/[0.92] p-4 text-left shadow-[0_18px_45px_rgba(15,23,42,0.14)] backdrop-blur-md sm:block ${active ? 'translate-y-0 opacity-100' : 'translate-y-1.5 opacity-0'} group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100`}
+              aria-hidden={!active}
+            >
+              <div className="text-[9px] font-extrabold tracking-[0.18em]" style={{ color: item.accent }}>{item.category}</div>
+              <div className="mt-1.5 text-[13px] font-bold leading-snug text-slate-800">{item.fact}</div>
+              <div className="mt-3 h-[2px] w-7 rounded-full" style={{ backgroundColor: item.accent }} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function HomeLarryStyle({ onOpenMatcher }) {
+      const [activeFact, setActiveFact] = useState(null);
+      const selectedFact = HOME_FACTS.find((item) => item.id === activeFact);
+
+      useEffect(() => {
+        const closeWithEscape = (event) => {
+          if (event.key === 'Escape') setActiveFact(null);
+        };
+        window.addEventListener('keydown', closeWithEscape);
+        return () => window.removeEventListener('keydown', closeWithEscape);
+      }, []);
+
+      return (
+        <div
+          className="relative min-h-[82vh] max-w-6xl mx-auto px-6 flex flex-col justify-center items-center text-center select-none"
+          onClick={() => setActiveFact(null)}
+        >
+          
+          {/* Six dimensions of Cecilia: 3D objects reveal personal facts on hover / tap. */}
+          {HOME_FACTS.map((item) => (
+            <HomeFactObject
+              key={item.id}
+              item={item}
+              active={activeFact === item.id}
+              onToggle={(id) => setActiveFact((current) => current === id ? null : id)}
+            />
+          ))}
+
+          {/* Mobile has no hover, so the active fact uses one compact, viewport-safe card. */}
+          {selectedFact && (
+            <div className="fixed bottom-5 left-1/2 z-50 w-[min(86vw,280px)] -translate-x-1/2 rounded-[20px] border border-white/80 bg-white/[0.94] p-4 text-left shadow-[0_18px_48px_rgba(15,23,42,0.18)] backdrop-blur-md sm:hidden">
+              <div className="text-[10px] font-extrabold tracking-[0.18em]" style={{ color: selectedFact.accent }}>{selectedFact.category}</div>
+              <div className="mt-1.5 text-[15px] font-bold leading-snug text-slate-800">{selectedFact.fact}</div>
+              <div className="mt-3 h-[2px] w-8 rounded-full" style={{ backgroundColor: selectedFact.accent }} />
+            </div>
+          )}
+
+          {/* HERO 主体 */}
+          <div className="space-y-6 max-w-2xl relative z-20">
+            
+            {/* 标题：Hi I am 不加粗 */}
+            <div className="space-y-1">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl tracking-tight text-slate-900">
+                <span className="font-normal text-slate-700">Hi I am </span>
+                <span className="font-serif italic font-normal text-slate-900">Cecilia!</span>
+              </h1>
+              <p className="text-base sm:text-xl font-medium text-slate-500 pt-1">
+                Product Manager / 产品经理
+              </p>
+            </div>
+
+            {/* 人物肖像卡片 */}
+            <div className="relative inline-block my-2">
+              <div className="relative w-64 h-72 sm:w-72 sm:h-80 rounded-[44px] bg-[#FFB36B] shadow-2xl shadow-orange-300/30 overflow-hidden">
+                <img 
+                  src="assets/cecilia-home-cutout.png" 
+                  alt="Cecilia Hu holding a coffee and making a peace sign" 
+                  className="absolute left-1/2 -bottom-5 w-[124%] max-w-none h-auto -translate-x-1/2 object-contain object-bottom" 
+                />
+              </div>
+
+              {/* 标签：27届同济大学硕士研究生 */}
+              <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full border border-slate-200/80 shadow-md text-xs font-semibold text-slate-800 whitespace-nowrap">
+                🎓 27届同济大学硕士研究生
+              </div>
+            </div>
+
+            {/* 唯一入口：Let's Work Together! [AI 匹配器] */}
+            <div className="pt-6 flex justify-center">
+              <button
+                onClick={onOpenMatcher}
+                className="px-10 py-4 rounded-full bg-white border-2 border-slate-200 hover:border-slate-900 text-slate-900 font-extrabold text-lg sm:text-xl transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center space-x-3"
+              >
+                <span>Let's Work Together!</span>
+                <span className="text-xs bg-teal-100 text-teal-800 font-bold px-3 py-1 rounded-full border border-teal-200">AI 匹配器</span>
+              </button>
+            </div>
+
+          </div>
+
+          <div className="pointer-events-none absolute left-[4%] top-[64%] hidden items-center gap-1.5 text-[10px] font-medium tracking-wide text-slate-400/75 sm:flex">
+            <span aria-hidden="true">↖</span>
+            <span>Hover around — there’s more to me.</span>
+          </div>
+
+        </div>
+      );
+    }
+
+    /* =========================================================================
+       02. EDUCATION SECTION (Tiny Planet + clean education list)
+       ========================================================================= */
+    function EducationSection() {
+      const educationData = [
+        { id: 'tongji', num: '01', accent: '#FF5A1F', shape: 'triangle', schoolZh: '同济大学', schoolEn: 'Tongji University', period: '2024–2027', degree: '国际关系硕士', highlights: ['GPA 4.81 / 5', '均分 90.93'] },
+        { id: 'turin', num: '02', accent: '#7C3AED', shape: 'circle', schoolZh: '意大利都灵大学', schoolEn: 'University of Turin', period: '2025–2026', degree: '国际关系双学位', highlights: ['欧盟国际角色', '全球经济与跨国公司'] },
+        { id: 'ucsb', num: '03', accent: '#2563EB', shape: 'square', schoolZh: '加州大学圣塔芭芭拉分校', schoolEn: 'University of California, Santa Barbara', period: '2021–2022', degree: 'Winter Visiting Student', highlights: ['全球经济与发展', '全球文化与道德'] },
+        { id: 'hbu', num: '04', accent: '#0FAF8F', shape: 'diamond', schoolZh: '湖北大学', schoolEn: 'Hubei University', period: '2019–2023', degree: '国际关系本科', highlights: ['专业排名 2 / 68', '均分 92'] },
+      ];
+
+      const [planetRotation, setPlanetRotation] = useState(0);
+      const planetDrag = useRef(null);
+
+      useEffect(() => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let animationFrame;
+        let lastTime = performance.now();
+
+        const rotatePlanet = (time) => {
+          const elapsed = Math.min(time - lastTime, 50);
+          lastTime = time;
+
+          if (!planetDrag.current && !reduceMotion.matches) {
+            // One calm revolution every two minutes.
+            setPlanetRotation((angle) => (angle + elapsed * 0.003) % 360);
+          }
+
+          animationFrame = requestAnimationFrame(rotatePlanet);
+        };
+
+        animationFrame = requestAnimationFrame(rotatePlanet);
+        return () => cancelAnimationFrame(animationFrame);
+      }, []);
+
+      const startPlanetDrag = (event) => {
+        planetDrag.current = { x: event.clientX, angle: planetRotation };
+        event.currentTarget.setPointerCapture(event.pointerId);
+      };
+
+      const movePlanet = (event) => {
+        if (!planetDrag.current) return;
+        setPlanetRotation(planetDrag.current.angle + (event.clientX - planetDrag.current.x) * 0.12);
+      };
+
+      const stopPlanetDrag = () => { planetDrag.current = null; };
+
+      const AccentShape = ({ type, color }) => {
+        if (type === 'triangle') {
+          return (
+            <span
+              className="block h-0 w-0 border-x-[8px] border-x-transparent border-b-[15px] transition-transform duration-300 group-hover:rotate-[8deg] group-hover:scale-110"
+              style={{ borderBottomColor: color, filter: `drop-shadow(0 3px 3px ${color}35)` }}
+            />
+          );
+        }
+
+        return (
+          <span
+            className={`block h-4 w-4 transition-transform duration-300 group-hover:rotate-[8deg] group-hover:scale-110 ${type === 'circle' ? 'rounded-full' : type === 'square' ? 'rounded-[4px]' : 'rounded-[3px] rotate-45 group-hover:rotate-[53deg]'}`}
+            style={{ backgroundColor: color, boxShadow: `0 4px 8px ${color}32` }}
+          />
+        );
+      };
+
+      return (
+        <section className="max-w-7xl mx-auto px-6 lg:px-8">
+          <style>{`
+            @keyframes educationPlanetFloat {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-7px); }
+            }
+          `}</style>
+
+          <div className="space-y-1 mb-6 lg:mb-3">
+            <div className="text-xs font-mono font-bold text-teal-600 tracking-wider">02 / EDUCATION</div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">GLOBAL ACADEMIC JOURNEY</h2>
+            <p className="text-xs sm:text-sm text-slate-500">在不同的地方学习，也在不同的视角中理解世界。</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-8 lg:gap-10 items-start">
+            {/* 左侧：纯圆形 Tiny Planet + 本人全身原图抠图 */}
+            <figure
+              className="group relative aspect-square w-[90%] lg:w-full max-w-[700px] mx-auto overflow-visible cursor-grab active:cursor-grabbing touch-none select-none"
+              onPointerDown={startPlanetDrag}
+              onPointerMove={movePlanet}
+              onPointerUp={stopPlanetDrag}
+              onPointerCancel={stopPlanetDrag}
+              aria-label="可左右拖动旋转的 Tiny Planet"
+            >
+              <div className="absolute inset-0 pointer-events-none" style={{ animation: 'educationPlanetFloat 32s ease-in-out infinite' }}>
+                <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.015]">
+                  <img
+                    src="assets/education-tiny-planet-circular.png"
+                    alt="融合武汉、都灵、圣塔芭芭拉与上海地标的圆形 Tiny Planet"
+                    draggable="false"
+                    className="absolute inset-0 h-full w-full object-contain will-change-transform drop-shadow-[0_22px_35px_rgba(15,23,42,.10)]"
+                    style={{ transform: `rotate(${planetRotation}deg)`, transition: planetDrag.current ? 'none' : 'transform 80ms linear' }}
+                  />
+                </div>
+
+                <div className="absolute left-1/2 top-[69.5%] z-[9] h-[3.8%] w-[15%] -translate-x-1/2 rounded-full bg-slate-950/28 blur-[8px]" />
+                <img
+                  src="assets/cecilia-education-cutout-v4-natural.png"
+                  alt="Cecilia Hu wearing a white NY cap, black top and white trousers"
+                  draggable="false"
+                  className="absolute left-1/2 top-[28%] z-10 h-[44%] w-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_14px_12px_rgba(15,23,42,.24)]"
+                />
+              </div>
+            </figure>
+
+            {/* 右侧：编辑式信息列表，编号与小图形是一个 inline group */}
+            <div className="self-start lg:pl-1">
+              <div>
+                {educationData.map((edu) => (
+                  <article key={edu.id} className="group grid grid-cols-[78px_minmax(0,1fr)] sm:grid-cols-[92px_minmax(0,1fr)] gap-3 border-b border-slate-200/90 py-5 sm:py-6 transition-transform duration-300 hover:translate-x-1">
+                    <div className="flex items-center gap-2.5 self-start pt-1.5">
+                      <span className="font-mono text-xl sm:text-2xl leading-none" style={{ color: edu.accent }}>{edu.num}</span>
+                      <AccentShape type={edu.shape} color={edu.accent} />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-5">
+                        <div className="min-w-0">
+                          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-slate-950">{edu.schoolZh}</h3>
+                          <p className="mt-1 text-[11px] sm:text-xs leading-relaxed tracking-wide text-slate-400">{edu.schoolEn}</p>
+                        </div>
+                        <time className="whitespace-nowrap pt-1 text-[11px] font-mono text-slate-500">{edu.period}</time>
+                      </div>
+                      <p className="mt-3 text-xs sm:text-sm leading-6 text-slate-600">
+                        {[edu.degree, ...edu.highlights].join(' · ')}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* =========================================================================
+       03. EXPERIENCE SECTION (collectible experience cards)
+       ========================================================================= */
+    function ExperienceVisual({ type }) {
+      if (type === 'calio') {
+        return (
+          <div className="relative h-full overflow-visible">
+            <div className="absolute inset-x-2 inset-y-3 rounded-[26px] bg-gradient-to-br from-fuchsia-300 to-violet-400 -rotate-[5deg] opacity-70" />
+            <div className="absolute inset-0 rounded-[26px] bg-[#F5F2FF] border border-violet-100 shadow-[0_16px_32px_rgba(109,73,190,.18)] overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_5%,rgba(216,180,254,.45),transparent_42%)]" />
+              <img src="assets/calio-30-day-challenge.png" alt="Calio 30天健康挑战产品视觉" className="absolute left-1/2 top-0 h-[113%] w-auto -translate-x-1/2 object-contain drop-shadow-[0_14px_20px_rgba(91,54,160,.18)]" />
+            </div>
+          </div>
+        );
+      }
+
+      if (type === 'xiaohongshu') {
+        return (
+          <div className="relative h-full overflow-visible">
+            <div className="absolute inset-x-1 inset-y-3 rounded-[28px] bg-orange-400/75 rotate-[6deg]" />
+            <div className="absolute inset-0 rounded-[26px] bg-[#FFF9F3] border border-orange-100 shadow-[0_16px_32px_rgba(234,88,12,.13)] overflow-hidden p-4">
+            <div className="relative z-10 flex items-end justify-between">
+              <div>
+                <div className="text-[9px] font-black text-slate-900">商业洞察分析</div>
+                <div className="mt-1 text-[7px] font-mono tracking-wider text-orange-500">BRAND GROWTH REPORT</div>
+              </div>
+              <div className="w-9 h-9 rounded-xl bg-[#FF2442] text-white text-[9px] font-black flex items-center justify-center shadow-md">小红书</div>
+            </div>
+            <div className="relative z-10 mt-3 grid grid-cols-4 gap-1">
+              {['曝光量', '点击率', '转化率', 'ROI'].map((metric, index) => (
+                <div key={metric} className="bg-white rounded-lg px-1 py-2 text-center shadow-sm border border-orange-100">
+                  <div className="text-[6px] text-slate-400">{metric}</div>
+                  <div className="mt-1 text-[9px] font-black text-slate-800">{['2.6M','8.23%','3.65%','5.21'][index]}</div>
+                  <div className="mt-0.5 text-[6px] font-bold text-emerald-500">↑ {['18.7%','12.4%','15.8%','9.3%'][index]}</div>
+                </div>
+              ))}
+            </div>
+            <div className="absolute left-4 right-4 bottom-4 h-[43%] rounded-2xl bg-white border border-orange-100 shadow-sm p-3 overflow-hidden">
+              <div className="text-[7px] font-bold text-slate-500">趋势分析</div>
+              <div className="absolute inset-x-3 bottom-4 top-8 flex items-end gap-1 opacity-55">
+                {[18, 30, 42, 38, 61, 49, 67, 63, 86].map((height, index) => <div key={index} className="flex-1 rounded-t bg-orange-100" style={{ height: `${height}%` }} />)}
+              </div>
+              <div className="absolute left-5 bottom-10 w-[88%] h-[44%] border-t-[3px] border-orange-500 rotate-[-7deg] [clip-path:polygon(0_45%,14%_66%,28%_39%,43%_54%,58%_24%,72%_38%,85%_8%,100%_0,100%_14%,86%_24%,72%_52%,58%_38%,43%_68%,28%_53%,14%_80%,0_58%)] bg-orange-400/25" />
+            </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (type === 'tiktok') {
+        return (
+          <div className="relative h-full overflow-visible">
+            <div className="absolute inset-x-1 inset-y-3 rounded-[28px] bg-blue-500/70 -rotate-[5deg]" />
+            <div className="absolute inset-0 rounded-[26px] bg-[#0E2B59] border border-blue-300/20 shadow-[0_18px_34px_rgba(30,64,175,.22)] overflow-hidden p-5 text-white">
+            <div className="absolute -right-10 -top-8 w-36 h-36 rounded-full bg-blue-400/25 blur-2xl" />
+            <div className="absolute inset-x-4 top-10 h-28 opacity-55 rounded-[50%] border border-blue-300/20">
+              <div className="absolute left-[8%] top-[35%] w-[84%] h-px bg-blue-300 rotate-6" />
+              <div className="absolute left-[18%] top-[15%] w-px h-[72%] bg-blue-300 -rotate-[28deg]" />
+              {[['15%','33%'],['42%','18%'],['70%','42%'],['31%','68%'],['81%','71%']].map((point, index) => (
+                <span key={index} className="absolute w-2 h-2 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,.8)]" style={{ left: point[0], top: point[1] }} />
+              ))}
+            </div>
+            <div className="relative z-10 text-[9px] font-mono tracking-wider text-blue-200">GLOBAL DATA QUALITY</div>
+            <div className="absolute left-5 bottom-5 right-5 z-10 grid grid-cols-2 gap-2">
+              <div className="rounded-2xl bg-white/10 border border-white/15 p-3">
+                <div className="text-[8px] text-blue-200">Accuracy</div>
+                <div className="mt-1 text-2xl font-black">95%</div>
+              </div>
+              <div className="rounded-2xl bg-white/10 border border-white/15 p-3">
+                <div className="text-[8px] text-blue-200">Global Team</div>
+                <div className="mt-1 text-2xl font-black">30+</div>
+              </div>
+            </div>
+            <div className="absolute right-5 top-4 text-xs font-black tracking-tight">TikTok ♪</div>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="relative h-full overflow-visible">
+          <div className="absolute inset-x-1 inset-y-3 rounded-[28px] bg-emerald-400/55 rotate-[5deg]" />
+          <div className="absolute inset-0 rounded-[26px] bg-[#EDF9F3] border border-emerald-100 shadow-[0_18px_34px_rgba(5,150,105,.14)] overflow-hidden">
+            <img src="assets/bytedance-hr-workshop.png" alt="现代团队 workshop 场景" className="absolute inset-x-0 top-0 w-full h-[76%] object-cover" />
+            <div className="absolute left-[24%] right-[19%] top-[15%] h-[27%] flex items-center justify-center text-center text-white text-[10px] sm:text-[11px] font-serif italic leading-4 drop-shadow-md">
+              Inspire Creativity<br />Enrich Life
+            </div>
+            <div className="absolute inset-x-0 bottom-0 h-[29%] bg-white/96 grid grid-cols-4 gap-1 p-2 pt-3">
+              {['招聘支持','组织发展','活动策划','数据分析'].map((item, index) => (
+                <div key={item} className="text-center text-[6px] font-medium text-emerald-800">
+                  <div className="mx-auto mb-1 w-6 h-6 rounded-lg border border-emerald-100 bg-emerald-50 flex items-center justify-center text-[11px]">{['♙','♧','♡','⌁'][index]}</div>{item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ExperienceCard({ experience, isHovered, hasHoveredCard, isSelected, onHover, onLeave, onSelect }) {
+      return (
+        <button
+          type="button"
+          onMouseEnter={onHover}
+          onMouseLeave={onLeave}
+          onFocus={onHover}
+          onBlur={onLeave}
+          onClick={onSelect}
+          aria-pressed={isSelected}
+          className={`experience-card relative min-w-0 h-[520px] rounded-[30px] border bg-white px-3 pb-3 text-left flex flex-col shadow-[0_14px_40px_rgba(15,23,42,.08)] ${hasHoveredCard && !isHovered ? 'experience-card-muted' : ''} ${isSelected ? 'border-slate-300' : 'border-slate-200/80'}`}
+        >
+          <div className="relative h-[57%] -mt-7">
+            <ExperienceVisual type={experience.visual} />
+          </div>
+          <div className="px-3 pt-6 pb-2 flex-1 flex flex-col">
+            <span className={`font-mono text-[28px] leading-none font-black ${experience.numberColor}`}>{experience.num}</span>
+            <h3 className="mt-4 text-[18px] font-black tracking-tight text-[#07142D] leading-tight">{experience.company}</h3>
+            <p className="mt-2 text-[11px] leading-5 text-slate-500">{experience.role}</p>
+            <span className={`mt-3 self-start text-[8px] font-mono font-bold tracking-wider px-2 py-1 rounded-full border ${experience.tagClass}`}>{experience.tag}</span>
+            <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100 font-mono text-[10px]">
+              <span className="text-slate-400">{experience.year}</span>
+              <span className={`font-bold ${experience.numberColor}`}>VIEW →</span>
+            </div>
+          </div>
+        </button>
+      );
+    }
+
+    function ExperienceSection() {
+      const [activeId, setActiveId] = useState('hello');
+      const [hoveredId, setHoveredId] = useState(null);
+
+      const experiences = [
+        { id: 'hello', num: '01', company: 'Hello 哈啰 - Calio', role: 'C端 AI 产品经理实习生', tag: 'PRODUCT', year: '2026', visual: 'calio', numberColor: 'text-violet-600', tagClass: 'bg-white text-violet-700 border-violet-300' },
+        { id: 'xiaohongshu', num: '02', company: '小红书', role: '商业化平台专家实习生', tag: 'BUSINESS & DATA', year: '2025', visual: 'xiaohongshu', numberColor: 'text-orange-500', tagClass: 'bg-white text-orange-600 border-orange-300' },
+        { id: 'tiktok', num: '03', company: 'ByteDance-TikTok', role: '大模型数据与项目经理实习生', tag: 'GLOBAL & AI', year: '2024', visual: 'tiktok', numberColor: 'text-blue-600', tagClass: 'bg-white text-blue-600 border-blue-300' },
+        { id: 'bytedance-hr', num: '04', company: 'ByteDance HR', role: 'HRBP / 组织项目实习生', tag: 'PEOPLE', year: '2021', visual: 'hr', numberColor: 'text-emerald-600', tagClass: 'bg-white text-emerald-700 border-emerald-300' },
+      ];
+
+      return (
+        <section className="max-w-[1320px] mx-auto px-6 lg:px-8 pb-8">
+          <style>{`
+            .experience-card {
+              transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms ease, opacity 260ms ease, border-color 260ms ease;
+              transform: translateY(0) scale(1);
+            }
+            .experience-card:hover, .experience-card:focus-visible {
+              transform: translateY(-8px) scale(1.035);
+              box-shadow: 0 28px 60px rgba(15, 23, 42, .16);
+              z-index: 10;
+              outline: none;
+            }
+            .experience-card-muted { opacity: .86; transform: scale(.985); }
+            @media (prefers-reduced-motion: reduce) {
+              .experience-card, .experience-card:hover, .experience-card:focus-visible { transition: none; transform: none; }
+            }
+          `}</style>
+
+          <div className="relative mb-16 lg:mb-20 max-w-3xl">
+            <div className="text-xs font-mono font-bold text-emerald-600 tracking-wider">03 / EXPERIENCE</div>
+            <h2 className="mt-4 text-4xl sm:text-5xl lg:text-[56px] leading-[1.02] tracking-[-.04em] text-slate-900">
+              <span className="font-semibold">Where I learned<br />to build </span>
+              <span className="font-serif italic font-normal">products :)</span>
+            </h2>
+            <p className="mt-5 text-sm text-slate-500">真实业务里的四段成长经历，点击卡片查看更多细节。</p>
+
+            <div className="hidden md:block absolute left-[104%] top-0 w-20 h-20 animate-float-1 pointer-events-none">
+              <div className="w-full h-full bg-gradient-to-br from-orange-300 to-[#FF4B00] [clip-path:polygon(50%_0,100%_100%,0_78%)] drop-shadow-xl rotate-12" />
+            </div>
+            <div className="hidden md:block absolute left-[128%] top-12 w-16 h-16 rounded-full bg-gradient-to-br from-purple-300 to-violet-700 shadow-xl animate-float-2 pointer-events-none" />
+            <div className="hidden md:block absolute left-[149%] top-20 w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-300 to-emerald-700 rotate-12 shadow-xl animate-float-3 pointer-events-none" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-5 gap-y-12 pt-5">
+            {experiences.map((experience) => (
+              <ExperienceCard
+                key={experience.id}
+                experience={experience}
+                isHovered={hoveredId === experience.id}
+                hasHoveredCard={Boolean(hoveredId)}
+                isSelected={activeId === experience.id}
+                onHover={() => setHoveredId(experience.id)}
+                onLeave={() => setHoveredId(null)}
+                onSelect={() => setActiveId(experience.id)}
+              />
+            ))}
+          </div>
+
+          <p className="mt-8 text-center text-[11px] text-slate-400">
+            <span aria-hidden="true" className="mr-2">⌁</span>悬停卡片会微微放大，点击查看更多详细经历。
+          </p>
+        </section>
+      );
+    }
+
+    /* =========================================================================
+       04. PROJECTS SECTION (🥐 吃啥 & ☕ 赛道测测)
+       ========================================================================= */
+    function ProjectsSection() {
+      const [activeProject, setActiveProject] = useState(null);
+
+      const projects = [
+        {
+          id: 'chisha',
+          icon: '🥐',
+          title: '吃啥',
+          label: 'CAMPUS FOOD DECISION PRODUCT',
+          headline: '今天吃什么？',
+          supporting: '帮你',
+          emphasis: '少纠结一点',
+          suffix: '。',
+          taglineLines: ['Less browsing.', 'Faster decisions.'],
+          demoUrl: 'https://campus-food-adviser.vercel.app/',
+          ideaUrl: '/projects/chisha',
+          domain: 'campus-food-adviser.vercel.app',
+          homeImage: 'assets/chisha-home.png',
+          resultImage: 'assets/chisha-result.png',
+          accentClass: 'text-[#F05A24]',
+          ruleClass: 'bg-orange-300',
+          buttonClass: 'bg-[#F05A24] hover:bg-[#DB4A18] shadow-[0_9px_20px_rgba(240,90,36,.20)]',
+          dotClass: 'bg-amber-500',
+          blobClass: 'bg-[radial-gradient(circle_at_44%_42%,rgba(255,225,166,.64),rgba(255,246,226,.36)_62%,transparent_74%)]',
+          mainHeightClass: 'h-[325px]',
+          resultClass: '-left-[12%] top-[260px] w-[66%] -rotate-[1.4deg] aspect-[1.24/1]'
+        },
+        {
+          id: 'saidao',
+          icon: '☕',
+          title: '赛道测测',
+          label: 'INTERNET CAREER EXPLORER',
+          headline: '我适合哪条',
+          emphasis: '互联网职业赛道',
+          suffix: '？',
+          taglineLines: ['Fun to enter.', 'Useful when you leave.'],
+          demoUrl: 'https://saidao-cece.vercel.app/',
+          ideaUrl: '/projects/saidao',
+          domain: 'saidao-cece.vercel.app',
+          homeImage: 'assets/saidao-home.png',
+          resultImage: 'assets/saidao-result.png',
+          accentClass: 'text-[#0D6B57]',
+          ruleClass: 'bg-teal-400',
+          buttonClass: 'bg-[#0D6B57] hover:bg-[#095544] shadow-[0_9px_20px_rgba(13,107,87,.20)]',
+          dotClass: 'bg-emerald-500',
+          blobClass: 'bg-[radial-gradient(circle_at_52%_44%,rgba(197,236,217,.62),rgba(233,247,239,.40)_62%,transparent_75%)]',
+          mainHeightClass: 'h-[325px]',
+          resultClass: '-left-[12%] top-[260px] w-[68%] rotate-[.5deg] aspect-[1.24/1]'
+        },
+      ];
+
+      const ProductCopy = ({ project }) => (
+        <div className="relative z-20 min-w-0 self-start pt-1">
+          <div className="flex items-center gap-2.5">
+            <span className="text-[32px] leading-none drop-shadow-sm 2xl:text-[36px]" aria-hidden="true">{project.icon}</span>
+            <div className="min-w-0">
+              <h3 className="text-[23px] font-extrabold leading-none tracking-[-.035em] text-slate-950 2xl:text-[25px]">{project.title}</h3>
+              <p className={"mt-1.5 max-w-[145px] text-[7px] font-mono font-bold leading-[1.4] tracking-[.11em] 2xl:text-[8px] " + project.accentClass}>{project.label}</p>
+            </div>
+          </div>
+
+          <h4 className="mt-7 text-[21px] leading-[1.25] font-extrabold tracking-[-.035em] text-slate-950 2xl:text-[24px]">
+            {project.headline}<br />
+            {project.supporting && <span>{project.supporting} </span>}
+            <span className={project.accentClass}>{project.emphasis}</span>{project.suffix}
+          </h4>
+
+          <div className={"mt-4 h-px w-7 " + project.ruleClass} />
+          <p className="mt-4 text-[11px] leading-[1.55] font-medium text-slate-500 2xl:text-[12px]">
+            {project.taglineLines.map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}
+          </p>
+
+          <div className="mt-5 flex flex-nowrap items-center gap-1.5">
+            <a onClick={(event) => event.stopPropagation()} href={project.demoUrl} target="_blank" rel="noopener noreferrer" className={"inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-[9px] font-bold text-white transition-colors duration-200 2xl:text-[10px] " + project.buttonClass}>
+              在线体验 <span aria-hidden="true">↗</span>
+            </a>
+            <a onClick={(event) => event.stopPropagation()} href={project.ideaUrl} className="inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-slate-200 bg-white px-3 py-2 text-[9px] font-bold text-slate-700 shadow-[0_5px_12px_rgba(15,23,42,.05)] transition-colors duration-200 hover:border-slate-300 hover:text-slate-950 2xl:text-[10px]">
+              查看产品思路 <span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+        </div>
+      );
+
+      const ProductVisual = ({ project, isActive, onToggle }) => (
+        <button
+          type="button"
+          aria-pressed={isActive}
+          aria-label={project.title + '产品界面预览，点击切换悬浮效果'}
+          onClick={onToggle}
+          className={"group/visual relative h-[420px] w-full max-w-[350px] cursor-pointer overflow-visible justify-self-start rounded-2xl text-left outline-none transition-[transform,filter] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-4 " + (isActive ? '-translate-y-1.5' : '')}
+        >
+          <span className={"pointer-events-none absolute -left-[10%] -right-[7%] -top-[7%] bottom-[1%] rounded-[48%_52%_46%_54%/44%_48%_52%_56%] " + project.blobClass} />
+
+          <div className={"absolute left-0 top-0 w-full overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-[box-shadow,filter] duration-300 " + project.mainHeightClass + " " + (isActive ? 'grayscale-[18%] shadow-[0_26px_55px_rgba(15,23,42,.20)]' : 'shadow-[0_16px_36px_rgba(15,23,42,.11)]')}>
+            <div className="flex h-7 items-center gap-1.5 border-b border-slate-100 bg-white/95 px-3">
+              <span className="h-2 w-2 rounded-full bg-[#FF5F57]" />
+              <span className="h-2 w-2 rounded-full bg-[#FFBD2E]" />
+              <span className="h-2 w-2 rounded-full bg-[#28C840]" />
+              <span className="absolute left-1/2 max-w-[60%] -translate-x-1/2 truncate text-[8px] font-medium text-slate-500">{project.domain}</span>
+              <span className="ml-auto text-[10px] text-slate-400" aria-hidden="true">⌂ &nbsp; ↥</span>
+            </div>
+            <img src={project.homeImage} alt={project.title + '真实产品首页'} className="block h-[calc(100%_-_28px)] w-full object-cover object-top" />
+          </div>
+
+          <div className={"absolute z-20 overflow-hidden rounded-xl border border-white/90 bg-white transition-[box-shadow,filter] duration-300 " + project.resultClass + " " + (isActive ? 'grayscale-[18%] shadow-[0_25px_48px_rgba(15,23,42,.24)]' : 'shadow-[0_17px_34px_rgba(15,23,42,.16)]')}>
+            <div className="flex h-5 items-center gap-1.5 border-b border-slate-100 bg-white px-2.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#FF5F57]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#FFBD2E]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#28C840]" />
+            </div>
+            <img src={project.resultImage} alt={project.title + '真实产品结果页'} className="block h-[calc(100%_-_20px)] w-full object-cover object-top" />
+          </div>
+          <span className={"pointer-events-none absolute inset-0 z-30 rounded-2xl bg-slate-900 transition-opacity duration-300 " + (isActive ? 'opacity-[.035]' : 'opacity-0')} />
+        </button>
+      );
+
+      const ProductModule = ({ project }) => {
+        const isActive = activeProject === project.id;
+        return (
+          <div
+            className="relative min-w-0 px-3 pb-2 pt-3 md:px-4 xl:px-3 2xl:px-4"
+          >
+            <div className="grid min-w-0 grid-cols-1 gap-y-5 md:grid-cols-[minmax(160px,.82fr)_minmax(0,1.55fr)] md:gap-x-3 md:gap-y-0 xl:grid-cols-[minmax(155px,.82fr)_minmax(0,1.55fr)] 2xl:grid-cols-[minmax(175px,.82fr)_minmax(0,1.55fr)]">
+              <ProductCopy project={project} />
+              <ProductVisual
+                project={project}
+                isActive={isActive}
+                onToggle={() => setActiveProject(isActive ? null : project.id)}
+              />
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <section className="relative mx-auto -mt-4 max-w-[1480px] px-6 pb-2 lg:px-8">
+          <div className="relative z-10">
+            <div className="text-xs font-mono font-bold tracking-wider text-emerald-700">04&nbsp; / &nbsp;PROJECTS</div>
+            <div className="mt-2 flex items-center gap-4">
+              <h2 className="text-[38px] font-extrabold leading-none tracking-[-.045em] text-slate-950 sm:text-[50px]">VIBE CODING PRODUCTS</h2>
+              <span className="hidden text-[32px] text-emerald-700 sm:inline" aria-hidden="true">✦</span>
+            </div>
+            <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-500">
+              Two products. Two kinds of ambiguity.<br />One helps you decide. One helps you find direction.
+            </p>
+          </div>
+
+          <span className="pointer-events-none absolute right-[8%] top-5 hidden h-14 w-14 rotate-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-700 shadow-xl md:block" />
+          <span className="pointer-events-none absolute right-[1%] top-[45%] hidden h-8 w-8 rounded-full bg-gradient-to-br from-purple-300 to-violet-700 shadow-lg xl:block" />
+          <span className="pointer-events-none absolute -left-1 bottom-16 hidden h-10 w-10 -rotate-12 rounded-xl bg-gradient-to-br from-amber-300 to-orange-500 shadow-lg xl:block" />
+          <span className="pointer-events-none absolute right-0 top-[56%] hidden text-3xl text-emerald-700 2xl:block" aria-hidden="true">✦</span>
+
+          <div className="mt-7 grid grid-cols-1 gap-7 xl:grid-cols-2 xl:items-start xl:gap-8">
+            <ProductModule project={projects[0]} />
+            <ProductModule project={projects[1]} />
+          </div>
+        </section>
+      );
+    }
+
+    /* =========================================================================
+       05. SKILLS — WHAT'S IN CECILIA'S BAG?
+       ========================================================================= */
+    function SkillsSection() {
+      const [activeSkill, setActiveSkill] = useState(null);
+      const [hoveredSkill, setHoveredSkill] = useState(null);
+      const highlightedSkill = hoveredSkill || activeSkill;
+
+      const skills = [
+        { id: 'product', title: 'PRODUCT', details: ['PRD Writing', 'Requirement Analysis', 'User Flow', 'Figma', 'Cross-functional Collaboration'] },
+        { id: 'data', title: 'DATA & ANALYTICS', details: ['MySQL / SQL', 'Tableau', 'KNIME', 'SPSS', 'Stata'] },
+        { id: 'ai', title: 'AI & VIBE CODING', details: ['Vibe Coding', 'Cursor', 'Claude', 'Dify', 'n8n'] },
+        { id: 'global', title: 'LANGUAGES & INTERNATIONAL', details: ['Chinese — Native', 'English — IELTS 7.0', 'International Experience'] },
+      ];
+
+      const objectState = (id, activeTransform) => {
+        if (highlightedSkill === id) return activeTransform + ' opacity-100 brightness-[1.035] drop-shadow-[0_20px_18px_rgba(15,23,42,.2)]';
+        if (highlightedSkill) return 'opacity-[.78]';
+        return 'opacity-100';
+      };
+      const interactionProps = (id, label) => ({
+        type: 'button',
+        'aria-label': label + ' — hover or tap to explore',
+        'aria-pressed': activeSkill === id,
+        onMouseEnter: () => setHoveredSkill(id),
+        onMouseLeave: () => setHoveredSkill(null),
+        onFocus: () => setHoveredSkill(id),
+        onBlur: () => setHoveredSkill(null),
+        onClick: () => setActiveSkill(activeSkill === id ? null : id),
+      });
+
+      return (
+        <section className="relative mx-auto min-h-[730px] max-w-[1480px] overflow-hidden px-6 pb-4 lg:min-h-[750px] lg:overflow-visible lg:px-8">
+          <style>{`
+            .carry-object { transform-origin: bottom center; transition: transform 240ms cubic-bezier(.2,.8,.2,1), opacity 200ms ease, filter 220ms ease; }
+            .carry-object img { user-select: none; -webkit-user-drag: none; }
+            .skill-hit::before { content: ''; position: absolute; inset: -26px; }
+            .bag-print { mix-blend-mode: multiply; text-shadow: 0 1px 0 rgba(255,255,255,.08); }
+            .skill-reveal { transition: opacity 190ms ease, transform 230ms cubic-bezier(.2,.8,.2,1); }
+            .skill-reveal p { text-shadow: 0 1px 10px rgba(255,255,255,.94); }
+            .tote-front { clip-path: inset(37.5% 0 0 0); }
+            @media (max-width: 639px) { .skill-hit::before { inset: -15px; } }
+            @media (prefers-reduced-motion: reduce) { .carry-object, .skill-reveal, .carry-object * { transition: none !important; } }
+          `}</style>
+
+          <div className="relative z-[90] max-w-[420px] pt-3 lg:pt-6">
+            <div className="font-mono text-xs font-bold tracking-wider text-emerald-700">05 / SKILLS</div>
+            <h2 className="mt-5 text-[40px] font-black leading-[.98] tracking-[-.052em] text-slate-950 sm:text-[48px] lg:text-[52px]">
+              WHAT I BRING<br />
+              <span>TO <span className="text-[#FF5500]">THE TABLE</span></span>
+            </h2>
+            <p className="mt-5 max-w-[390px] text-base leading-7 text-slate-500 sm:text-[17px]">A collection of skills, tools and perspectives I use to build products.</p>
+          </div>
+
+          <div className="relative -mx-5 mt-7 h-[570px] min-w-0 sm:mx-auto sm:h-[650px] sm:w-full sm:max-w-[1040px] lg:-mt-[150px] lg:h-[660px] lg:max-w-[1080px] xl:-mt-[160px]">
+            <div className="pointer-events-none absolute bottom-[62px] left-1/2 z-0 h-16 w-[62%] -translate-x-1/2 rounded-[50%] bg-orange-950/10 blur-2xl" />
+
+            {/* Layer 1 — complete tote acts as the back/interior layer. */}
+            <div className="pointer-events-none absolute bottom-[72px] left-1/2 z-10 w-[100%] -translate-x-1/2 sm:w-[84%] lg:w-[78%]">
+              <img src="assets/skills/cecilia-tote.png" alt="" className="block h-auto w-full drop-shadow-[0_24px_24px_rgba(121,61,19,.16)]" />
+            </div>
+
+            {/* Layer 2 — the four skill objects live between the tote back and front. */}
+            <button {...interactionProps('data', 'Data and analytics laptop')} className={'skill-hit carry-object absolute left-[28%] top-[68px] z-20 w-[52%] -rotate-[1deg] outline-none drop-shadow-[0_15px_14px_rgba(15,23,42,.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300 sm:left-[30%] sm:top-[42px] sm:w-[49%] lg:left-[30%] lg:top-[34px] lg:w-[48%] ' + objectState('data', '-translate-y-5 scale-[1.02]')}>
+              <img src="assets/skills/data-laptop.png" alt="Open silver laptop representing data and analytics skills" className="block h-auto w-full" />
+              <div className="pointer-events-none absolute left-[20%] top-[15%] w-[48%] -rotate-[1deg] text-left font-sans text-white">
+                <p className={'text-[13px] font-bold tracking-[.16em] sm:text-[17px] lg:text-[20px] ' + (highlightedSkill === 'data' ? 'opacity-0' : 'opacity-100')}>DATA</p>
+                <div className={'skill-reveal absolute left-0 top-0 w-full ' + (highlightedSkill === 'data' ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0')}>
+                  <p className="text-[12px] font-bold tracking-wide sm:text-[17px] lg:text-[20px]">DATA & ANALYTICS</p>
+                  <div className="mt-1.5 grid grid-cols-2 gap-x-2 gap-y-0.5 text-[8px] font-medium leading-tight text-slate-200 sm:text-[12px] lg:text-[14px]">
+                    {skills[1].details.map((detail) => <p key={detail}><span className="mr-1 text-orange-400">•</span>{detail}</p>)}
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            <button {...interactionProps('product', 'Product notebook')} className={'skill-hit carry-object absolute left-[12%] top-[118px] z-30 w-[36%] -rotate-[7deg] outline-none drop-shadow-[0_14px_13px_rgba(60,45,24,.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300 sm:left-[15%] sm:top-[72px] sm:w-[32%] lg:left-[16%] lg:top-[56px] lg:w-[31%] ' + objectState('product', '-translate-y-6 scale-[1.02] -rotate-[5deg]')}>
+              <img src="assets/skills/product-notebook.png" alt="Cream spiral notebook and black pen representing product skills" className="block h-auto w-full" />
+              <div className="pointer-events-none absolute left-[31%] top-[25%] w-[58%] rotate-[1deg] text-left font-sans text-slate-900">
+                <p className={'text-[12px] font-bold tracking-[.12em] sm:text-[16px] lg:text-[18px] ' + (highlightedSkill === 'product' ? 'opacity-0' : 'opacity-100')}>PRODUCT</p>
+                <div className={'skill-reveal absolute left-0 top-0 w-full ' + (highlightedSkill === 'product' ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0')}>
+                  <p className="text-[12px] font-bold sm:text-[17px] lg:text-[20px]">PRODUCT</p>
+                  <div className="mt-1 space-y-0.5 text-[7px] font-medium leading-tight text-slate-700 sm:text-[11px] lg:text-[13px]">
+                    {skills[0].details.map((detail) => <p key={detail}><span className="mr-1 text-[#FF5500]">•</span>{detail}</p>)}
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            <button {...interactionProps('ai', 'AI and vibe coding APM over-ear headphones')} className={'skill-hit carry-object absolute right-[18%] top-[174px] z-40 w-[33%] rotate-[3deg] outline-none drop-shadow-[0_14px_14px_rgba(15,23,42,.13)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300 sm:right-[20%] sm:top-[108px] sm:w-[29%] lg:right-[22%] lg:top-[92px] lg:w-[28%] ' + objectState('ai', '-translate-y-4 scale-[1.02] rotate-[2deg]')}>
+              <img src="assets/skills/ai-headphones-apm.png" alt="Cream APM over-ear headphones representing AI and vibe coding skills" className="block h-auto w-full" />
+              <span className={'pointer-events-none absolute left-1/2 top-[46%] -translate-x-1/2 rounded-full bg-white/88 px-2.5 py-1 font-sans text-[12px] font-bold tracking-[.18em] text-slate-900 shadow-sm backdrop-blur-sm sm:text-[15px] ' + (highlightedSkill === 'ai' ? 'opacity-0' : 'opacity-100')}>AI</span>
+            </button>
+
+            <button {...interactionProps('global', 'Passport representing languages and international experience')} className={'skill-hit carry-object absolute right-[10%] top-[296px] z-[35] w-[21%] rotate-[7deg] outline-none drop-shadow-[0_13px_13px_rgba(74,40,26,.15)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300 sm:right-[12%] sm:top-[214px] sm:w-[18%] lg:right-[13%] lg:top-[196px] lg:w-[17%] ' + objectState('global', '-translate-y-4 scale-[1.02] rotate-[5deg]')}>
+              <img src="assets/skills/global-passport.png" alt="Coral passport representing languages and international experience" className="block h-auto w-full" />
+              <span className={'pointer-events-none absolute left-1/2 top-[51%] -translate-x-1/2 whitespace-nowrap font-sans text-[7px] font-bold tracking-[.14em] text-[#4c2a22] sm:text-[9px] lg:text-[10px] ' + (highlightedSkill === 'global' ? 'opacity-0' : 'opacity-100')}>INTERNATIONAL</span>
+            </button>
+
+            {/* Lightweight editorial reveals for objects without a screen/page. */}
+            <div className={'skill-reveal pointer-events-none absolute right-[0%] top-[382px] z-[75] w-[260px] font-sans text-slate-900 sm:right-[2%] sm:top-[330px] sm:w-[300px] lg:right-[0%] lg:top-[320px] ' + (highlightedSkill === 'ai' ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0')}>
+              <p className="text-[20px] font-bold sm:text-[23px]">AI & VIBE CODING</p>
+              <span className="mt-2 block h-0.5 w-10 bg-[#FF5500]" />
+              <div className="mt-3 space-y-1 text-[15px] font-medium leading-snug text-slate-600 sm:text-[17px]">
+                {skills[2].details.map((detail) => <p key={detail}><span className="mr-2 text-[#FF5500]">•</span>{detail}</p>)}
+              </div>
+            </div>
+
+            <div className={'skill-reveal pointer-events-none absolute right-[0%] top-[92px] z-[75] w-[275px] font-sans text-slate-900 sm:right-[0%] sm:top-[82px] sm:w-[320px] lg:right-[-2%] lg:top-[86px] ' + (highlightedSkill === 'global' ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0')}>
+              <p className="text-[19px] font-bold sm:text-[22px]">LANGUAGES & INTERNATIONAL</p>
+              <span className="mt-2 block h-0.5 w-10 bg-[#FF5500]" />
+              <div className="mt-3 space-y-1.5 text-[14px] font-medium leading-snug text-slate-600 sm:text-[17px]">
+                {skills[3].details.map((detail) => <p key={detail}><span className="mr-2 text-[#FF5500]">•</span>{detail}</p>)}
+              </div>
+            </div>
+
+            {/* Layer 3 — same tote, clipped to its body, becomes the foreground mask. */}
+            <div className="tote-front pointer-events-none absolute bottom-[72px] left-1/2 z-[60] w-[100%] -translate-x-1/2 sm:w-[84%] lg:w-[78%]">
+              <img src="assets/skills/cecilia-tote.png" alt="" className="block h-auto w-full" />
+              <div className="bag-print absolute inset-x-[19%] bottom-[17%] text-center text-[#12203b] opacity-90">
+                <p className="font-serif text-[25px] leading-none sm:text-[40px] lg:text-[44px]">Cecilia’s Bag</p>
+              </div>
+            </div>
+
+            <div className="absolute bottom-[13px] left-1/2 z-[80] -translate-x-1/2 whitespace-nowrap font-serif text-[12px] italic text-slate-400 sm:text-sm">
+              <span aria-hidden="true" className="mr-2 font-sans text-[11px] not-italic text-[#FF5500]">⌁</span>
+              <span className="hidden sm:inline">Hover an item to unpack a skill.</span>
+              <span className="sm:hidden">Tap an item to unpack a skill.</span>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // AI 岗位匹配器 Modal 弹窗
+    function AIMatcherModal({ onClose }) {
+      const [jdText, setJdText] = useState('');
+      const [isAnalyzing, setIsAnalyzing] = useState(false);
+      const [hasAnalyzed, setHasAnalyzed] = useState(true);
+
+      const handleStartMatch = (presetRole) => {
+        setIsAnalyzing(true);
+        setTimeout(() => {
+          setIsAnalyzing(false);
+          setHasAnalyzed(true);
+        }, 500);
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg font-bold text-slate-900">综合等级</span>
+                <span className="text-xs font-bold bg-teal-100 text-teal-800 px-2.5 py-0.5 rounded-full">匹配</span>
+              </div>
+              <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-xs">✕</button>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-6">
+              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 space-y-2">
+                <div className="text-xs font-bold text-slate-500 flex justify-between">
+                  <span>AI 岗位匹配器</span>
+                  <span className="text-teal-600">选择预设快捷尝试:</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 pb-1">
+                  {['C端产品经理', 'AI 产品经理', '国际化/出海 PM', '数据/策略 PM'].map((preset) => (
+                    <button key={preset} onClick={() => handleStartMatch(preset)} className="text-[11px] bg-white border border-slate-200 px-2.5 py-1 rounded-lg text-slate-700 hover:border-teal-500 hover:text-teal-700 font-medium">
+                      {preset}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center space-x-2 bg-white rounded-xl p-1.5 border border-slate-200">
+                  <input
+                    type="text"
+                    value={jdText}
+                    onChange={(e) => setJdText(e.target.value)}
+                    placeholder="粘贴您的 JD，查看胡敏雪与岗位之间的匹配度..."
+                    className="flex-1 text-xs px-2 outline-none text-slate-800"
+                  />
+                  <button onClick={() => handleStartMatch()} className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-lg">
+                    {isAnalyzing ? '分析中...' : '开始匹配 ➔'}
+                  </button>
+                </div>
+              </div>
+
+              {hasAnalyzed && (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+                    <div className="sm:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl bg-rose-50/50 border border-rose-100 text-center">
+                      <div className="text-[10px] font-bold text-slate-500 uppercase">综合分</div>
+                      <div className="text-4xl font-extrabold text-slate-900 my-1">89 <span className="text-xs font-normal text-slate-400">/100</span></div>
+                      <span className="text-[10px] text-rose-600 font-bold bg-white px-2 py-0.5 rounded-full border border-rose-100">高度契合</span>
+                    </div>
+
+                    <div className="sm:col-span-8 space-y-3">
+                      <div>
+                        <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                          <span>学历背景 (同济硕士 & 都灵双学位)</span>
+                          <span className="font-mono text-blue-600">90</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-slate-100 overflow-hidden"><div className="h-full bg-blue-500 rounded-full w-[90%]"></div></div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                          <span>工作经验 (哈啰/小红书/字节)</span>
+                          <span className="font-mono text-blue-600">85</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-slate-100 overflow-hidden"><div className="h-full bg-blue-500 rounded-full w-[85%]"></div></div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                          <span>技能特长 (SQL/Figma/Vibe Coding)</span>
+                          <span className="font-mono text-blue-600">95</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-slate-100 overflow-hidden"><div className="h-full bg-blue-500 rounded-full w-[95%]"></div></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+                      <div className="text-xs font-bold text-slate-900">⭐ 匹配亮点</div>
+                      <div className="text-xs text-slate-600 space-y-1.5 leading-relaxed">
+                        <p><strong className="text-slate-800">数据敏感度：</strong> 熟练掌握 SQL/Tableau/KNIME，拥有小红书商业化归因与 Calio 埋点经验。</p>
+                        <p><strong className="text-slate-800">自驱与落地：</strong> 具备独立做 Vibe Coding 产品的实战案例（《吃啥》与《赛道测测》）。</p>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+                      <div className="text-xs font-bold text-slate-900">📝 AI 评估总结</div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        候选人在专业技能上具备扎实的数据分析能力与产品策划经验；软技能突出表现为高自驱力与跨国团队推进能力。整体与产品经理岗位高度契合。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="p-4 border-t border-slate-100 flex justify-end bg-slate-50/50">
+              <button onClick={onClose} className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-6 py-2.5 rounded-full">
+                关闭弹窗
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

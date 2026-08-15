@@ -1,0 +1,27 @@
+.DS_Store
+.Rhistory
+AGENTS.md
+AI_STUDIO_HANDOFF.md
+Cecilia_Portfolio_AI_Studio_Latest_2026-08-14.zip
+Cecilia_Portfolio_AI_Studio_Latest_2026-08-14/
+Cecilia_Portfolio_Latest_Code.txt
+tools/
+
+# Private, source, duplicate, and superseded assets that are not used by index.html.
+assets/Cecilia-Hu-Resume.pdf
+assets/cecilia-education-cutout-cropped.png
+assets/cecilia-education-cutout-v2-full.png
+assets/cecilia-education-cutout-v2.png
+assets/cecilia-education-cutout-v3-bright.png
+assets/cecilia-education-cutout.png
+assets/cecilia-education-reference.jpg
+assets/cecilia-education-source-v2.jpg
+assets/cecilia-home-chroma.png
+assets/cecilia-home-source.png
+assets/education-tiny-planet.png
+assets/projects-chisha-home.png
+assets/projects-chisha-result.png
+assets/projects-saidao-home.png
+assets/projects-saidao-result-full.png
+assets/projects-saidao-result.png
+assets/tiny-planet-reference.jpg
