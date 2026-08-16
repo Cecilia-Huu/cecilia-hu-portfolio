@@ -476,7 +476,9 @@
 
               <div className="mt-4 space-y-2">
                 <div className="flex h-11 items-center gap-2.5 rounded-xl px-2.5 transition-colors duration-200 hover:bg-slate-50">
-                  <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg border border-slate-200 text-[12px] text-slate-600" aria-hidden="true">✉</span>
+                  <span className="flex h-7 w-7 flex-none items-center justify-center overflow-hidden rounded-lg border border-white bg-white shadow-[0_4px_12px_rgba(15,23,42,.10)]" aria-hidden="true">
+                    <img src="assets/email-icon.png" alt="" className="h-6 w-6 rounded-md object-cover" />
+                  </span>
                   <a href={'mailto:' + email} className="min-w-0 flex-1 truncate text-[11px] font-semibold text-slate-700 transition-colors hover:text-[#FF5500]">{email}</a>
                   <button type="button" aria-label="Copy email address" onClick={() => copyContact(email, 'email')} className="min-w-[66px] rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[9px] font-bold text-slate-600 transition-all hover:border-orange-200 hover:text-[#FF5500] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" aria-live="polite">
                     {copiedItem === 'email' ? 'Copied! ✓' : 'Copy'}
@@ -484,13 +486,17 @@
                 </div>
 
                 <a aria-label="Open Cecilia's LinkedIn" href="https://www.linkedin.com/in/minxue-hu-986b5a38b" target="_blank" rel="noopener noreferrer" className="flex h-11 items-center gap-2.5 rounded-xl px-2.5 text-[11px] font-semibold text-slate-700 transition-colors duration-200 hover:bg-slate-50 hover:text-[#0A66C2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300">
-                  <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg border border-slate-200 font-serif text-[10px] font-bold text-slate-600" aria-hidden="true">in</span>
+                  <span className="flex h-7 w-7 flex-none items-center justify-center overflow-hidden rounded-lg border border-white bg-white shadow-[0_4px_12px_rgba(15,23,42,.10)]" aria-hidden="true">
+                    <img src="assets/linkedin-icon.png" alt="" className="h-6 w-6 rounded-md object-cover" />
+                  </span>
                   <span className="flex-1">LinkedIn</span>
                   <span className="pr-2 text-slate-400" aria-hidden="true">↗</span>
                 </a>
 
                 <div className="flex h-11 items-center gap-2.5 rounded-xl px-2.5 transition-colors duration-200 hover:bg-white/55">
-                  <img src="assets/wechat-contact-icon.png" alt="" aria-hidden="true" className="h-7 w-7 flex-none object-contain" />
+                  <span className="flex h-7 w-7 flex-none items-center justify-center overflow-hidden rounded-lg border border-white bg-white shadow-[0_4px_12px_rgba(15,23,42,.10)]" aria-hidden="true">
+                    <img src="assets/wechat-contact-icon.png" alt="" className="h-6 w-6 rounded-md object-contain" />
+                  </span>
                   <span className="min-w-0 flex-1 truncate text-[11px] font-semibold text-slate-700">{wechatId}</span>
                   <button type="button" aria-label="Copy WeChat ID" onClick={() => copyContact(wechatId, 'wechat')} className="min-w-[66px] rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[9px] font-bold text-slate-600 transition-all hover:border-orange-200 hover:text-[#FF5500] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" aria-live="polite">
                     {copiedItem === 'wechat' ? 'Copied! ✓' : 'Copy'}
@@ -737,10 +743,10 @@
        ========================================================================= */
     function EducationSection() {
       const educationData = [
-        { id: 'tongji', num: '01', accent: '#FF5A1F', shape: 'triangle', schoolZh: '同济大学', schoolEn: 'Tongji University', period: '2024–2027', degree: '国际关系硕士', highlights: ['GPA 4.81 / 5', '均分 90.93'] },
-        { id: 'turin', num: '02', accent: '#7C3AED', shape: 'circle', schoolZh: '意大利都灵大学', schoolEn: 'University of Turin', period: '2025–2026', degree: '国际关系双学位', highlights: ['欧盟国际角色', '全球经济与跨国公司'] },
-        { id: 'ucsb', num: '03', accent: '#2563EB', shape: 'square', schoolZh: '加州大学圣塔芭芭拉分校', schoolEn: 'University of California, Santa Barbara', period: '2021–2022', degree: 'Winter Visiting Student', highlights: ['全球经济与发展', '全球文化与道德'] },
-        { id: 'hbu', num: '04', accent: '#0FAF8F', shape: 'diamond', schoolZh: '湖北大学', schoolEn: 'Hubei University', period: '2019–2023', degree: '国际关系本科', highlights: ['专业排名 2 / 68', '均分 92'] },
+        { id: 'tongji', num: '01', accent: '#FF5A1F', shape: 'triangle', schoolZh: '同济大学', schoolEn: 'Tongji University', period: '2024–2027', summary: '国际关系硕士 · GPA 4.81 / 5 · 均分 90.93', courses: ['MySQL数据库基础 (91)', '量化研究方法 (95)', '全球治理 (95)'] },
+        { id: 'turin', num: '02', accent: '#7C3AED', shape: 'circle', schoolZh: '意大利都灵大学', schoolEn: 'University of Turin', period: '2025–2026', summary: '国际关系双学位 · 均分 28.4 / 30', courses: ['The International Role of the EU (28)', 'Cities and Globalisation (30)', 'Global Economy and Multinational Corporations (29)'] },
+        { id: 'ucsb', num: '03', accent: '#2563EB', shape: 'square', schoolZh: '加州大学圣塔芭芭拉分校', schoolEn: 'University of California, Santa Barbara', period: '2021–2022', summary: 'Winter Visiting Student · Global Studies', courses: ['Global Economy and Development', 'Global Culture and Ethics'] },
+        { id: 'hbu', num: '04', accent: '#0FAF8F', shape: 'diamond', schoolZh: '湖北大学', schoolEn: 'Hubei University', period: '2019–2023', summary: '国际关系本科 · 专业排名 2 / 68 · 均分 92', courses: ['国际政治经济学 (95)', '媒介与政治传播 (97)', '法语 (93)'] },
       ];
 
       const [planetRotation, setPlanetRotation] = useState(0);
@@ -843,26 +849,36 @@
               </div>
             </figure>
 
-            {/* 右侧：编辑式信息列表，编号与小图形是一个 inline group */}
+            {/* 右侧：Academic Timeline */}
             <div className="self-start lg:pl-1">
               <div>
                 {educationData.map((edu) => (
-                  <article key={edu.id} className="group grid grid-cols-[78px_minmax(0,1fr)] sm:grid-cols-[92px_minmax(0,1fr)] gap-3 border-b border-slate-200/90 py-5 sm:py-6 transition-transform duration-300 hover:translate-x-1">
+                  <article key={edu.id} className="group grid grid-cols-[70px_minmax(0,1fr)] sm:grid-cols-[88px_minmax(0,1fr)] gap-3 border-b border-slate-200/90 px-2 py-5 sm:px-3 sm:py-6 rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:border-transparent hover:shadow-[0_14px_34px_rgba(15,23,42,0.08)]">
                     <div className="flex items-center gap-2.5 self-start pt-1.5">
-                      <span className="font-mono text-xl sm:text-2xl leading-none" style={{ color: edu.accent }}>{edu.num}</span>
+                      <span className="font-mono text-xl sm:text-2xl font-medium leading-none" style={{ color: edu.accent }}>{edu.num}</span>
                       <AccentShape type={edu.shape} color={edu.accent} />
                     </div>
                     <div className="min-w-0">
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-5">
                         <div className="min-w-0">
-                          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-slate-950">{edu.schoolZh}</h3>
+                          <h3 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 transition-colors group-hover:text-slate-950">{edu.schoolZh}</h3>
                           <p className="mt-1 text-[11px] sm:text-xs leading-relaxed tracking-wide text-slate-400">{edu.schoolEn}</p>
                         </div>
                         <time className="whitespace-nowrap pt-1 text-[11px] font-mono text-slate-500">{edu.period}</time>
                       </div>
-                      <p className="mt-3 text-xs sm:text-sm leading-6 text-slate-600">
-                        {[edu.degree, ...edu.highlights].join(' · ')}
-                      </p>
+                      <p className="mt-3 text-xs sm:text-sm font-medium leading-6 text-slate-600">{edu.summary}</p>
+                      <div className="mt-3 flex flex-wrap gap-1.5" aria-label={`${edu.schoolZh}课程`}>
+                        {edu.courses.map((course, courseIndex) => (
+                          <div key={course} className={edu.id === 'turin' && courseIndex === 2 ? 'basis-full' : ''}>
+                            <span
+                              className="inline-flex max-w-full items-center whitespace-nowrap rounded-full border px-2.5 py-1 text-[10px] sm:text-[11px] font-medium leading-4 text-slate-600 transition-colors duration-300"
+                              style={{ backgroundColor: `${edu.accent}0A`, borderColor: `${edu.accent}24` }}
+                            >
+                              {course}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </article>
                 ))}
