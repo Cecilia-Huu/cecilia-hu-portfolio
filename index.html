@@ -286,7 +286,272 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
+    const translations = {
+      zh: {
+        global: {
+          metaTitle: '胡敏雪 (Cecilia Hu) - Product Manager Portfolio',
+          brandName: '胡敏雪 (CECILIA HU)',
+          footer: '© 2026 CECILIA HU (胡敏雪) · Product Manager Portfolio',
+        },
+        home: {
+          role: 'Product Manager / 产品经理',
+          student: '27届同济大学硕士研究生',
+          matcher: 'AI 匹配器',
+          facts: {
+            drive: '同济考研初试第一', consistency: '连续三年一等奖学金', personality: '工作 ENTJ · 生活 ENTP',
+            global: '去过 20+ 个国家', academics: '专业 Top 5%', research: '连续两年入选全球政治学顶会',
+          },
+        },
+        education: {
+          subtitle: '在不同的地方学习，也在不同的视角中理解世界。',
+          globeAria: '可左右拖动旋转的 Tiny Planet',
+          globeAlt: '融合武汉、都灵、圣塔芭芭拉与上海地标的圆形 Tiny Planet',
+          coursesAria: (school) => `${school}课程`,
+          items: {
+            tongji: { school: '同济大学', schoolEn: 'Tongji University', summary: '国际关系硕士 · GPA 4.81 / 5 · 均分 90.93', courses: ['MySQL数据库基础 (91)', '量化研究方法 (95)', '全球治理 (95)'] },
+            turin: { school: '意大利都灵大学', schoolEn: 'University of Turin', summary: '国际关系双学位 · 均分 28.4 / 30', courses: ['欧盟的国际角色 (28)', 'Cities and Globalisation (30)', '全球经济与跨国公司 (29)'] },
+            ucsb: { school: '加州大学圣塔芭芭拉分校', schoolEn: 'University of California, Santa Barbara', summary: 'Winter Visiting Student · Global Studies', courses: ['全球经济与发展', '全球文化与道德'] },
+            hbu: { school: '湖北大学', schoolEn: 'Hubei University', summary: '国际关系本科 · 专业排名 2 / 68 · 均分 92', courses: ['国际政治经济学 (95)', '媒介与政治传播 (97)', '法语 (93)'] },
+          },
+        },
+        experience: {
+          subtitle: '真实业务里的产品成长经历',
+          tip: '点击一张职业卡片，探索 Cecilia 的职业经历。',
+          modal: { roleImpact: '角色与产出', skills: '技能', closeAria: '关闭经历详情' },
+          openAria: (company) => `查看 ${company} 经历详情`,
+          companies: { hello: 'Calio @ Hello 哈啰', xiaohongshu: '小红书', tiktok: 'TikTok @ ByteDance', hrbp: 'ByteDance HRBP' },
+          roles: { hello: 'AI 健康产品经理实习生', xiaohongshu: '商业化平台数据洞察实习生', tiktok: '国际化项目管理实习生', hrbp: 'HRBP Intern' },
+          locations: { shanghai: '上海', beijing: '北京', wuhan: '武汉' },
+          openings: {
+            hello: '用 AI 产品连接用户健康体验与商业增长', xiaohongshu: '从商业数据中发现增长机会',
+            tiktok: '在全球 AI 项目中连接数据、流程与团队协作', hrbp: '从组织与人才视角理解互联网团队运作',
+          },
+          visual: {
+            creatorHead: '头部', creatorMid: '腰部', trend: '投放趋势', recommendation: '策略建议',
+            creatorOptimization: '优化达人组合', efficiencyReview: '复盘投放效率',
+            interviewCoordination: '面试协调', processSupport: '流程支持',
+          },
+          modules: {
+            productDesign: { title: '产品设计', bullets: ['独立输出「30天健康挑战」活动 PRD，设计用户参与流程、挑战机制与奖励规则', '完成需求分析、业务流程设计及研发评审，推动方案落地', '结合用户场景探索提升参与度与付费转化的产品机制'] },
+            dataDriven: { title: '数据驱动', bullets: ['从 0 到 1 搭建产品数据分析体系', '梳理用户增长、核心行为、留存及商业化指标', '完成 SQL 字段 Mapping、数据口径梳理与埋点方案设计'] },
+            commercialResearch: { title: '商业化研究', bullets: ['调研竞品活动玩法、定价策略及返还机制', '分析目标用户参与门槛与激励方式', '输出方案对比与优化建议，支持产运评审'] },
+            businessData: { title: '商业数据分析', bullets: ['支撑医美、耐消家具双赛道数据运营', '分析 20+ 品牌 CPC / CPUV / SOV / AIPS 等指标', '处理数据口径偏差与异常数据问题'] },
+            dataInsight: { title: '数据洞察', bullets: ['输出品牌投放复盘报告与优化洞察', '协同 CBD 与客户推进策略调整'] },
+            aiAutomation: { title: 'AI 自动化探索', bullets: ['撰写数据复盘 SOP', '探索 n8n、Dify 自动化工作流', '提升团队数据交付效率约 15%'] },
+            aiDataOperations: { title: 'AI 数据运营', bullets: ['参与 AI 大模型训练数据运营体系建设', '使用 KNIME 处理 Quality / UR / PSR 指标', '输出数据分析与可视化报告'] },
+            globalCollaboration: { title: '全球项目协作', bullets: ['参与 30+ 人国际项目协作', '主导 10+ 轮 GPM-SP-产品英文校准会议', '将模糊需求转化为 SOP'] },
+            dataMonitoring: { title: '数据监控', bullets: ['搭建项目指标看板', '推动标注准确率从 85% 提升至 95%'] },
+            organizationSupport: { title: '组织与人才支持', bullets: ['支持 170 人团队活动组织与沟通协调', '协助招聘流程推进', '参与候选人沟通与面试协调'] },
+          },
+          skills: {
+            productDesign: '产品设计', userGrowth: '用户增长', monetization: '商业化', aiProduct: 'AI 产品', dataAnalysis: '数据分析',
+            businessInsights: '商业洞察', growthStrategy: '增长策略', aiAutomation: 'AI 自动化', biTools: 'BI 工具',
+            aiDataOperations: 'AI 数据运营', globalCollaboration: '国际化协作', projectManagement: '项目管理', dataVisualization: '数据可视化',
+            communication: '沟通协作', organizationManagement: '组织管理', projectCoordination: '项目协调',
+          },
+          aria: {
+            helloProductAlt: 'Calio 30天健康挑战产品页面', helloLogoAlt: 'Hello 哈啰 logo', xiaohongshuLogoAlt: '小红书 logo',
+            bytedanceLogoAlt: 'ByteDance 字节跳动 logo', network: '连接欧洲、美国和东南亚市场的全球协作网络',
+          },
+        },
+        projects: {
+          liveDemo: '在线体验',
+          previewAria: (title) => `${title}产品界面预览，点击切换悬浮效果`,
+          homeAlt: (title) => `${title}真实产品首页`, resultAlt: (title) => `${title}真实产品结果页`,
+          chisha: { title: '吃啥', label: 'AI FOOD DECISION ASSISTANT', headline: '今天吃什么？', supporting: '帮你', emphasis: '少纠结一点', suffix: '。', tagline: ['AI 日常决策助手'] },
+          saidao: { title: '赛道测测', label: 'INTERNET CAREER EXPLORER', headline: '我适合哪条', emphasis: '互联网职业赛道', suffix: '？', tagline: ['AI 职业探索产品', '帮助用户找到更适合自己的互联网职业赛道。'] },
+        },
+        skills: {
+          product: ['PRD', '需求分析', 'User Flow', 'Figma', '跨团队协作'],
+          data: ['MySQL / SQL', 'Tableau', 'KNIME', 'SPSS', 'Stata'],
+          ai: ['Vibe Coding', 'Cursor', 'Claude', 'Dify', 'n8n'],
+          global: ['中文', 'English — IELTS 7.0', '国际化经历'],
+          hobbies: {
+            pingpong: { title: '乒乓球', detail: '校级团队第五' }, swimming: { title: '游泳', detail: '保持节奏与耐力感的一种方式' },
+            dance: { title: '跳舞', detail: '通过舞蹈释放能量与表达自己' }, volunteering: { title: '志愿活动', detail: '人口普查 / 音乐节志愿者' },
+          },
+        },
+        matcher: {
+          title: 'AI 岗位匹配器', subtitle: '粘贴 JD，看看我们有多匹配！', presetsLabel: '选择预设快捷尝试：',
+          presets: ['C端产品经理', 'AI 产品经理', '国际化 / 出海 PM', '数据 / 策略 PM'],
+          placeholder: '粘贴您的 JD，看看胡敏雪与岗位之间的匹配度…', analyze: '开始匹配 →', analyzing: '分析中…', analyzingTitle: '正在分析 JD…',
+          loading: ['识别岗位核心能力', '匹配 Cecilia 的经历', '分析能力结构', '生成匹配结论'],
+          hoverHint: '悬停查看各能力维度的评估依据', assessment: 'AI 评估总结', highlights: '匹配亮点', close: '✕  关闭',
+          tip: '💡 Tip：匹配结果仅供参考，最终以真实沟通为准！', closeAria: '关闭 AI 岗位匹配器',
+          radarAria: '产品、数据、AI、沟通协作与执行落地五维能力雷达图', dimensionAria: (title) => `查看${title}评估依据`,
+          radarLegend: { candidate: '你的匹配表现', requirement: '岗位需求强度' },
+          dimensions: {
+            product: { title: '产品能力', keywords: '需求分析 · PRD · User Flow · 产品设计 · 产品思维', description: '衡量从问题识别、需求拆解到产品方案设计的完整产品能力。' },
+            data: { title: '数据能力', keywords: 'SQL · Tableau · KNIME · 数据分析 · 数据驱动决策', description: '衡量使用数据发现问题、验证判断并支持产品决策的能力。' },
+            ai: { title: 'AI 能力', keywords: 'Vibe Coding · Cursor · Dify · n8n · AI 产品实践', description: '衡量理解并使用 AI 工具进行产品设计、自动化与实际落地的能力。' },
+            collaboration: { title: '沟通协作', keywords: '跨团队沟通 · 英文沟通 · 跨文化协作 · 项目推动', description: '衡量在研发、运营、数据等多角色环境中沟通并推动项目的能力。' },
+            execution: { title: '执行落地', keywords: '独立 Own 需求 · 0→1 落地 · 推动上线 · 实际交付', description: '衡量将问题从需求阶段推进到真实产品上线与交付的能力。' },
+          },
+          grades: {
+            A: { title: '高度匹配', english: 'Strong Match', note: '岗位方向一致，核心要求有充分的履历证据支撑。' },
+            B: { title: '比较匹配', english: 'Good Match', note: '方向相近且有可迁移优势，但仍存在明确能力缺口。' },
+            C: { title: '一般匹配', english: 'Partial Match', note: '岗位核心能力与当前职业经历存在明显差距。' },
+          },
+          evidence: {
+            product: { title: '产品落地能力', text: 'PRD、需求分析与独立产品上线，为岗位提供直接证据。' },
+            data: { title: '数据驱动能力', text: 'SQL Mapping、KNIME 与 Tableau 支撑数据判断。' },
+            ai: { title: 'AI 产品实践', text: 'Cursor、Dify、n8n 与 Vibe Coding 均有实际应用。' },
+            collaborationInternational: { title: '跨文化沟通', text: 'TikTok 跨国项目及多轮英文校准会议提供直接证据。' },
+            collaborationDefault: { title: '跨团队推进', text: '具备 30+ 人协作与跨团队需求评审经验。' },
+            execution: { title: '执行落地能力', text: '独立 Own PRD、推动评审并完成 0→1 上线。' },
+            transferableData: { title: '数据理解基础', text: 'SQL Mapping 与分析经验可迁移，但不等同于后端研发。' },
+            transferableCollaboration: { title: '研发协作基础', text: '跨团队和研发评审经验可迁移至工程协作场景。' },
+          },
+          branches: {
+            engineering: { summary: '候选人有 SQL、数据分析及研发协作基础，但主要经历集中在产品管理与项目推进。', gap: '后端开发、编程语言及服务端技术栈缺乏直接履历证据，因此判定为一般匹配。' },
+            productInternational: { summary: '产品落地、英文沟通与跨文化项目经历，与该国际化产品岗位高度重合。' },
+            productDefault: { summary: 'PRD、需求分析、数据判断与独立推进经历，对产品岗位形成直接支撑。', gap: '复杂技术架构或大规模商业化经验，仍需结合岗位实际要求进一步验证。' },
+            productSenior: { gap: '岗位要求的资深年限与组织管理跨度高于当前经历，是主要补充空间。' },
+            productCommercial: { gap: '多年商业化产品闭环与变现规模仍需更多直接案例证明。' },
+            aiProduct: { summary: 'AI 工具实践、产品设计与 0→1 落地经历，能够支撑 AI 产品岗位的主要工作。', gap: '模型训练与底层算法工程并非当前强项，深技术岗位需要研发团队协同补位。' },
+            dataStrategy: { summary: '数据分析工具、指标口径与业务洞察经验，可支撑数据和策略类岗位的核心任务。' },
+            data: { gap: '高级统计建模与数据工程经验在当前履历中证据有限。' }, strategy: { gap: '长期战略规划与高层经营决策经验仍需更多项目证明。' },
+            projectOperations: { summary: '跨团队协作、SOP 搭建和项目推动能力，可迁移至该岗位的协同与交付场景。', gap: '该岗位的垂直业务运营深度仍需结合具体行业要求进一步验证。' },
+            other: { summary: '候选人具备数据理解和跨团队协作基础，但与该岗位的核心职业方向重合有限。', gap: '当前简历缺少该岗位关键专业能力的直接证据，因此不做高匹配判断。' },
+          },
+        },
+        contact: { title: '和我聊聊', subtitle: '期待认识你', copyEmail: '复制邮箱', copied: '已复制', closeAria: '关闭联系卡片' },
+      },
+      en: {
+        global: { metaTitle: 'Cecilia Hu | Product Manager Portfolio', brandName: 'CECILIA HU', footer: '© 2026 CECILIA HU · Product Manager Portfolio' },
+        home: {
+          role: 'Product Manager', student: "Master's Student at Tongji University · Class of 2027", matcher: 'AI Job Matcher',
+          facts: {
+            drive: "Ranked 1st in Tongji's Master's Entrance Exam", consistency: 'First-Class Scholarship · 3 Years Running', personality: 'Work: ENTJ · Life: ENTP',
+            global: 'Traveled to 20+ Countries', academics: 'Top 5% in Major', research: 'Selected for Top Political Science Conferences · 2 Years Running',
+          },
+        },
+        education: {
+          subtitle: 'Learning across places, seeing the world through different perspectives.',
+          globeAria: 'Interactive Tiny Planet — drag horizontally to rotate',
+          globeAlt: 'Circular Tiny Planet blending landmarks from Wuhan, Turin, Santa Barbara and Shanghai',
+          coursesAria: (school) => `Courses at ${school}`,
+          items: {
+            tongji: { school: 'Tongji University', schoolEn: '', summary: "Master's in International Relations · GPA 4.81/5 · Average 90.93", courses: ['MySQL Database Fundamentals (91)', 'Quantitative Research Methods (95)', 'Global Governance (95)'] },
+            turin: { school: 'University of Turin', schoolEn: '', summary: "Dual-Degree Master's Program in International Relations · Average 28.4/30", courses: ['The International Role of the EU (28)', 'Cities and Globalisation (30)', 'Global Economy and Multinational Corporations (29)'] },
+            ucsb: { school: 'University of California, Santa Barbara', schoolEn: '', summary: 'Winter Visiting Student · Global Studies', courses: ['Global Economy and Development', 'Global Culture and Ethics'] },
+            hbu: { school: 'Hubei University', schoolEn: '', summary: 'B.A. in International Relations · Rank 2/68 · Average 92', courses: ['International Political Economy (95)', 'Media and Political Communication (97)', 'French (93)'] },
+          },
+        },
+        experience: {
+          subtitle: 'Growing through real-world product work.', tip: "Click a card to explore Cecilia's experience.",
+          modal: { roleImpact: 'Role & Impact', skills: 'Skills', closeAria: 'Close experience details' },
+          openAria: (company) => `View ${company} experience details`,
+          companies: { hello: 'Calio @ Hello', xiaohongshu: 'Xiaohongshu', tiktok: 'TikTok @ ByteDance', hrbp: 'ByteDance HRBP' },
+          roles: { hello: 'AI Health Product Manager Intern', xiaohongshu: 'Commercialization Data Insights Intern', tiktok: 'Global Project Management Intern', hrbp: 'HRBP Intern' },
+          locations: { shanghai: 'Shanghai', beijing: 'Beijing', wuhan: 'Wuhan' },
+          openings: {
+            hello: 'Connecting user health experiences with business growth through AI products.', xiaohongshu: 'Turning commercial data into growth opportunities.',
+            tiktok: 'Connecting data, workflows and teams across global AI projects.', hrbp: 'Understanding how internet teams operate through an organization and talent lens.',
+          },
+          visual: {
+            creatorHead: 'Top-tier', creatorMid: 'Mid-tier', trend: 'Campaign Trend', recommendation: 'Recommendations',
+            creatorOptimization: 'Optimize Creator Mix', efficiencyReview: 'Review Campaign Efficiency',
+            interviewCoordination: 'Interview Coordination', processSupport: 'Process Support',
+          },
+          modules: {
+            productDesign: { title: 'Product Design', bullets: ['Owned the PRD for the 30-Day Health Challenge, designing the participation flow, challenge mechanics and reward rules.', 'Completed requirement analysis, business flow design and engineering review to drive implementation.', 'Explored product mechanisms to improve engagement and paid conversion based on user scenarios.'] },
+            dataDriven: { title: 'Data-Driven Analysis', bullets: ['Built the product analytics framework from 0 to 1.', 'Defined metrics across user growth, core behaviors, retention and monetization.', 'Completed SQL field mapping, metric-definition alignment and event-tracking design.'] },
+            commercialResearch: { title: 'Monetization Research', bullets: ['Researched competitor campaign mechanics, pricing strategies and cashback models.', 'Analyzed participation thresholds and incentive mechanisms for target users.', 'Delivered solution comparisons and optimization recommendations to support product and operations review.'] },
+            businessData: { title: 'Commercial Data Analysis', bullets: ['Supported data operations across medical aesthetics and durable goods / furniture verticals.', 'Analyzed CPC, CPUV, SOV and AIPS metrics across 20+ brands.', 'Resolved metric-definition discrepancies and anomalous data.'] },
+            dataInsight: { title: 'Data Insights', bullets: ['Produced campaign review reports and optimization insights.', 'Partnered with CBD teams and clients to refine campaign strategy.'] },
+            aiAutomation: { title: 'AI Automation Exploration', bullets: ['Created data review SOPs.', 'Explored automated workflows with n8n and Dify.', 'Improved team data-delivery efficiency by approximately 15%.'] },
+            aiDataOperations: { title: 'AI Data Operations', bullets: ['Contributed to the data operations framework for AI model training.', 'Used KNIME to process Quality, UR and PSR metrics.', 'Produced data analysis and visualization reports.'] },
+            globalCollaboration: { title: 'Global Project Collaboration', bullets: ['Worked within a 30+ person global project team.', 'Led 10+ English calibration sessions across GPM, SP and Product.', 'Translated ambiguous requirements into actionable SOPs.'] },
+            dataMonitoring: { title: 'Data Monitoring', bullets: ['Built project KPI dashboards.', 'Improved annotation accuracy from 85% to 95%.'] },
+            organizationSupport: { title: 'Organization & Talent Support', bullets: ['Supported team engagement and communication for a 170-person organization.', 'Supported recruitment process execution.', 'Supported candidate communication and interview coordination.'] },
+          },
+          skills: {
+            productDesign: 'Product Design', userGrowth: 'User Growth', monetization: 'Monetization', aiProduct: 'AI Product', dataAnalysis: 'Data Analysis',
+            businessInsights: 'Business Insights', growthStrategy: 'Growth Strategy', aiAutomation: 'AI Automation', biTools: 'BI Tools',
+            aiDataOperations: 'AI Data Operations', globalCollaboration: 'Global Collaboration', projectManagement: 'Project Management', dataVisualization: 'Data Visualization',
+            communication: 'Communication & Collaboration', organizationManagement: 'Organization Management', projectCoordination: 'Project Coordination',
+          },
+          aria: {
+            helloProductAlt: 'Calio 30-Day Health Challenge product screen', helloLogoAlt: 'Hello logo', xiaohongshuLogoAlt: 'Xiaohongshu logo',
+            bytedanceLogoAlt: 'ByteDance logo', network: 'Global collaboration network connecting Europe, the U.S. and Southeast Asia',
+          },
+        },
+        projects: {
+          liveDemo: 'Live Demo',
+          previewAria: (title) => `Interactive preview of ${title}; hover to switch views`,
+          homeAlt: (title) => `${title} actual product home screen`, resultAlt: (title) => `${title} actual product result screen`,
+          chisha: { title: 'What to Eat?', label: 'AI FOOD DECISION ASSISTANT', headline: 'What should I eat today?', supporting: 'Let AI make the choice', emphasis: 'a little easier', suffix: '.', tagline: ['AI Everyday Decision Assistant'] },
+          saidao: { title: 'Internet Career Path Explorer', label: 'INTERNET CAREER EXPLORER', headline: 'Which internet career path', emphasis: 'fits me best', suffix: '?', tagline: ['AI Career Exploration Product', 'Helping users discover the internet career path that fits them best.'] },
+        },
+        skills: {
+          product: ['PRD Writing', 'Requirement Analysis', 'User Flow', 'Figma', 'Cross-functional Collaboration'],
+          data: ['MySQL / SQL', 'Tableau', 'KNIME', 'SPSS', 'Stata'], ai: ['Vibe Coding', 'Cursor', 'Claude', 'Dify', 'n8n'],
+          global: ['Chinese · Native', 'English — IELTS 7.0', 'International Experience'],
+          hobbies: {
+            pingpong: { title: 'Table Tennis', detail: '5th Place in a University Team Competition' }, swimming: { title: 'Swimming', detail: 'A way to stay in rhythm and build endurance.' },
+            dance: { title: 'Dance', detail: 'A way to release energy and express myself through movement.' }, volunteering: { title: 'Volunteering', detail: 'National Census / Music Festival Volunteer' },
+          },
+        },
+        matcher: {
+          title: 'AI Job Matcher', subtitle: 'Paste a JD and see how well we match!', presetsLabel: 'Try a preset role:',
+          presets: ['Consumer Product Manager', 'AI Product Manager', 'Global Product Manager', 'Data / Strategy Product Manager'],
+          placeholder: 'Paste the JD to see how Cecilia matches the role…', analyze: 'Analyze Match →', analyzing: 'Analyzing…', analyzingTitle: 'Analyzing the JD…',
+          loading: ['Identifying core role requirements', "Matching Cecilia's experience", 'Mapping capability fit', 'Generating the match summary'],
+          hoverHint: 'Hover to see how each dimension is assessed.', assessment: 'AI Assessment', highlights: 'Why We Match', close: '✕  Close',
+          tip: '💡 Tip: Match results are for reference only — real conversations matter most.', closeAria: 'Close AI Job Matcher',
+          radarAria: 'Five-dimensional capability radar chart covering Product, Data, AI, Collaboration and Execution', dimensionAria: (title) => `View assessment criteria for ${title}`,
+          radarLegend: { candidate: 'Your Match', requirement: 'Role Requirements' },
+          dimensions: {
+            product: { title: 'Product', keywords: 'Requirement Analysis · PRD · User Flow · Product Design · Product Thinking', description: 'Assesses the ability to identify problems, break down requirements, and turn them into coherent product solutions.' },
+            data: { title: 'Data', keywords: 'SQL · Tableau · KNIME · Data Analysis · Data-driven Decision Making', description: 'Assesses the ability to use data to identify problems, validate hypotheses, and support product decisions.' },
+            ai: { title: 'AI', keywords: 'Vibe Coding · Cursor · Dify · n8n · AI Product Practice', description: 'Assesses the ability to apply AI tools to product design, automation, and real-world implementation.' },
+            collaboration: { title: 'Collaboration', keywords: 'Cross-functional Communication · English Communication · Cross-cultural Collaboration · Project Ownership', description: 'Assesses the ability to collaborate across product, engineering, operations and data teams while driving projects forward.' },
+            execution: { title: 'Execution', keywords: 'Independent Ownership · 0-to-1 Delivery · Launch Execution · Real-world Delivery', description: 'Assesses the ability to take a problem from requirement definition through launch and delivery.' },
+          },
+          grades: {
+            A: { title: 'Strong Match', english: '', note: "Strong alignment, with solid experience directly supporting the role's core requirements." },
+            B: { title: 'Good Match', english: '', note: 'Good directional fit with transferable strengths, but there are still clear capability gaps.' },
+            C: { title: 'Partial Match', english: '', note: "There is a significant gap between the role's core requirements and the candidate's current experience." },
+          },
+          evidence: {
+            product: { title: 'Product Execution', text: 'PRDs, requirement analysis and independently launched products provide direct evidence of product execution.' },
+            data: { title: 'Data-Driven Decision Making', text: 'SQL mapping, KNIME and Tableau experience support data-informed decision making.' },
+            ai: { title: 'AI Product Practice', text: 'Cursor, Dify, n8n and Vibe Coding have all been applied in real projects.' },
+            collaborationInternational: { title: 'Cross-Cultural Communication', text: 'TikTok global projects and 10+ English calibration sessions provide direct evidence.' },
+            collaborationDefault: { title: 'Cross-Functional Execution', text: 'Experience collaborating with 30+ stakeholders and working through cross-functional reviews provides direct evidence.' },
+            execution: { title: 'Execution & Delivery', text: 'Owned PRDs, drove reviews and delivered 0-to-1 launches.' },
+            transferableData: { title: 'Data Foundations', text: 'SQL mapping and analytics experience are transferable, but do not equal backend engineering experience.' },
+            transferableCollaboration: { title: 'Engineering Collaboration', text: 'Cross-functional collaboration and engineering review experience can transfer to engineering-facing work.' },
+          },
+          branches: {
+            engineering: { summary: 'The candidate has foundations in SQL, data analysis and engineering collaboration, but most experience is concentrated in product management and project execution.', gap: 'There is limited direct evidence of backend development, programming languages or server-side technology stacks, so this is assessed as a Partial Match.' },
+            productInternational: { summary: 'Product execution, English communication and cross-cultural project experience align strongly with this global product role.' },
+            productDefault: { summary: 'Experience in PRDs, requirement analysis, data-informed judgment and independent execution directly supports core product responsibilities.', gap: "Experience with complex technical architecture or large-scale monetization would need further validation against the role's specific requirements." },
+            productSenior: { gap: "The role's required seniority and people-management scope exceed the candidate's current experience." },
+            productCommercial: { gap: 'More direct evidence is needed for end-to-end monetization ownership and large-scale commercial impact.' },
+            aiProduct: { summary: 'Hands-on AI tooling, product design and 0-to-1 execution provide strong support for the core responsibilities of an AI product role.', gap: 'Model training and low-level algorithm engineering are not current strengths, so deeply technical roles would require close collaboration with engineering teams.' },
+            dataStrategy: { summary: 'Experience with analytics tools, metric definitions and business insights supports the core needs of data and strategy roles.' },
+            data: { gap: 'There is limited direct evidence of advanced statistical modeling or data engineering.' }, strategy: { gap: 'Long-term strategic planning and senior-level business decision-making require more direct project evidence.' },
+            projectOperations: { summary: 'Cross-functional collaboration, SOP building and project execution are transferable to coordination and delivery-focused roles.', gap: "Depth of hands-on operations in the specific vertical would need to be validated against the role's requirements." },
+            other: { summary: 'The candidate brings data literacy and cross-functional collaboration, but the role has limited overlap with her current career direction.', gap: "The current experience does not provide enough direct evidence of the role's key professional capabilities, so the match is not assessed as high." },
+          },
+        },
+        contact: { title: "Let's Talk", subtitle: "I'd love to hear from you.", copyEmail: 'Copy Email', copied: 'Copied!', closeAria: 'Close contact card' },
+      },
+    };
+
+    const LanguageContext = React.createContext({ language: 'zh', copy: translations.zh });
+    const useLanguage = () => React.useContext(LanguageContext);
+
     function App() {
+      const [language, setLanguage] = useState(() => {
+        try {
+          return localStorage.getItem('portfolioLanguage') === 'en' ? 'en' : 'zh';
+        } catch (error) {
+          return 'zh';
+        }
+      });
       const [activeTab, setActiveTab] = useState('HOME');
       const [isModalOpen, setIsModalOpen] = useState(false);
       const headerRef = useRef(null);
@@ -294,6 +559,7 @@
       const navButtonRefs = useRef({});
       const sectionVisibilityRef = useRef({});
       const [activePill, setActivePill] = useState({ left: 0, width: 0, opacity: 0 });
+      const copy = translations[language];
 
       const navItems = [
         { id: 'HOME', label: 'Home', sectionId: 'home' },
@@ -302,6 +568,16 @@
         { id: 'PROJECTS', label: 'Projects', sectionId: 'projects' },
         { id: 'SKILLS', label: 'Skills', sectionId: 'skills' },
       ];
+
+      useEffect(() => {
+        try {
+          localStorage.setItem('portfolioLanguage', language);
+        } catch (error) {
+          // The language still works for this session if storage is unavailable.
+        }
+        document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
+        document.title = copy.global.metaTitle;
+      }, [language, copy.global.metaTitle]);
 
       const updateActivePill = () => {
         const nav = navRef.current;
@@ -396,21 +672,22 @@
       };
 
       return (
+        <LanguageContext.Provider value={{ language, copy }}>
         <div className="min-h-screen flex flex-col justify-between relative">
           
           {/* 1. 顶部悬浮胶囊导航 */}
           <header ref={headerRef} className="fixed top-5 left-0 right-0 z-40 flex justify-center px-4">
-            <div className="bg-white/90 backdrop-blur-xl border border-slate-200/80 rounded-full px-5 py-2.5 shadow-xl shadow-slate-100 flex items-center space-x-6">
+            <div className="flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 px-2 py-2 shadow-xl shadow-slate-100 backdrop-blur-xl sm:px-3 lg:gap-6 lg:px-5 lg:py-2.5">
               
               <div 
                 className="font-bold text-xs tracking-wider uppercase text-slate-900 cursor-pointer flex items-center space-x-2"
                 onClick={() => handleNavigate(navItems[0])}
               >
                 <div className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[10px]">胡</div>
-                <span>胡敏雪 (CECILIA HU)</span>
+                <span className="hidden xl:inline">{copy.global.brandName}</span>
               </div>
 
-              <nav ref={navRef} aria-label="Portfolio sections" className="relative flex items-center space-x-1 sm:space-x-2 text-xs font-medium text-slate-600">
+              <nav ref={navRef} aria-label="Portfolio sections" className="relative flex min-w-0 flex-1 items-center space-x-1 overflow-x-auto text-xs font-medium text-slate-600 [scrollbar-width:none] sm:space-x-2">
                 <span
                   aria-hidden="true"
                   className="pointer-events-none absolute bottom-0 top-0 rounded-full bg-[#FF5500] shadow-md transition-all duration-[260ms] ease-out"
@@ -422,7 +699,7 @@
                     ref={(node) => { navButtonRefs.current[item.id] = node; }}
                     onClick={() => handleNavigate(item)}
                     aria-current={activeTab === item.id ? 'page' : undefined}
-                    className={`relative z-10 px-3.5 py-1.5 rounded-full transition-colors duration-200 ${
+                    className={`relative z-10 whitespace-nowrap px-2 py-1.5 rounded-full transition-colors duration-200 sm:px-3.5 ${
                       activeTab === item.id
                         ? 'text-white font-bold'
                         : 'hover:text-slate-900 hover:bg-slate-100'
@@ -432,6 +709,12 @@
                   </button>
                 ))}
               </nav>
+
+              <div className="flex shrink-0 items-center rounded-full border border-slate-200 bg-slate-50/80 p-0.5 text-[10px] font-bold text-slate-400" role="group">
+                <button type="button" aria-pressed={language === 'zh'} onClick={() => setLanguage('zh')} className={`rounded-full px-2 py-1 transition-colors ${language === 'zh' ? 'bg-white text-[#FF5500] shadow-sm' : 'hover:text-slate-700'}`}>中</button>
+                <span aria-hidden="true" className="text-slate-300">/</span>
+                <button type="button" aria-pressed={language === 'en'} onClick={() => setLanguage('en')} className={`rounded-full px-2 py-1 transition-colors ${language === 'en' ? 'bg-white text-[#FF5500] shadow-sm' : 'hover:text-slate-700'}`}>EN</button>
+              </div>
 
               <ContactMenu />
             </div>
@@ -466,17 +749,19 @@
 
           {/* 3. 页脚 */}
           <footer className="py-6 border-t border-slate-100 text-center text-xs text-slate-400 font-mono">
-            © 2026 CECILIA HU (胡敏雪) · Product Manager Portfolio
+            {copy.global.footer}
           </footer>
 
           {/* 4. AI 岗位匹配器 Modal 弹窗 */}
           {isModalOpen && <AIMatcherModal onClose={() => setIsModalOpen(false)} />}
 
         </div>
+        </LanguageContext.Provider>
       );
     }
 
     function ContactMenu() {
+      const { copy } = useLanguage();
       const email = 'hmxdxyx@163.com';
       const wechatId = 'cecilia1205hmx';
       const [isOpen, setIsOpen] = useState(false);
@@ -536,10 +821,10 @@
               <div className="absolute -top-1.5 right-7 h-3 w-3 rotate-45 border-l border-t border-slate-200/50 bg-white/[0.92]" />
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-base font-extrabold text-slate-900">Say hi! <span aria-hidden="true">👋</span></p>
-                  <p className="mt-0.5 text-[10px] text-slate-400">I’d love to hear from you.</p>
+                  <p className="text-base font-extrabold text-slate-900">{copy.contact.title} <span aria-hidden="true">👋</span></p>
+                  <p className="mt-0.5 text-[10px] text-slate-400">{copy.contact.subtitle}</p>
                 </div>
-                <button type="button" onClick={() => setIsOpen(false)} aria-label="关闭联系卡片" className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-[10px] text-slate-500 transition-colors hover:bg-slate-200">✕</button>
+                <button type="button" onClick={() => setIsOpen(false)} aria-label={copy.contact.closeAria} className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-[10px] text-slate-500 transition-colors hover:bg-slate-200">✕</button>
               </div>
 
               <div className="mt-4 space-y-2">
@@ -549,7 +834,7 @@
                   </span>
                   <a href={'mailto:' + email} className="min-w-0 flex-1 truncate text-[11px] font-semibold text-slate-700 transition-colors hover:text-[#FF5500]">{email}</a>
                   <button type="button" aria-label="Copy email address" onClick={() => copyContact(email, 'email')} className="min-w-[66px] rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[9px] font-bold text-slate-600 transition-all hover:border-orange-200 hover:text-[#FF5500] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300" aria-live="polite">
-                    {copiedItem === 'email' ? 'Copied! ✓' : 'Copy'}
+                    {copiedItem === 'email' ? copy.contact.copied + ' ✓' : copy.contact.copyEmail}
                   </button>
                 </div>
 
@@ -718,8 +1003,10 @@
     }
 
     function HomeLarryStyle({ onOpenMatcher }) {
+      const { copy } = useLanguage();
       const [activeFact, setActiveFact] = useState(null);
-      const selectedFact = HOME_FACTS.find((item) => item.id === activeFact);
+      const localizedFacts = HOME_FACTS.map((item) => ({ ...item, fact: copy.home.facts[item.id] }));
+      const selectedFact = localizedFacts.find((item) => item.id === activeFact);
 
       useEffect(() => {
         const closeWithEscape = (event) => {
@@ -736,7 +1023,7 @@
         >
           
           {/* Six dimensions of Cecilia: 3D objects reveal personal facts on hover / tap. */}
-          {HOME_FACTS.map((item) => (
+          {localizedFacts.map((item) => (
             <HomeFactObject
               key={item.id}
               item={item}
@@ -764,7 +1051,7 @@
                 <span className="font-serif italic font-normal text-slate-900">Cecilia!</span>
               </h1>
               <p className="text-base sm:text-xl font-medium text-slate-500 pt-1">
-                Product Manager / 产品经理
+                {copy.home.role}
               </p>
             </div>
 
@@ -780,7 +1067,7 @@
 
               {/* 标签：27届同济大学硕士研究生 */}
               <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full border border-slate-200/80 shadow-md text-xs font-semibold text-slate-800 whitespace-nowrap">
-                🎓 27届同济大学硕士研究生
+                🎓 {copy.home.student}
               </div>
             </div>
 
@@ -791,7 +1078,7 @@
                 className="px-10 py-4 rounded-full bg-white border-2 border-slate-200 hover:border-slate-900 text-slate-900 font-extrabold text-lg sm:text-xl transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center space-x-3"
               >
                 <span>Let's Work Together!</span>
-                <span className="text-xs bg-teal-100 text-teal-800 font-bold px-3 py-1 rounded-full border border-teal-200">AI 匹配器</span>
+                <span className="text-xs bg-teal-100 text-teal-800 font-bold px-3 py-1 rounded-full border border-teal-200">{copy.home.matcher}</span>
               </button>
             </div>
 
@@ -810,11 +1097,12 @@
        02. EDUCATION SECTION (Tiny Planet + clean education list)
        ========================================================================= */
     function EducationSection() {
+      const { copy } = useLanguage();
       const educationData = [
-        { id: 'tongji', num: '01', accent: '#FF5A1F', shape: 'triangle', schoolZh: '同济大学', schoolEn: 'Tongji University', period: '2024–2027', summary: '国际关系硕士 · GPA 4.81 / 5 · 均分 90.93', courses: ['MySQL数据库基础 (91)', '量化研究方法 (95)', '全球治理 (95)'] },
-        { id: 'turin', num: '02', accent: '#7C3AED', shape: 'circle', schoolZh: '意大利都灵大学', schoolEn: 'University of Turin', period: '2025–2026', summary: '国际关系双学位 · 均分 28.4 / 30', courses: ['The International Role of the EU (28)', 'Cities and Globalisation (30)', 'Global Economy and Multinational Corporations (29)'] },
-        { id: 'ucsb', num: '03', accent: '#2563EB', shape: 'square', schoolZh: '加州大学圣塔芭芭拉分校', schoolEn: 'University of California, Santa Barbara', period: '2021–2022', summary: 'Winter Visiting Student · Global Studies', courses: ['Global Economy and Development', 'Global Culture and Ethics'] },
-        { id: 'hbu', num: '04', accent: '#0FAF8F', shape: 'diamond', schoolZh: '湖北大学', schoolEn: 'Hubei University', period: '2019–2023', summary: '国际关系本科 · 专业排名 2 / 68 · 均分 92', courses: ['国际政治经济学 (95)', '媒介与政治传播 (97)', '法语 (93)'] },
+        { id: 'tongji', num: '01', accent: '#FF5A1F', shape: 'triangle', period: '2024–2027', ...copy.education.items.tongji },
+        { id: 'turin', num: '02', accent: '#7C3AED', shape: 'circle', period: '2025–2026', ...copy.education.items.turin },
+        { id: 'ucsb', num: '03', accent: '#2563EB', shape: 'square', period: '2021–2022', ...copy.education.items.ucsb },
+        { id: 'hbu', num: '04', accent: '#0FAF8F', shape: 'diamond', period: '2019–2023', ...copy.education.items.hbu },
       ];
 
       const [planetRotation, setPlanetRotation] = useState(0);
@@ -883,7 +1171,7 @@
           <div className="section-header">
             <div className="section-label font-mono font-bold text-teal-600 tracking-wider">02 / EDUCATION</div>
             <h2 className="section-title font-extrabold text-slate-900">GLOBAL ACADEMIC JOURNEY</h2>
-            <p className="section-subtitle text-slate-500">在不同的地方学习，也在不同的视角中理解世界。</p>
+            <p className="section-subtitle text-slate-500">{copy.education.subtitle}</p>
           </div>
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.18fr)_minmax(0,1fr)] lg:gap-8 items-start">
@@ -894,13 +1182,13 @@
               onPointerMove={movePlanet}
               onPointerUp={stopPlanetDrag}
               onPointerCancel={stopPlanetDrag}
-              aria-label="可左右拖动旋转的 Tiny Planet"
+              aria-label={copy.education.globeAria}
             >
               <div className="absolute inset-0 pointer-events-none" style={{ animation: 'educationPlanetFloat 32s ease-in-out infinite' }}>
                 <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.015]">
                   <img
                     src="assets/education-tiny-planet-circular.png"
-                    alt="融合武汉、都灵、圣塔芭芭拉与上海地标的圆形 Tiny Planet"
+                    alt={copy.education.globeAlt}
                     draggable="false"
                     className="absolute inset-0 h-full w-full object-contain will-change-transform drop-shadow-[0_22px_35px_rgba(15,23,42,.10)]"
                     style={{ transform: `rotate(${planetRotation}deg)`, transition: planetDrag.current ? 'none' : 'transform 80ms linear' }}
@@ -929,13 +1217,13 @@
                     <div className="min-w-0">
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-5">
                         <div className="min-w-0">
-                          <h3 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 transition-colors group-hover:text-slate-950">{edu.schoolZh}</h3>
-                          <p className="mt-1 text-[11px] sm:text-xs leading-relaxed tracking-wide text-slate-400">{edu.schoolEn}</p>
+                          <h3 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 transition-colors group-hover:text-slate-950">{edu.school}</h3>
+                          {edu.schoolEn && <p className="mt-1 text-[11px] sm:text-xs leading-relaxed tracking-wide text-slate-400">{edu.schoolEn}</p>}
                         </div>
                         <time className="whitespace-nowrap pt-1 text-[11px] font-mono text-slate-500">{edu.period}</time>
                       </div>
                       <p className="mt-2 text-xs sm:text-sm font-medium leading-5 text-slate-600">{edu.summary}</p>
-                      <div className={edu.id === 'turin' ? 'mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-[max-content_max-content]' : 'mt-2 flex flex-wrap gap-1.5'} aria-label={`${edu.schoolZh}课程`}>
+                      <div className={edu.id === 'turin' ? 'mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-[max-content_max-content]' : 'mt-2 flex flex-wrap gap-1.5'} aria-label={copy.education.coursesAria(edu.school)}>
                         {edu.courses.map((course, courseIndex) => (
                           <div key={course} className={edu.id === 'turin' && courseIndex === 2 ? 'sm:col-span-2' : ''}>
                             <span
@@ -1017,7 +1305,40 @@
       },
     ];
 
+    const localizeExperienceData = (copy) => {
+      const moduleKeys = {
+        hello: ['productDesign', 'dataDriven', 'commercialResearch'],
+        xiaohongshu: ['businessData', 'dataInsight', 'aiAutomation'],
+        tiktok: ['aiDataOperations', 'globalCollaboration', 'dataMonitoring'],
+        'bytedance-hr': ['organizationSupport'],
+      };
+      const skillKeys = {
+        hello: ['productDesign', 'userGrowth', 'monetization', 'aiProduct', 'dataAnalysis', null],
+        xiaohongshu: ['dataAnalysis', 'businessInsights', 'growthStrategy', 'aiAutomation', 'biTools'],
+        tiktok: ['aiDataOperations', 'globalCollaboration', 'projectManagement', 'dataVisualization', null],
+        'bytedance-hr': ['communication', 'organizationManagement', 'projectCoordination'],
+      };
+      const companyKeys = { hello: 'hello', xiaohongshu: 'xiaohongshu', tiktok: 'tiktok', 'bytedance-hr': 'hrbp' };
+      const locationKeys = { hello: 'shanghai', xiaohongshu: 'shanghai', tiktok: 'beijing', 'bytedance-hr': 'wuhan' };
+      const logoAltKeys = { hello: 'helloLogoAlt', xiaohongshu: 'xiaohongshuLogoAlt', tiktok: null, 'bytedance-hr': 'bytedanceLogoAlt' };
+
+      return experienceData.map((item) => {
+        const itemKey = companyKeys[item.id];
+        return {
+          ...item,
+          company: copy.experience.companies[itemKey],
+          role: copy.experience.roles[itemKey],
+          location: copy.experience.locations[locationKeys[item.id]],
+          opening: copy.experience.openings[itemKey],
+          logoAlt: logoAltKeys[item.id] ? copy.experience.aria[logoAltKeys[item.id]] : item.logoAlt,
+          modules: item.modules.map((module, index) => ({ ...module, ...copy.experience.modules[moduleKeys[item.id][index]] })),
+          skills: item.skills.map((skill, index) => skillKeys[item.id][index] ? copy.experience.skills[skillKeys[item.id][index]] : skill),
+        };
+      });
+    };
+
     function ExperienceCardVisual({ experience }) {
+      const { copy } = useLanguage();
       if (experience.id === 'hello') {
         return (
           <div className="experience-card-visual relative h-[238px] overflow-visible">
@@ -1028,7 +1349,7 @@
             <span className="absolute right-6 top-[55%] text-[9px] text-violet-300">◆</span>
             <div className="experience-card-visual-object absolute inset-0">
               <div className="absolute left-1/2 -top-8 h-[290px] w-[146px] -translate-x-1/2 rotate-[-4deg] overflow-hidden rounded-[22px] border-[5px] border-white bg-white shadow-[0_26px_42px_rgba(91,54,160,.27)]">
-                <img src="assets/experience/calio-challenge-hd.png" alt="Calio 30天健康挑战产品页面" className="h-full w-full object-contain" />
+                <img src="assets/experience/calio-challenge-hd.png" alt={copy.experience.aria.helloProductAlt} className="h-full w-full object-contain" />
               </div>
             </div>
           </div>
@@ -1044,7 +1365,7 @@
                 <div className="text-[8px] font-black text-slate-700">CREATOR TIER</div>
                 <div className="mt-2 flex items-center gap-2.5">
                   <span className="h-11 w-11 shrink-0 rounded-full" style={{ background: 'conic-gradient(#ff5a1f 0 24%, #ff9b78 24% 58%, #ffd8c8 58% 100%)' }}><span className="m-[9px] block h-[26px] w-[26px] rounded-full bg-white" /></span>
-                  <div className="space-y-1 text-[7px] text-slate-500"><div><b className="text-[#FF5A1F]">●</b> 头部</div><div><b className="text-[#FF9B78]">●</b> 腰部</div><div><b className="text-[#FFD8C8]">●</b> KOC</div></div>
+                  <div className="space-y-1 text-[7px] text-slate-500"><div><b className="text-[#FF5A1F]">●</b> {copy.experience.visual.creatorHead}</div><div><b className="text-[#FF9B78]">●</b> {copy.experience.visual.creatorMid}</div><div><b className="text-[#FFD8C8]">●</b> KOC</div></div>
                 </div>
               </div>
               <div className="absolute -right-1 top-5 z-[3] w-[45%] rotate-[4deg] rounded-[15px] border border-orange-100 bg-white p-2.5 shadow-[0_13px_25px_rgba(234,88,12,.13)]">
@@ -1054,15 +1375,15 @@
                 </div>
               </div>
               <div className="absolute bottom-5 left-1 z-[1] w-[49%] rotate-[3deg] rounded-[15px] border border-orange-100 bg-white p-2.5 shadow-[0_13px_25px_rgba(234,88,12,.12)]">
-                <div className="text-[7px] font-bold text-slate-500">投放趋势</div>
+                <div className="text-[7px] font-bold text-slate-500">{copy.experience.visual.trend}</div>
                 <svg viewBox="0 0 120 42" className="mt-1 h-9 w-full" aria-hidden="true"><path d="M2 35 C18 31, 25 34, 38 25 S60 29, 72 18 S93 20, 118 5" fill="none" stroke="#ff5a1f" strokeWidth="2" strokeLinecap="round" /><path d="M2 35 C18 31, 25 34, 38 25 S60 29, 72 18 S93 20, 118 5 L118 42 L2 42 Z" fill="#fff0e8" /></svg>
               </div>
               <div className="absolute bottom-2 right-0 z-[2] w-[45%] rotate-[-3deg] rounded-[15px] border border-orange-100 bg-white p-2.5 shadow-[0_13px_25px_rgba(234,88,12,.13)]">
-                <div className="text-[8px] font-black text-slate-700">策略建议</div>
-                <div className="mt-1.5 space-y-1 text-[7px] text-slate-500"><div><b className="text-emerald-500">✓</b> 优化达人组合</div><div><b className="text-emerald-500">✓</b> 复盘投放效率</div></div>
+                <div className="text-[8px] font-black text-slate-700">{copy.experience.visual.recommendation}</div>
+                <div className="mt-1.5 space-y-1 text-[7px] text-slate-500"><div><b className="text-emerald-500">✓</b> {copy.experience.visual.creatorOptimization}</div><div><b className="text-emerald-500">✓</b> {copy.experience.visual.efficiencyReview}</div></div>
               </div>
               <div className="absolute bottom-1 left-1/2 z-[5] h-12 w-[92px] -translate-x-1/2 rotate-[-5deg] overflow-hidden rounded-[14px] border border-red-100 bg-white px-2 shadow-[0_14px_26px_rgba(255,36,66,.2)]">
-                <img src={experience.logo} alt="小红书 logo" className="h-full w-full object-contain mix-blend-multiply" />
+                <img src={experience.logo} alt={copy.experience.aria.xiaohongshuLogoAlt} className="h-full w-full object-contain mix-blend-multiply" />
               </div>
             </div>
           </div>
@@ -1074,7 +1395,7 @@
           <div className="experience-card-visual relative h-[238px] overflow-visible">
             <span className="absolute left-1/2 top-[45%] h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-200/40 blur-3xl" />
             <div className="experience-card-visual-object absolute inset-0">
-              <svg viewBox="0 0 220 220" className="absolute left-1/2 -top-5 h-[250px] w-[250px] -translate-x-1/2 drop-shadow-[0_22px_30px_rgba(37,99,235,.28)]" aria-label="连接欧洲、美国和东南亚市场的全球协作网络">
+              <svg viewBox="0 0 220 220" className="absolute left-1/2 -top-5 h-[250px] w-[250px] -translate-x-1/2 drop-shadow-[0_22px_30px_rgba(37,99,235,.28)]" aria-label={copy.experience.aria.network}>
                 <defs><radialGradient id="experienceGlobe" cx="34%" cy="26%"><stop offset="0%" stopColor="#9fc9ff" /><stop offset="56%" stopColor="#4387ed" /><stop offset="100%" stopColor="#174aa3" /></radialGradient></defs>
                 <circle cx="110" cy="108" r="73" fill="url(#experienceGlobe)" stroke="#b7d4ff" strokeWidth="2" />
                 <ellipse cx="110" cy="108" rx="38" ry="73" fill="none" stroke="rgba(255,255,255,.38)" />
@@ -1102,7 +1423,7 @@
             <div className="absolute left-1 -top-1 z-[3] h-[132px] w-[96px] rotate-[-6deg] rounded-[15px] border border-emerald-100 bg-white p-2.5 shadow-[0_14px_26px_rgba(5,150,105,.15)]">
               <span className="absolute -top-9 left-1/2 h-12 w-1.5 -translate-x-1/2 rounded-full bg-blue-500 shadow-sm" /><span className="absolute -top-8 left-[44%] h-3 w-10 -translate-x-1/2 rounded-full border-[3px] border-blue-700 border-b-0" />
               <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50"><span className="relative h-5 w-5"><span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full bg-emerald-500" /><span className="absolute bottom-0 left-1/2 h-3 w-5 -translate-x-1/2 rounded-t-full bg-emerald-400" /></span></div>
-              <div className="mt-2 text-center text-[9px] font-black text-slate-700">面试协调</div><div className="mt-1 text-center text-[7px] text-slate-400">流程支持</div>
+              <div className="mt-2 text-center text-[9px] font-black text-slate-700">{copy.experience.visual.interviewCoordination}</div><div className="mt-1 text-center text-[7px] text-slate-400">{copy.experience.visual.processSupport}</div>
             </div>
             <div className="absolute -right-1 top-4 z-[2] h-[120px] w-[140px] rotate-[6deg] rounded-[8px] border border-emerald-100 bg-white p-2 pb-6 shadow-[0_14px_26px_rgba(5,150,105,.14)]">
               <div className="flex h-full items-end justify-center gap-1 overflow-hidden rounded bg-emerald-50 px-2 pb-2">
@@ -1120,6 +1441,7 @@
     }
 
     function ExperienceCard({ experience, isHovered, hasHoveredCard, onHover, onLeave, onSelect }) {
+      const { copy } = useLanguage();
       return (
         <button
           type="button"
@@ -1128,7 +1450,7 @@
           onFocus={onHover}
           onBlur={onLeave}
           onClick={onSelect}
-          aria-label={`查看 ${experience.company} 经历详情`}
+          aria-label={copy.experience.openAria(experience.company)}
           className={`experience-card group relative h-[430px] min-w-0 rounded-[30px] border bg-white p-3 text-left flex flex-col shadow-[0_18px_42px_rgba(15,23,42,.09)] ${hasHoveredCard && !isHovered ? 'experience-card-muted' : ''}`}
           style={{ borderColor: experience.border }}
         >
@@ -1149,6 +1471,7 @@
     }
 
     function ExperienceModal({ experience, onClose }) {
+      const { copy } = useLanguage();
       const closeButtonRef = useRef(null);
 
       useEffect(() => {
@@ -1166,7 +1489,7 @@
       return (
         <div className="experience-modal-backdrop fixed inset-0 z-[100] flex items-center justify-center bg-[#07142D]/35 p-4 backdrop-blur-[6px] sm:p-6" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
           <article role="dialog" aria-modal="true" aria-labelledby={`experience-${experience.id}-title`} className="experience-modal-panel relative max-h-[calc(100vh-2rem)] w-full max-w-[1120px] overflow-y-auto rounded-[28px] border border-white/80 bg-white shadow-[0_30px_100px_rgba(7,20,45,.28)]">
-            <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="关闭经历详情" className="absolute right-5 top-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-slate-500 shadow-sm transition hover:rotate-90 hover:border-slate-300 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-100">×</button>
+            <button ref={closeButtonRef} type="button" onClick={onClose} aria-label={copy.experience.modal.closeAria} className="absolute right-5 top-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-slate-500 shadow-sm transition hover:rotate-90 hover:border-slate-300 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-100">×</button>
             <div className="p-5 sm:p-7">
               <header className="flex items-center gap-4 border-b border-slate-100 pb-4 pr-12">
                 <div className="flex h-14 w-[86px] shrink-0 items-center justify-center overflow-hidden rounded-2xl border p-1" style={{ background: experience.tint, borderColor: experience.border }}>
@@ -1190,7 +1513,7 @@
               </section>
 
               <section className="mt-5">
-                <div className="font-mono text-[11px] font-black tracking-[.14em]" style={{ color: experience.accent }}>角色与产出</div>
+                <div className="font-mono text-[11px] font-black tracking-[.14em]" style={{ color: experience.accent }}>{copy.experience.modal.roleImpact}</div>
                 <div className={`mt-3 grid gap-4 ${experience.modules.length === 1 ? 'grid-cols-1' : 'md:grid-cols-3'}`}>
                   {experience.modules.map((module) => (
                     <article key={module.title} className="rounded-[18px] border border-slate-100 bg-slate-50/45 p-5">
@@ -1207,7 +1530,7 @@
               </section>
 
               <section className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center">
-                <div className="shrink-0 font-mono text-[11px] font-black tracking-[.14em] text-slate-400">技能</div>
+                <div className="shrink-0 font-mono text-[11px] font-black tracking-[.14em] text-slate-400">{copy.experience.modal.skills}</div>
                 <div className="flex flex-wrap gap-2">
                   {experience.skills.map((skill) => <span key={skill} className="rounded-full border px-3 py-1.5 text-[11px] font-bold" style={{ color: experience.accent, background: experience.tint, borderColor: experience.border }}>{skill}</span>)}
                 </div>
@@ -1219,8 +1542,11 @@
     }
 
     function ExperienceSection() {
-      const [activeExperience, setActiveExperience] = useState(null);
+      const { copy } = useLanguage();
+      const [activeExperienceId, setActiveExperienceId] = useState(null);
       const [hoveredId, setHoveredId] = useState(null);
+      const localizedExperienceData = localizeExperienceData(copy);
+      const activeExperience = localizedExperienceData.find((item) => item.id === activeExperienceId);
 
       return (
         <section className="section-container">
@@ -1244,7 +1570,7 @@
           <div className="section-header relative">
             <div className="section-label font-mono font-bold text-teal-600 tracking-wider">03 / EXPERIENCE</div>
             <h2 className="section-title font-extrabold text-slate-900">Where I learned to build products :)</h2>
-            <p className="section-subtitle text-slate-500">真实业务里的产品成长经历</p>
+            <p className="section-subtitle text-slate-500">{copy.experience.subtitle}</p>
 
             <div className="hidden lg:block absolute right-[18%] top-[-22px] w-14 h-14 animate-float-1 pointer-events-none">
               <div className="w-full h-full bg-gradient-to-br from-orange-300 to-[#FF4B00] [clip-path:polygon(50%_0,100%_100%,0_78%)] drop-shadow-xl rotate-12" />
@@ -1254,13 +1580,13 @@
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-            {experienceData.map((experience) => (
-              <ExperienceCard key={experience.id} experience={experience} isHovered={hoveredId === experience.id} hasHoveredCard={Boolean(hoveredId)} onHover={() => setHoveredId(experience.id)} onLeave={() => setHoveredId(null)} onSelect={() => setActiveExperience(experience)} />
+            {localizedExperienceData.map((experience) => (
+              <ExperienceCard key={experience.id} experience={experience} isHovered={hoveredId === experience.id} hasHoveredCard={Boolean(hoveredId)} onHover={() => setHoveredId(experience.id)} onLeave={() => setHoveredId(null)} onSelect={() => setActiveExperienceId(experience.id)} />
             ))}
           </div>
 
-          <p className="mt-12 text-center text-[11px] text-slate-400"><span aria-hidden="true" className="mr-2">⌁</span>点击一张职业卡片，探索 Cecilia 的职业经历。</p>
-          {activeExperience && <ExperienceModal experience={activeExperience} onClose={() => setActiveExperience(null)} />}
+          <p className="mt-12 text-center text-[11px] text-slate-400"><span aria-hidden="true" className="mr-2">⌁</span>{copy.experience.tip}</p>
+          {activeExperience && <ExperienceModal experience={activeExperience} onClose={() => setActiveExperienceId(null)} />}
         </section>
       );
     }
@@ -1269,19 +1595,15 @@
        04. PROJECTS SECTION (🥐 吃啥 & ☕ 赛道测测)
        ========================================================================= */
     function ProjectsSection() {
+      const { copy } = useLanguage();
       const [activeProject, setActiveProject] = useState(null);
 
       const projects = [
         {
           id: 'chisha',
           icon: '🥐',
-          title: '吃啥',
-          label: 'CAMPUS FOOD DECISION PRODUCT',
-          headline: '今天吃什么？',
-          supporting: '帮你',
-          emphasis: '少纠结一点',
-          suffix: '。',
-          taglineLines: ['Less browsing.', 'Faster decisions.'],
+          ...copy.projects.chisha,
+          taglineLines: copy.projects.chisha.tagline,
           demoUrl: 'https://campus-food-adviser.vercel.app/',
           domain: 'campus-food-adviser.vercel.app',
           homeImage: 'assets/chisha-home.png',
@@ -1297,12 +1619,8 @@
         {
           id: 'saidao',
           icon: '☕',
-          title: '赛道测测',
-          label: 'INTERNET CAREER EXPLORER',
-          headline: '我适合哪条',
-          emphasis: '互联网职业赛道',
-          suffix: '？',
-          taglineLines: ['Fun to enter.', 'Useful when you leave.'],
+          ...copy.projects.saidao,
+          taglineLines: copy.projects.saidao.tagline,
           demoUrl: 'https://saidao-cece.vercel.app/',
           domain: 'saidao-cece.vercel.app',
           homeImage: 'assets/saidao-home.png',
@@ -1340,7 +1658,7 @@
 
           <div className="mt-5">
             <a onClick={(event) => event.stopPropagation()} href={project.demoUrl} target="_blank" rel="noopener noreferrer" className={"inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-5 py-2.5 text-[10px] font-extrabold text-white transition-colors duration-200 2xl:text-[11px] " + project.buttonClass}>
-              在线体验 <span aria-hidden="true">↗</span>
+              {copy.projects.liveDemo} <span aria-hidden="true">↗</span>
             </a>
             <p className="mt-3 whitespace-nowrap font-mono text-[8px] font-medium tracking-[.02em] text-slate-400 2xl:text-[9px]">
               <span aria-hidden="true">●</span> LIVE · {project.domain}
@@ -1354,7 +1672,7 @@
         <button
           type="button"
           aria-pressed={isActive}
-          aria-label={project.title + '产品界面预览，点击切换悬浮效果'}
+          aria-label={copy.projects.previewAria(project.title)}
           onClick={onToggle}
           className={"group/visual relative h-[420px] w-full max-w-[350px] cursor-pointer overflow-visible justify-self-start rounded-2xl text-left outline-none transition-[transform,filter] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-4 " + (isActive ? '-translate-y-1.5' : '')}
         >
@@ -1368,7 +1686,7 @@
               <span className="absolute left-1/2 max-w-[60%] -translate-x-1/2 truncate text-[8px] font-medium text-slate-500">{project.domain}</span>
               <span className="ml-auto text-[10px] text-slate-400" aria-hidden="true">⌂ &nbsp; ↥</span>
             </div>
-            <img src={project.homeImage} alt={project.title + '真实产品首页'} className="block h-[calc(100%_-_28px)] w-full object-cover object-top" />
+            <img src={project.homeImage} alt={copy.projects.homeAlt(project.title)} className="block h-[calc(100%_-_28px)] w-full object-cover object-top" />
           </div>
 
           <div className={"absolute z-20 overflow-hidden rounded-xl border border-white/90 bg-white transition-[box-shadow,filter] duration-300 " + project.resultClass + " " + (isActive ? 'grayscale-[18%] shadow-[0_25px_48px_rgba(15,23,42,.24)]' : 'shadow-[0_17px_34px_rgba(15,23,42,.16)]')}>
@@ -1377,7 +1695,7 @@
               <span className="h-1.5 w-1.5 rounded-full bg-[#FFBD2E]" />
               <span className="h-1.5 w-1.5 rounded-full bg-[#28C840]" />
             </div>
-            <img src={project.resultImage} alt={project.title + '真实产品结果页'} className="block h-[calc(100%_-_20px)] w-full object-cover object-top" />
+            <img src={project.resultImage} alt={copy.projects.resultAlt(project.title)} className="block h-[calc(100%_-_20px)] w-full object-cover object-top" />
           </div>
           <span className={"pointer-events-none absolute inset-0 z-30 rounded-2xl bg-slate-900 transition-opacity duration-300 " + (isActive ? 'opacity-[.035]' : 'opacity-0')} />
         </button>
@@ -1426,6 +1744,7 @@
        05. SKILLS — CECILIA'S PRODUCT TOOLKIT
        ========================================================================= */
     function SkillsSection() {
+      const { copy } = useLanguage();
       const [activeSkill, setActiveSkill] = useState(null);
       const [hoveredSkill, setHoveredSkill] = useState(null);
       const [activeHobby, setActiveHobby] = useState(null);
@@ -1434,17 +1753,17 @@
       const highlightedHobby = hoveredHobby || activeHobby;
 
       const skills = [
-        { id: 'product', title: 'PRODUCT', details: ['PRD Writing', 'Requirement Analysis', 'User Flow', 'Figma', 'Cross-functional Collaboration'] },
-        { id: 'data', title: 'DATA', details: ['MySQL / SQL', 'Tableau', 'KNIME', 'SPSS', 'Stata'] },
-        { id: 'ai', title: 'AI & VIBE CODING', details: ['Vibe Coding', 'Cursor', 'Claude', 'Dify', 'n8n'] },
-        { id: 'global', title: 'LANGUAGES & GLOBAL', details: ['Chinese — Native', 'English — IELTS 7.0', 'International Experience'] },
+        { id: 'product', title: 'PRODUCT', details: copy.skills.product },
+        { id: 'data', title: 'DATA', details: copy.skills.data },
+        { id: 'ai', title: 'AI & VIBE CODING', details: copy.skills.ai },
+        { id: 'global', title: 'LANGUAGES & GLOBAL', details: copy.skills.global },
       ];
 
       const hobbies = [
-        { id: 'pingpong', title: 'Ping Pong', detail: '校级团队第五', type: 'sphere', position: 'lg:left-[3%] lg:top-[24%] xl:left-[-8%] 2xl:left-[-18%]', size: 'h-[78px] w-[78px]', floatClass: 'hobby-float-one' },
-        { id: 'swimming', title: 'Swimming', detail: '保持节奏与耐力感的一种方式', type: 'goggles', position: 'lg:left-[2%] lg:bottom-[15%] xl:left-[-10%] 2xl:left-[-20%]', size: 'h-[74px] w-[124px]', floatClass: 'hobby-float-two' },
-        { id: 'dance', title: 'Dance', detail: '通过舞蹈释放能量与表达自己', type: 'dance', position: 'lg:right-[3%] lg:top-[18%] xl:right-[-8%] 2xl:right-[-17%]', size: 'h-[86px] w-[78px]', floatClass: 'hobby-float-three' },
-        { id: 'volunteering', title: 'Volunteering', detail: '人口普查 / 音乐节志愿者', type: 'badge', position: 'lg:right-[2%] lg:bottom-[13%] xl:right-[-10%] 2xl:right-[-20%]', size: 'h-[92px] w-[76px]', floatClass: 'hobby-float-four' },
+        { id: 'pingpong', ...copy.skills.hobbies.pingpong, type: 'sphere', position: 'lg:left-[3%] lg:top-[24%] xl:left-[-8%] 2xl:left-[-18%]', size: 'h-[78px] w-[78px]', floatClass: 'hobby-float-one' },
+        { id: 'swimming', ...copy.skills.hobbies.swimming, type: 'goggles', position: 'lg:left-[2%] lg:bottom-[15%] xl:left-[-10%] 2xl:left-[-20%]', size: 'h-[74px] w-[124px]', floatClass: 'hobby-float-two' },
+        { id: 'dance', ...copy.skills.hobbies.dance, type: 'dance', position: 'lg:right-[3%] lg:top-[18%] xl:right-[-8%] 2xl:right-[-17%]', size: 'h-[86px] w-[78px]', floatClass: 'hobby-float-three' },
+        { id: 'volunteering', ...copy.skills.hobbies.volunteering, type: 'badge', position: 'lg:right-[2%] lg:bottom-[13%] xl:right-[-10%] 2xl:right-[-20%]', size: 'h-[92px] w-[76px]', floatClass: 'hobby-float-four' },
       ];
 
       const isVisible = (id) => highlightedSkill === id;
@@ -1629,6 +1948,7 @@
 
     // AI 岗位匹配器 Modal 弹窗
     function AIMatcherModal({ onClose }) {
+      const { copy } = useLanguage();
       const [jdText, setJdText] = useState('');
       const [isAnalyzing, setIsAnalyzing] = useState(false);
       const [hasAnalyzed, setHasAnalyzed] = useState(false);
@@ -1639,17 +1959,17 @@
       const analysisTimerRef = useRef(null);
 
       const presetRoles = [
-        { label: 'C端产品经理', icon: '♙', color: '#8b5cf6' },
-        { label: 'AI 产品经理', icon: '✦', color: '#16a871' },
-        { label: '国际化 / 出海 PM', icon: '◎', color: '#3478f6' },
-        { label: '数据 / 策略 PM', icon: '▥', color: '#ff6b1a' },
+        { id: 'consumer', query: 'C端产品经理', label: copy.matcher.presets[0], icon: '♙', color: '#8b5cf6' },
+        { id: 'ai', query: 'AI 产品经理', label: copy.matcher.presets[1], icon: '✦', color: '#16a871' },
+        { id: 'global', query: '国际化 / 出海 PM', label: copy.matcher.presets[2], icon: '◎', color: '#3478f6' },
+        { id: 'data', query: '数据 / 策略 PM', label: copy.matcher.presets[3], icon: '▥', color: '#ff6b1a' },
       ];
       const dimensions = [
-        { id: 'product', title: '产品能力', accent: '#8b5cf6', icon: '◇', keywords: '需求分析 · PRD · User Flow · 产品设计 · 产品思维', description: '衡量从问题识别、需求拆解到产品方案设计的完整产品能力。' },
-        { id: 'data', title: '数据能力', accent: '#16a871', icon: '◫', keywords: 'SQL · Tableau · KNIME · 数据分析 · 数据驱动决策', description: '衡量使用数据发现问题、验证判断并支持产品决策的能力。' },
-        { id: 'ai', title: 'AI 能力', accent: '#a43dff', icon: '✦', keywords: 'Vibe Coding · Cursor · Dify · n8n · AI 产品实践', description: '衡量理解并使用 AI 工具进行产品设计、自动化与实际落地的能力。' },
-        { id: 'collaboration', title: '沟通协作', accent: '#3478f6', icon: '♙', keywords: '跨团队沟通 · 英文沟通 · 跨文化协作 · 项目推动', description: '衡量在研发、运营、数据等多角色环境中沟通并推动项目的能力。' },
-        { id: 'execution', title: '执行落地', accent: '#ff6b1a', icon: '◎', keywords: '独立 Own 需求 · 0→1 落地 · 推动上线 · 实际交付', description: '衡量将问题从需求阶段推进到真实产品上线与交付的能力。' },
+        { id: 'product', accent: '#8b5cf6', icon: '◇', ...copy.matcher.dimensions.product },
+        { id: 'data', accent: '#16a871', icon: '◫', ...copy.matcher.dimensions.data },
+        { id: 'ai', accent: '#a43dff', icon: '✦', ...copy.matcher.dimensions.ai },
+        { id: 'collaboration', accent: '#3478f6', icon: '♙', ...copy.matcher.dimensions.collaboration },
+        { id: 'execution', accent: '#ff6b1a', icon: '◎', ...copy.matcher.dimensions.execution },
       ];
       const candidateProfile = {
         product: ['AI 健康产品经理实习', '独立输出 PRD', '需求分析与业务流程设计', '研发评审', 'Vibe Coding 独立产品'],
@@ -1680,9 +2000,9 @@
         const contains = (words) => words.some((word) => query.includes(word));
         const countHits = (words) => words.filter((word) => query.includes(word)).length;
         const role = classifyRole(query);
-        const international = contains(['国际化', '出海', '海外', '全球', '跨文化', '英文']);
-        const senior = contains(['8年以上', '八年以上', '10年以上', '十年以上', '总监', '负责人']);
-        const commercial = contains(['多年商业化', '广告平台', '增长变现', '商业化负责人']);
+        const international = contains(['国际化', '出海', '海外', '全球', '跨文化', '英文', 'global', 'international', 'overseas', 'cross-cultural', 'english']);
+        const senior = contains(['8年以上', '八年以上', '10年以上', '十年以上', '总监', '负责人', '8+ years', '10+ years', 'director', 'head of']);
+        const commercial = contains(['多年商业化', '广告平台', '增长变现', '商业化负责人', 'monetization', 'advertising platform', 'commercial lead']);
         const engineeringSkills = ['java', 'c++', 'go', 'golang', 'spring', 'redis', 'kafka', '微服务', '分布式', '高并发', '系统架构', '后端开发', '服务端开发', 'devops', '云原生'];
         const missingCoreCount = countHits(engineeringSkills);
 
@@ -1719,56 +2039,44 @@
         if (commercial) internalScore -= 7;
         if (role.id === 'engineering') internalScore = Math.min(internalScore - Math.min(missingCoreCount * 2, 10), 39);
 
-        const grade = internalScore >= 82
-          ? { letter: 'A', title: '高度匹配', english: 'Strong Match', note: '岗位方向一致，核心要求有充分的履历证据支撑。' }
-          : internalScore >= 60
-            ? { letter: 'B', title: '比较匹配', english: 'Good Match', note: '方向相近且有可迁移优势，但仍存在明确能力缺口。' }
-            : { letter: 'C', title: '一般匹配', english: 'Partial Match', note: '岗位核心能力与当前职业经历存在明显差距。' };
+        const grade = { letter: internalScore >= 82 ? 'A' : internalScore >= 60 ? 'B' : 'C' };
 
         const evidence = {
-          product: { id: 'product', title: '产品落地能力', text: 'PRD、需求分析与独立产品上线，为岗位提供直接证据。' },
-          data: { id: 'data', title: '数据驱动能力', text: 'SQL Mapping、KNIME 与 Tableau 支撑数据判断。' },
-          ai: { id: 'ai', title: 'AI 产品实践', text: 'Cursor、Dify、n8n 与 Vibe Coding 均有实际应用。' },
-          collaboration: { id: 'collaboration', title: international ? '跨文化沟通' : '跨团队推进', text: international ? 'TikTok 跨国项目及多轮英文校准会议提供直接证据。' : '具备 30+ 人协作与跨团队需求评审经验。' },
-          execution: { id: 'execution', title: '执行落地能力', text: '独立 Own PRD、推动评审并完成 0→1 上线。' },
-          transferableData: { id: 'data', title: '数据理解基础', text: 'SQL Mapping 与分析经验可迁移，但不等同于后端研发。' },
-          transferableCollab: { id: 'collaboration', title: '研发协作基础', text: '跨团队和研发评审经验可迁移至工程协作场景。' },
+          product: { id: 'product', copyKey: 'product' }, data: { id: 'data', copyKey: 'data' }, ai: { id: 'ai', copyKey: 'ai' },
+          collaboration: { id: 'collaboration', copyKey: international ? 'collaborationInternational' : 'collaborationDefault' },
+          execution: { id: 'execution', copyKey: 'execution' }, transferableData: { id: 'data', copyKey: 'transferableData' },
+          transferableCollab: { id: 'collaboration', copyKey: 'transferableCollaboration' },
         };
 
         let highlights;
-        let summary;
-        let gap;
+        let summaryKey;
+        let gapKey;
         if (role.id === 'engineering') {
           highlights = [evidence.transferableData, evidence.transferableCollab];
-          summary = '候选人有 SQL、数据分析及研发协作基础，但主要经历集中在产品管理与项目推进。';
-          gap = '后端开发、编程语言及服务端技术栈缺乏直接履历证据，因此判定为一般匹配。';
+          summaryKey = 'engineering.summary'; gapKey = 'engineering.gap';
         } else if (role.id === 'product') {
           highlights = international ? [evidence.collaboration, evidence.product, evidence.data] : [evidence.product, evidence.execution, evidence.data];
-          summary = international ? '产品落地、英文沟通与跨文化项目经历，与该国际化产品岗位高度重合。' : 'PRD、需求分析、数据判断与独立推进经历，对产品岗位形成直接支撑。';
-          gap = senior ? '岗位要求的资深年限与组织管理跨度高于当前经历，是主要补充空间。' : commercial ? '多年商业化产品闭环与变现规模仍需更多直接案例证明。' : '复杂技术架构或大规模商业化经验，仍需结合岗位实际要求进一步验证。';
+          summaryKey = international ? 'productInternational.summary' : 'productDefault.summary';
+          gapKey = senior ? 'productSenior.gap' : commercial ? 'productCommercial.gap' : 'productDefault.gap';
         } else if (role.id === 'aiProduct') {
           highlights = [evidence.ai, evidence.product, evidence.execution];
-          summary = 'AI 工具实践、产品设计与 0→1 落地经历，能够支撑 AI 产品岗位的主要工作。';
-          gap = '模型训练与底层算法工程并非当前强项，深技术岗位需要研发团队协同补位。';
+          summaryKey = 'aiProduct.summary'; gapKey = 'aiProduct.gap';
         } else if (role.id === 'data' || role.id === 'strategy') {
           highlights = [evidence.data, evidence.product, evidence.collaboration];
-          summary = '数据分析工具、指标口径与业务洞察经验，可支撑数据和策略类岗位的核心任务。';
-          gap = role.id === 'data' ? '高级统计建模与数据工程经验在当前履历中证据有限。' : '长期战略规划与高层经营决策经验仍需更多项目证明。';
+          summaryKey = 'dataStrategy.summary'; gapKey = role.id === 'data' ? 'data.gap' : 'strategy.gap';
         } else if (role.id === 'project' || role.id === 'operations') {
           highlights = [evidence.collaboration, evidence.execution, evidence.data];
-          summary = '跨团队协作、SOP 搭建和项目推动能力，可迁移至该岗位的协同与交付场景。';
-          gap = '该岗位的垂直业务运营深度仍需结合具体行业要求进一步验证。';
+          summaryKey = 'projectOperations.summary'; gapKey = 'projectOperations.gap';
         } else {
           highlights = [evidence.collaboration, evidence.data];
-          summary = '候选人具备数据理解和跨团队协作基础，但与该岗位的核心职业方向重合有限。';
-          gap = '当前简历缺少该岗位关键专业能力的直接证据，因此不做高匹配判断。';
+          summaryKey = 'other.summary'; gapKey = 'other.gap';
         }
 
         const coreCoverage = role.id === 'engineering'
           ? { matched: ['跨团队协作'], partial: ['SQL / 数据理解'], missing: engineeringSkills.filter((skill) => query.includes(skill)) }
           : { matched: candidateProfile[role.id === 'aiProduct' ? 'ai' : role.id] || candidateProfile.collaboration, partial: [], missing: [] };
 
-        return { role, grade, ability, demand, summary, gap, highlights, coreCoverage };
+        return { roleId: role.id, grade, ability, demand, summaryKey, gapKey, highlights, coreCoverage };
       };
 
       useEffect(() => {
@@ -1781,8 +2089,10 @@
       }, []);
 
       const handleStartMatch = (presetRole) => {
-        const nextRole = typeof presetRole === 'string' ? presetRole : selectedRole;
-        if (typeof presetRole === 'string') setSelectedRole(presetRole);
+        const isPreset = presetRole && typeof presetRole === 'object';
+        const selectedPreset = presetRoles.find((preset) => preset.id === selectedRole);
+        const nextRole = isPreset ? presetRole.query : selectedPreset?.query || '';
+        if (isPreset) setSelectedRole(presetRole.id);
         setHasAnalyzed(false);
         setActiveDimension(null);
         setLoadingStep(0);
@@ -1807,7 +2117,9 @@
         return point.x.toFixed(1) + ',' + point.y.toFixed(1);
       }).join(' ');
       const activeDimensionData = dimensions.find((item) => item.id === activeDimension);
-      const loadingMessages = ['识别岗位核心能力', '匹配 Cecilia 的经历', '分析能力结构', '生成匹配结论'];
+      const loadingMessages = copy.matcher.loading;
+      const branchCopy = (path) => path.split('.').reduce((value, key) => value[key], copy.matcher.branches);
+      const gradeCopy = matchResult ? copy.matcher.grades[matchResult.grade.letter] : null;
 
       return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/55 backdrop-blur-md animate-fade-in">
@@ -1815,20 +2127,20 @@
             <div className="matcher-modal-header px-5 pt-4 pb-3 sm:px-7 sm:pt-5 flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2.5">
-                  <h2 id="matcher-title" className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0c1836]">AI 岗位匹配器</h2>
+                  <h2 id="matcher-title" className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0c1836]">{copy.matcher.title}</h2>
                   <span className="text-[11px] font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full">Beta</span>
                 </div>
-                <p className="mt-1 text-xs text-slate-400">粘贴 JD，看看我们有多匹配！</p>
+                <p className="mt-1 text-xs text-slate-400">{copy.matcher.subtitle}</p>
               </div>
-              <button onClick={onClose} aria-label="关闭 AI 岗位匹配器" className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors">✕</button>
+              <button onClick={onClose} aria-label={copy.matcher.closeAria} className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors">✕</button>
             </div>
 
             <div className="matcher-scroll-area px-4 pb-3 sm:px-7 sm:pb-4 overflow-y-auto">
               <div className="matcher-input-panel bg-slate-50/70 p-3 rounded-[18px] border border-slate-200/80 space-y-2">
-                <div className="text-xs font-bold text-[#0c1836]">选择预设快捷尝试：</div>
+                <div className="text-xs font-bold text-[#0c1836]">{copy.matcher.presetsLabel}</div>
                 <div className="flex flex-wrap gap-2">
                   {presetRoles.map((preset) => (
-                    <button key={preset.label} onClick={() => handleStartMatch(preset.label)} aria-pressed={selectedRole === preset.label} className={'flex items-center gap-1.5 text-[11px] sm:text-xs bg-white border px-3 py-1.5 rounded-full text-slate-700 hover:-translate-y-0.5 hover:shadow-md font-semibold transition-all ' + (selectedRole === preset.label ? 'border-slate-400 shadow-sm' : 'border-slate-200')}>
+                    <button key={preset.id} onClick={() => handleStartMatch(preset)} aria-pressed={selectedRole === preset.id} className={'flex items-center gap-1.5 text-[11px] sm:text-xs bg-white border px-3 py-1.5 rounded-full text-slate-700 hover:-translate-y-0.5 hover:shadow-md font-semibold transition-all ' + (selectedRole === preset.id ? 'border-slate-400 shadow-sm' : 'border-slate-200')}>
                       <span style={{ color: preset.color }} className="text-base leading-none">{preset.icon}</span>{preset.label}
                     </button>
                   ))}
@@ -1839,11 +2151,11 @@
                     value={jdText}
                     onChange={(e) => setJdText(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter' && !isAnalyzing) handleStartMatch(); }}
-                    placeholder="粘贴您的 JD，看看胡敏雪与岗位之间的匹配度…"
+                    placeholder={copy.matcher.placeholder}
                     className="min-w-0 flex-1 text-xs sm:text-sm px-2 sm:px-3 outline-none text-slate-800 placeholder:text-slate-400"
                   />
                   <button disabled={isAnalyzing} onClick={() => handleStartMatch()} className="shrink-0 bg-[#0c1836] hover:bg-slate-800 disabled:opacity-70 text-white text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl transition-colors">
-                    {isAnalyzing ? '分析中…' : '开始匹配 →'}
+                    {isAnalyzing ? copy.matcher.analyzing : copy.matcher.analyze}
                   </button>
                 </div>
               </div>
@@ -1853,7 +2165,7 @@
                   <div className="flex gap-1.5 mb-4" aria-hidden="true">
                     <span className="matcher-loading-dot w-2.5 h-2.5 rounded-full bg-orange-500" /><span className="matcher-loading-dot w-2.5 h-2.5 rounded-full bg-violet-400" /><span className="matcher-loading-dot w-2.5 h-2.5 rounded-full bg-emerald-400" />
                   </div>
-                  <p className="text-base font-bold text-[#0c1836]">正在分析 JD…</p>
+                  <p className="text-base font-bold text-[#0c1836]">{copy.matcher.analyzingTitle}</p>
                   <p className="mt-2 text-xs text-slate-400" aria-live="polite">{loadingMessages[loadingStep]}</p>
                 </div>
               )}
@@ -1864,14 +2176,14 @@
                     <div className="absolute -left-12 -top-12 w-40 h-40 rounded-full bg-orange-100/45 blur-2xl" />
                     <div className="relative text-[11px] font-extrabold tracking-[.16em] text-orange-600">AI MATCH RESULT</div>
                     <div className="matcher-grade-letter relative text-[92px] sm:text-[100px] leading-[.88] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-orange-400 to-orange-600 drop-shadow-[0_10px_13px_rgba(249,115,22,.18)]">{matchResult.grade.letter}</div>
-                    <div className="relative text-xl sm:text-2xl font-black tracking-tight text-[#0c1836]">{matchResult.grade.title}</div>
-                    <div className="relative mt-0.5 text-[11px] font-bold text-orange-600">{matchResult.grade.english}</div>
-                    <div className="matcher-grade-note relative mt-3 w-full rounded-xl border border-orange-200/80 bg-white/75 px-3 py-2 text-left text-[11px] leading-relaxed text-slate-600"><span className="mr-1.5">⭐</span>{matchResult.grade.note}</div>
+                    <div className="relative text-xl sm:text-2xl font-black tracking-tight text-[#0c1836]">{gradeCopy.title}</div>
+                    {gradeCopy.english && <div className="relative mt-0.5 text-[11px] font-bold text-orange-600">{gradeCopy.english}</div>}
+                    <div className="matcher-grade-note relative mt-3 w-full rounded-xl border border-orange-200/80 bg-white/75 px-3 py-2 text-left text-[11px] leading-relaxed text-slate-600"><span className="mr-1.5">⭐</span>{gradeCopy.note}</div>
                   </section>
 
                   <section className="matcher-main-card lg:col-span-8 relative min-h-[280px] rounded-[20px] bg-white border border-slate-200/90 overflow-hidden">
-                    <div className="absolute right-4 top-4 z-10 flex items-center gap-1 text-[10px] text-slate-400"><span className="hidden sm:inline">悬停查看各能力维度的评估依据</span><span className="w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center font-serif">i</span></div>
-                    <svg viewBox="0 0 600 330" className="matcher-radar block w-full h-[280px]" aria-label="产品、数据、AI、沟通协作与执行落地五维能力雷达图">
+                    <div className="absolute right-4 top-4 z-10 flex items-center gap-1 text-[10px] text-slate-400"><span className="hidden sm:inline">{copy.matcher.hoverHint}</span><span className="w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center font-serif">i</span></div>
+                    <svg viewBox="0 0 600 330" className="matcher-radar block w-full h-[280px]" aria-label={copy.matcher.radarAria}>
                       {[1, .75, .5, .25].map((level) => <polygon key={level} points={polygonPoints([100,100,100,100,100], radius * level)} fill="none" stroke="#dbe2eb" strokeWidth="1" />)}
                       {angles.map((angle) => { const end = pointAt(radius, angle); return <line key={angle} x1={center.x} y1={center.y} x2={end.x} y2={end.y} stroke="#e3e8ef" strokeWidth="1" />; })}
                       <polygon points={polygonPoints(matchResult.demand)} fill="rgba(148,163,184,.08)" stroke="#b8c1cf" strokeWidth="1.3" strokeDasharray="4 4" />
@@ -1879,20 +2191,20 @@
                       {matchResult.ability.map((value, index) => {
                         const point = pointAt(radius * value / 100, angles[index]);
                         const dimension = dimensions[index];
-                        return <circle key={dimension.id} data-radar-dimension="true" role="button" tabIndex="0" aria-label={'查看' + dimension.title + '评估依据'} cx={point.x} cy={point.y} r={activeDimension === dimension.id ? 8 : 5.5} fill={activeDimension === dimension.id ? dimension.accent : '#ff6b1a'} stroke="white" strokeWidth="3" className="matcher-radar-label transition-all" onMouseEnter={() => setActiveDimension(dimension.id)} onFocus={() => setActiveDimension(dimension.id)} onClick={(event) => { event.stopPropagation(); setActiveDimension((current) => current === dimension.id ? null : dimension.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setActiveDimension(dimension.id); } }} />;
+                        return <circle key={dimension.id} data-radar-dimension="true" role="button" tabIndex="0" aria-label={copy.matcher.dimensionAria(dimension.title)} cx={point.x} cy={point.y} r={activeDimension === dimension.id ? 8 : 5.5} fill={activeDimension === dimension.id ? dimension.accent : '#ff6b1a'} stroke="white" strokeWidth="3" className="matcher-radar-label transition-all" onMouseEnter={() => setActiveDimension(dimension.id)} onFocus={() => setActiveDimension(dimension.id)} onClick={(event) => { event.stopPropagation(); setActiveDimension((current) => current === dimension.id ? null : dimension.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setActiveDimension(dimension.id); } }} />;
                       })}
                       {[
                         { x: 220, y: 22, anchor: 'middle' }, { x: 370, y: 110, anchor: 'start' }, { x: 333, y: 300, anchor: 'start' }, { x: 108, y: 300, anchor: 'end' }, { x: 64, y: 110, anchor: 'end' },
                       ].map((position, index) => {
                         const dimension = dimensions[index];
                         return (
-                          <g key={dimension.id} data-radar-dimension="true" role="button" tabIndex="0" aria-label={'查看' + dimension.title + '评估依据'} className="matcher-radar-label" onMouseEnter={() => setActiveDimension(dimension.id)} onFocus={() => setActiveDimension(dimension.id)} onClick={(event) => { event.stopPropagation(); setActiveDimension((current) => current === dimension.id ? null : dimension.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setActiveDimension(dimension.id); } }}>
+                          <g key={dimension.id} data-radar-dimension="true" role="button" tabIndex="0" aria-label={copy.matcher.dimensionAria(dimension.title)} className="matcher-radar-label" onMouseEnter={() => setActiveDimension(dimension.id)} onFocus={() => setActiveDimension(dimension.id)} onClick={(event) => { event.stopPropagation(); setActiveDimension((current) => current === dimension.id ? null : dimension.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setActiveDimension(dimension.id); } }}>
                             <rect className="matcher-label-pill" x={position.anchor === 'middle' ? position.x - 53 : position.anchor === 'end' ? position.x - 112 : position.x - 7} y={position.y - 17} width="120" height="34" rx="17" fill={activeDimension === dimension.id ? dimension.accent + '12' : 'transparent'} stroke="transparent" />
                             <text x={position.x} y={position.y + 5} textAnchor={position.anchor} fontSize="14" fontWeight="700" fill="#0c1836"><tspan fill={dimension.accent}>{dimension.icon} </tspan>{dimension.title}</text>
                           </g>
                         );
                       })}
-                      <g transform="translate(145 318)"><line x1="0" y1="0" x2="20" y2="0" stroke="#ff6b1a" strokeWidth="2" /><circle cx="10" cy="0" r="3" fill="#ff6b1a" /><text x="28" y="4" fontSize="10" fill="#8290a6">你的匹配表现</text><line x1="125" y1="0" x2="145" y2="0" stroke="#b8c1cf" strokeWidth="1.3" strokeDasharray="4 3" /><text x="153" y="4" fontSize="10" fill="#8290a6">岗位需求强度</text></g>
+                      <g transform="translate(128 318)"><line x1="0" y1="0" x2="20" y2="0" stroke="#ff6b1a" strokeWidth="2" /><circle cx="10" cy="0" r="3" fill="#ff6b1a" /><text x="28" y="4" fontSize="10" fill="#8290a6">{copy.matcher.radarLegend.candidate}</text><line x1="150" y1="0" x2="170" y2="0" stroke="#b8c1cf" strokeWidth="1.3" strokeDasharray="4 3" /><text x="178" y="4" fontSize="10" fill="#8290a6">{copy.matcher.radarLegend.requirement}</text></g>
                     </svg>
                     <div data-radar-dimension="true" data-visible={Boolean(activeDimensionData)} className="matcher-dimension-card absolute z-20 right-3 top-12 w-[238px] rounded-[18px] border border-slate-200 bg-white/95 p-4 shadow-[0_16px_40px_rgba(15,23,42,.14)] backdrop-blur-md">
                       {activeDimensionData && <React.Fragment><div className="flex items-center gap-2 font-bold text-sm text-[#0c1836]"><span style={{ color: activeDimensionData.accent }} className="text-lg">{activeDimensionData.icon}</span>{activeDimensionData.title}</div><p className="mt-2.5 text-[11px] font-semibold leading-relaxed text-slate-700">{activeDimensionData.keywords}</p><div className="my-3 h-px bg-slate-100" /><p className="text-[10px] leading-relaxed text-slate-500">{activeDimensionData.description}</p></React.Fragment>}
@@ -1900,15 +2212,16 @@
                   </section>
 
                   <section className="matcher-bottom-card lg:col-span-4 rounded-[20px] border border-slate-200/90 bg-white p-4">
-                    <h3 className="text-sm font-extrabold text-[#0c1836]">🤖 <span className="ml-1">AI 评估总结</span></h3>
-                    <div className="mt-2 text-[11px] sm:text-xs leading-relaxed text-slate-600 space-y-1.5"><p>{matchResult.summary}</p><p>{matchResult.gap}</p></div>
+                    <h3 className="text-sm font-extrabold text-[#0c1836]">🤖 <span className="ml-1">{copy.matcher.assessment}</span></h3>
+                    <div className="mt-2 text-[11px] sm:text-xs leading-relaxed text-slate-600 space-y-1.5"><p>{branchCopy(matchResult.summaryKey)}</p><p>{branchCopy(matchResult.gapKey)}</p></div>
                   </section>
                   <section className="matcher-bottom-card lg:col-span-8 rounded-[20px] border border-slate-200/90 bg-white p-4">
-                    <h3 className="text-sm font-extrabold text-[#0c1836]">⭐ <span className="ml-1">匹配亮点</span></h3>
+                    <h3 className="text-sm font-extrabold text-[#0c1836]">⭐ <span className="ml-1">{copy.matcher.highlights}</span></h3>
                     <div className={'mt-2 grid grid-cols-1 gap-2 ' + (matchResult.highlights.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3')}>
                       {matchResult.highlights.map((highlight, index) => {
                         const dimension = dimensions.find((item) => item.id === highlight.id);
-                        return <article key={highlight.id} className="rounded-xl border border-slate-100 bg-slate-50/65 p-2.5"><div className="flex items-center gap-2"><span style={{ backgroundColor: dimension.accent }} className="w-5 h-5 shrink-0 rounded-full text-white text-[8px] font-bold flex items-center justify-center">{'0' + (index + 1)}</span><h4 className="text-[11px] font-bold text-[#0c1836]">{highlight.title}</h4></div><p className="matcher-clamp-2 mt-1.5 text-[10px] leading-relaxed text-slate-500">{highlight.text}</p></article>;
+                        const highlightCopy = copy.matcher.evidence[highlight.copyKey];
+                        return <article key={highlight.copyKey} className="rounded-xl border border-slate-100 bg-slate-50/65 p-2.5"><div className="flex items-center gap-2"><span style={{ backgroundColor: dimension.accent }} className="w-5 h-5 shrink-0 rounded-full text-white text-[8px] font-bold flex items-center justify-center">{'0' + (index + 1)}</span><h4 className="text-[11px] font-bold text-[#0c1836]">{highlightCopy.title}</h4></div><p className="matcher-clamp-2 mt-1.5 text-[10px] leading-relaxed text-slate-500">{highlightCopy.text}</p></article>;
                       })}
                     </div>
                   </section>
@@ -1917,9 +2230,9 @@
             </div>
 
             <div className="px-5 py-2 border-t border-slate-100 flex items-center justify-between gap-3 bg-white sm:px-7 min-h-[44px]">
-              <p className="hidden sm:block text-[10px] text-slate-400">💡 Tip：匹配结果仅供参考，最终以真实沟通为准！</p>
+              <p className="hidden sm:block text-[10px] text-slate-400">{copy.matcher.tip}</p>
               <button onClick={onClose} className="ml-auto bg-[#0c1836] hover:bg-slate-800 text-white text-xs font-bold px-5 py-2 rounded-full transition-colors">
-                ✕&nbsp;&nbsp;关闭
+                {copy.matcher.close}
               </button>
             </div>
           </div>
