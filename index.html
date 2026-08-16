@@ -383,7 +383,7 @@
               <div className="w-full"><EducationSection /></div>
             </section>
 
-            <section id="experience" data-section="EXPERIENCE" className="portfolio-section py-24">
+            <section id="experience" data-section="EXPERIENCE" className="portfolio-section pt-20 pb-16">
               <ExperienceSection />
             </section>
 
@@ -876,103 +876,166 @@
     /* =========================================================================
        03. EXPERIENCE SECTION (collectible experience cards)
        ========================================================================= */
-    function ExperienceVisual({ type }) {
-      if (type === 'calio') {
+    const experienceData = [
+      {
+        id: 'hello', num: '01', company: 'Calio @ Hello 哈啰', role: 'AI 健康产品经理实习生', location: '上海', timeline: '2026.06 — 2026.07', year: '2026',
+        logo: 'assets/experience/hello-logo.png', logoAlt: 'Hello 哈啰 logo', logoScale: 1.42, accent: '#7C3AED', tint: '#F5F0FF', border: '#DDD0FF', positioning: 'AI Health · Growth · Data',
+        opening: '用 AI 产品连接用户健康体验与商业增长',
+        intro: '参与 AI 健康管理产品迭代，围绕用户行为、会员转化和数据分析，探索健康产品从功能体验到商业价值的完整链路。',
+        cardSkills: ['AI 产品', '用户增长', '数据分析'],
+        modules: [
+          { icon: '◆', title: '产品设计', bullets: ['独立输出「30天健康挑战」活动 PRD，设计用户参与流程、挑战机制与奖励规则', '完成需求分析、业务流程设计及研发评审，推动方案落地', '结合用户场景探索提升参与度与付费转化的产品机制'] },
+          { icon: '●', title: '数据驱动', bullets: ['从 0 到 1 搭建产品数据分析体系', '梳理用户增长、核心行为、留存及商业化指标', '完成 SQL 字段 Mapping、数据口径梳理与埋点方案设计'] },
+          { icon: '✦', title: '商业化研究', bullets: ['调研竞品活动玩法、定价策略及返还机制', '分析目标用户参与门槛与激励方式', '输出方案对比与优化建议，支持产运评审'] },
+        ],
+        output: '搭建「用户行为 → 数据分析 → 产品优化 → 商业增长」的数据驱动产品闭环。',
+        skills: ['产品设计', '用户增长', '商业化', 'AI 产品', '数据分析', 'SQL'],
+      },
+      {
+        id: 'xiaohongshu', num: '02', company: '小红书', role: '商业化平台数据洞察实习生', location: '上海', timeline: '2025.05 — 2025.09', year: '2025',
+        logo: 'assets/experience/xiaohongshu-logo.png', logoAlt: '小红书 logo', logoScale: 1.16, accent: '#FF5A1F', tint: '#FFF5EE', border: '#FFD7BF', positioning: 'Business · Insight · AI',
+        opening: '从商业数据中发现增长机会',
+        intro: '围绕品牌投放效果与商业增长，通过数据分析帮助业务团队理解市场表现，并转化为策略优化建议。',
+        cardSkills: ['商业洞察', '增长策略', 'AI 自动化'],
+        modules: [
+          { icon: '●', title: '商业数据分析', bullets: ['支撑医美、耐消家具双赛道数据运营', '分析 20+ 品牌 CPC / CPUV / SOV / AIPS 等指标', '处理数据口径偏差与异常数据问题'] },
+          { icon: '◆', title: '数据洞察', bullets: ['输出品牌投放复盘报告与优化洞察', '协同 CBD 与客户推进策略调整'] },
+          { icon: '✦', title: 'AI 自动化探索', bullets: ['撰写数据复盘 SOP', '探索 n8n、Dify 自动化工作流', '提升团队数据交付效率约 15%'] },
+        ],
+        output: '将零散数据需求转化为标准化分析框架。',
+        skills: ['数据分析', '商业洞察', '增长策略', 'AI 自动化', 'BI 工具'],
+      },
+      {
+        id: 'tiktok', num: '03', company: 'TikTok @ ByteDance', role: '国际化项目管理实习生', location: '北京', timeline: '2024.04 — 2024.08', year: '2024',
+        logo: 'assets/experience/tiktok-logo.png', logoAlt: 'TikTok logo', logoScale: .8, accent: '#2563EB', tint: '#EFF5FF', border: '#C8DAFF', positioning: 'Global · AI Data · Quality',
+        opening: '在全球 AI 项目中连接数据、流程与团队协作',
+        intro: '参与大模型训练数据运营，在跨文化协作中把数据监控、流程标准化与项目推进连接起来。',
+        cardSkills: ['AI 数据运营', '国际协作', '项目管理'],
+        modules: [
+          { icon: '◆', title: 'AI 数据运营', bullets: ['参与 AI 大模型训练数据运营体系建设', '使用 KNIME 处理 Quality / UR / PSR 指标', '输出数据分析与可视化报告'] },
+          { icon: '●', title: '全球项目协作', bullets: ['参与 30+ 人国际项目协作', '主导 10+ 轮 GPM-SP-产品英文校准会议', '将模糊需求转化为 SOP'] },
+          { icon: '✦', title: '数据监控', bullets: ['搭建项目指标看板', '推动标注准确率从 85% 提升至 95%'] },
+        ],
+        output: '通过数据监控和流程优化，提升 AI 数据运营质量。',
+        skills: ['AI 数据运营', '国际化协作', '项目管理', '数据可视化', 'KNIME'],
+      },
+      {
+        id: 'bytedance-hr', num: '04', company: 'ByteDance HRBP', role: 'HRBP Intern', location: '武汉', timeline: '2021.07 — 2021.08', year: '2021',
+        logo: 'assets/experience/bytedance-logo.png', logoAlt: 'ByteDance 字节跳动 logo', logoScale: 1.12, accent: '#059669', tint: '#F0FAF6', border: '#C5ECDD', positioning: 'People · Organization · Team', earlier: true,
+        opening: '从组织与人才视角理解互联网团队运作',
+        intro: '这段早期经历让我从团队协作与组织运作的视角，理解产品背后人与流程的连接。',
+        cardSkills: ['沟通协作', '组织管理', '项目协调'],
+        modules: [
+          { icon: '◇', title: '组织与人才支持', bullets: ['支持 170 人团队活动组织与沟通协调', '协助招聘流程推进', '参与候选人沟通与面试协调'] },
+        ],
+        output: '建立对互联网团队协作、人才流程与组织运作的初步理解。',
+        skills: ['沟通协作', '组织管理', '项目协调'],
+      },
+    ];
+
+    function ExperienceCardVisual({ experience }) {
+      if (experience.id === 'hello') {
         return (
-          <div className="relative h-full overflow-visible">
-            <div className="absolute inset-x-2 inset-y-3 rounded-[26px] bg-gradient-to-br from-fuchsia-300 to-violet-400 -rotate-[5deg] opacity-70" />
-            <div className="absolute inset-0 rounded-[26px] bg-[#F5F2FF] border border-violet-100 shadow-[0_16px_32px_rgba(109,73,190,.18)] overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_5%,rgba(216,180,254,.45),transparent_42%)]" />
-              <img src="assets/calio-30-day-challenge.png" alt="Calio 30天健康挑战产品视觉" className="absolute left-1/2 top-0 h-[113%] w-auto -translate-x-1/2 object-contain drop-shadow-[0_14px_20px_rgba(91,54,160,.18)]" />
+          <div className="experience-card-visual relative h-[238px] overflow-visible">
+            <span className="absolute left-1/2 top-[42%] h-40 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-200/35 blur-3xl" />
+            <img src={experience.logo} alt="" aria-hidden="true" className="absolute left-3 top-3 h-7 w-14 object-contain opacity-55 mix-blend-multiply" />
+            <span className="absolute right-5 top-6 text-[12px] text-violet-400">✦</span>
+            <span className="absolute left-6 top-[48%] h-2 w-2 rounded-full bg-violet-300" />
+            <span className="absolute right-6 top-[55%] text-[9px] text-violet-300">◆</span>
+            <div className="experience-card-visual-object absolute inset-0">
+              <div className="absolute left-1/2 -top-8 h-[290px] w-[146px] -translate-x-1/2 rotate-[-4deg] overflow-hidden rounded-[22px] border-[5px] border-white bg-white shadow-[0_26px_42px_rgba(91,54,160,.27)]">
+                <img src="assets/experience/calio-challenge-hd.png" alt="Calio 30天健康挑战产品页面" className="h-full w-full object-contain" />
+              </div>
             </div>
           </div>
         );
       }
 
-      if (type === 'xiaohongshu') {
+      if (experience.id === 'xiaohongshu') {
         return (
-          <div className="relative h-full overflow-visible">
-            <div className="absolute inset-x-1 inset-y-3 rounded-[28px] bg-orange-400/75 rotate-[6deg]" />
-            <div className="absolute inset-0 rounded-[26px] bg-[#FFF9F3] border border-orange-100 shadow-[0_16px_32px_rgba(234,88,12,.13)] overflow-hidden p-4">
-            <div className="relative z-10 flex items-end justify-between">
-              <div>
-                <div className="text-[9px] font-black text-slate-900">商业洞察分析</div>
-                <div className="mt-1 text-[7px] font-mono tracking-wider text-orange-500">BRAND GROWTH REPORT</div>
-              </div>
-              <div className="w-9 h-9 rounded-xl bg-[#FF2442] text-white text-[9px] font-black flex items-center justify-center shadow-md">小红书</div>
-            </div>
-            <div className="relative z-10 mt-3 grid grid-cols-4 gap-1">
-              {['曝光量', '点击率', '转化率', 'ROI'].map((metric, index) => (
-                <div key={metric} className="bg-white rounded-lg px-1 py-2 text-center shadow-sm border border-orange-100">
-                  <div className="text-[6px] text-slate-400">{metric}</div>
-                  <div className="mt-1 text-[9px] font-black text-slate-800">{['2.6M','8.23%','3.65%','5.21'][index]}</div>
-                  <div className="mt-0.5 text-[6px] font-bold text-emerald-500">↑ {['18.7%','12.4%','15.8%','9.3%'][index]}</div>
+          <div className="experience-card-visual relative h-[238px] overflow-visible">
+            <span className="absolute left-1/2 top-[48%] h-44 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-100/65 blur-3xl" />
+            <div className="experience-card-visual-object absolute inset-0">
+              <div className="absolute -left-1 top-1 z-[2] w-[48%] rotate-[-4deg] rounded-[15px] border border-orange-100 bg-white p-3 shadow-[0_13px_25px_rgba(234,88,12,.13)]">
+                <div className="text-[8px] font-black text-slate-700">CREATOR TIER</div>
+                <div className="mt-2 flex items-center gap-2.5">
+                  <span className="h-11 w-11 shrink-0 rounded-full" style={{ background: 'conic-gradient(#ff5a1f 0 24%, #ff9b78 24% 58%, #ffd8c8 58% 100%)' }}><span className="m-[9px] block h-[26px] w-[26px] rounded-full bg-white" /></span>
+                  <div className="space-y-1 text-[7px] text-slate-500"><div><b className="text-[#FF5A1F]">●</b> 头部</div><div><b className="text-[#FF9B78]">●</b> 腰部</div><div><b className="text-[#FFD8C8]">●</b> KOC</div></div>
                 </div>
-              ))}
-            </div>
-            <div className="absolute left-4 right-4 bottom-4 h-[43%] rounded-2xl bg-white border border-orange-100 shadow-sm p-3 overflow-hidden">
-              <div className="text-[7px] font-bold text-slate-500">趋势分析</div>
-              <div className="absolute inset-x-3 bottom-4 top-8 flex items-end gap-1 opacity-55">
-                {[18, 30, 42, 38, 61, 49, 67, 63, 86].map((height, index) => <div key={index} className="flex-1 rounded-t bg-orange-100" style={{ height: `${height}%` }} />)}
               </div>
-              <div className="absolute left-5 bottom-10 w-[88%] h-[44%] border-t-[3px] border-orange-500 rotate-[-7deg] [clip-path:polygon(0_45%,14%_66%,28%_39%,43%_54%,58%_24%,72%_38%,85%_8%,100%_0,100%_14%,86%_24%,72%_52%,58%_38%,43%_68%,28%_53%,14%_80%,0_58%)] bg-orange-400/25" />
-            </div>
+              <div className="absolute -right-1 top-5 z-[3] w-[45%] rotate-[4deg] rounded-[15px] border border-orange-100 bg-white p-2.5 shadow-[0_13px_25px_rgba(234,88,12,.13)]">
+                <div className="text-[8px] font-black text-slate-700">MEDIA SIGNALS</div>
+                <div className="mt-2 grid grid-cols-2 gap-1.5">
+                  {['CPC', 'CPUV', 'SOV', 'AIPS'].map((metric) => <div key={metric} className="rounded-md bg-orange-50 px-1.5 py-1.5 text-[7px] font-bold text-orange-600">{metric}<span className="float-right text-slate-300">—</span></div>)}
+                </div>
+              </div>
+              <div className="absolute bottom-5 left-1 z-[1] w-[49%] rotate-[3deg] rounded-[15px] border border-orange-100 bg-white p-2.5 shadow-[0_13px_25px_rgba(234,88,12,.12)]">
+                <div className="text-[7px] font-bold text-slate-500">投放趋势</div>
+                <svg viewBox="0 0 120 42" className="mt-1 h-9 w-full" aria-hidden="true"><path d="M2 35 C18 31, 25 34, 38 25 S60 29, 72 18 S93 20, 118 5" fill="none" stroke="#ff5a1f" strokeWidth="2" strokeLinecap="round" /><path d="M2 35 C18 31, 25 34, 38 25 S60 29, 72 18 S93 20, 118 5 L118 42 L2 42 Z" fill="#fff0e8" /></svg>
+              </div>
+              <div className="absolute bottom-2 right-0 z-[2] w-[45%] rotate-[-3deg] rounded-[15px] border border-orange-100 bg-white p-2.5 shadow-[0_13px_25px_rgba(234,88,12,.13)]">
+                <div className="text-[8px] font-black text-slate-700">策略建议</div>
+                <div className="mt-1.5 space-y-1 text-[7px] text-slate-500"><div><b className="text-emerald-500">✓</b> 优化达人组合</div><div><b className="text-emerald-500">✓</b> 复盘投放效率</div></div>
+              </div>
+              <div className="absolute bottom-1 left-1/2 z-[5] h-12 w-[92px] -translate-x-1/2 rotate-[-5deg] overflow-hidden rounded-[14px] border border-red-100 bg-white px-2 shadow-[0_14px_26px_rgba(255,36,66,.2)]">
+                <img src={experience.logo} alt="小红书 logo" className="h-full w-full object-contain mix-blend-multiply" />
+              </div>
             </div>
           </div>
         );
       }
 
-      if (type === 'tiktok') {
+      if (experience.id === 'tiktok') {
         return (
-          <div className="relative h-full overflow-visible">
-            <div className="absolute inset-x-1 inset-y-3 rounded-[28px] bg-blue-500/70 -rotate-[5deg]" />
-            <div className="absolute inset-0 rounded-[26px] bg-[#0E2B59] border border-blue-300/20 shadow-[0_18px_34px_rgba(30,64,175,.22)] overflow-hidden p-5 text-white">
-            <div className="absolute -right-10 -top-8 w-36 h-36 rounded-full bg-blue-400/25 blur-2xl" />
-            <div className="absolute inset-x-4 top-10 h-28 opacity-55 rounded-[50%] border border-blue-300/20">
-              <div className="absolute left-[8%] top-[35%] w-[84%] h-px bg-blue-300 rotate-6" />
-              <div className="absolute left-[18%] top-[15%] w-px h-[72%] bg-blue-300 -rotate-[28deg]" />
-              {[['15%','33%'],['42%','18%'],['70%','42%'],['31%','68%'],['81%','71%']].map((point, index) => (
-                <span key={index} className="absolute w-2 h-2 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,.8)]" style={{ left: point[0], top: point[1] }} />
-              ))}
-            </div>
-            <div className="relative z-10 text-[9px] font-mono tracking-wider text-blue-200">GLOBAL DATA QUALITY</div>
-            <div className="absolute left-5 bottom-5 right-5 z-10 grid grid-cols-2 gap-2">
-              <div className="rounded-2xl bg-white/10 border border-white/15 p-3">
-                <div className="text-[8px] text-blue-200">Accuracy</div>
-                <div className="mt-1 text-2xl font-black">95%</div>
-              </div>
-              <div className="rounded-2xl bg-white/10 border border-white/15 p-3">
-                <div className="text-[8px] text-blue-200">Global Team</div>
-                <div className="mt-1 text-2xl font-black">30+</div>
-              </div>
-            </div>
-            <div className="absolute right-5 top-4 text-xs font-black tracking-tight">TikTok ♪</div>
+          <div className="experience-card-visual relative h-[238px] overflow-visible">
+            <span className="absolute left-1/2 top-[45%] h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-200/40 blur-3xl" />
+            <div className="experience-card-visual-object absolute inset-0">
+              <svg viewBox="0 0 220 220" className="absolute left-1/2 -top-5 h-[250px] w-[250px] -translate-x-1/2 drop-shadow-[0_22px_30px_rgba(37,99,235,.28)]" aria-label="连接欧洲、美国和东南亚市场的全球协作网络">
+                <defs><radialGradient id="experienceGlobe" cx="34%" cy="26%"><stop offset="0%" stopColor="#9fc9ff" /><stop offset="56%" stopColor="#4387ed" /><stop offset="100%" stopColor="#174aa3" /></radialGradient></defs>
+                <circle cx="110" cy="108" r="73" fill="url(#experienceGlobe)" stroke="#b7d4ff" strokeWidth="2" />
+                <ellipse cx="110" cy="108" rx="38" ry="73" fill="none" stroke="rgba(255,255,255,.38)" />
+                <ellipse cx="110" cy="108" rx="73" ry="28" fill="none" stroke="rgba(255,255,255,.34)" />
+                <path d="M52 70 C83 92 139 91 168 70 M48 139 C83 121 142 122 173 143" fill="none" stroke="rgba(255,255,255,.3)" strokeDasharray="3 4" />
+                <path d="M80 64 L96 52 L113 59 L107 75 L119 87 L106 99 L90 93 L84 78 Z M129 104 L145 96 L161 106 L153 120 L160 135 L141 144 L128 132 L134 117 Z M73 119 L89 110 L99 122 L91 141 L77 149 L67 135 Z" fill="rgba(255,255,255,.8)" />
+                <path d="M78 75 Q116 20 151 79 M151 79 Q184 116 148 139 M148 139 Q105 175 76 130" fill="none" stroke="white" strokeWidth="1.5" strokeDasharray="4 4" opacity=".8" />
+                {[[78,75],[151,79],[148,139],[76,130]].map((point, index) => <g key={index}><circle cx={point[0]} cy={point[1]} r="7" fill="rgba(255,255,255,.25)" /><circle cx={point[0]} cy={point[1]} r="3.5" fill="white" /></g>)}
+              </svg>
+              <div className="absolute -left-1 top-5 z-[3] rotate-[-5deg] rounded-xl border border-blue-100 bg-white/95 px-2.5 py-2 shadow-[0_9px_19px_rgba(37,99,235,.14)]"><div className="text-[8px] font-black text-blue-700">EU TEAM</div><div className="mt-0.5 text-[7px] text-slate-400">DATA QUALITY</div></div>
+              <div className="absolute -right-1 top-[76px] z-[3] rotate-[4deg] rounded-xl border border-blue-100 bg-white/95 px-2.5 py-2 shadow-[0_9px_19px_rgba(37,99,235,.14)]"><div className="text-[8px] font-black text-blue-700">U.S. TEAM</div><div className="mt-0.5 text-[7px] text-slate-400">CALIBRATION</div></div>
+              <div className="absolute bottom-5 -left-1 z-[3] rotate-[4deg] rounded-xl border border-blue-100 bg-white/95 px-2.5 py-2 shadow-[0_9px_19px_rgba(37,99,235,.14)]"><div className="text-[8px] font-black text-blue-700">SEA TEAM</div><div className="mt-0.5 text-[7px] text-slate-400">OPERATIONS</div></div>
+              <div className="absolute bottom-0 right-4 z-[5] h-[78px] w-[78px] rotate-[7deg] overflow-hidden rounded-[21px] border-[3px] border-slate-900 bg-black shadow-[0_18px_28px_rgba(15,23,42,.32)]"><img src={experience.logo} alt="TikTok logo" className="h-full w-full object-cover" /></div>
+              <div className="absolute bottom-0 left-[36%] z-[4] rounded-full border border-blue-100 bg-white/95 px-2 py-1 font-mono text-[7px] font-black text-blue-600 shadow-sm">85% → 95%</div>
             </div>
           </div>
         );
       }
 
       return (
-        <div className="relative h-full overflow-visible">
-          <div className="absolute inset-x-1 inset-y-3 rounded-[28px] bg-emerald-400/55 rotate-[5deg]" />
-          <div className="absolute inset-0 rounded-[26px] bg-[#EDF9F3] border border-emerald-100 shadow-[0_18px_34px_rgba(5,150,105,.14)] overflow-hidden">
-            <img src="assets/bytedance-hr-workshop.png" alt="现代团队 workshop 场景" className="absolute inset-x-0 top-0 w-full h-[76%] object-cover" />
-            <div className="absolute left-[24%] right-[19%] top-[15%] h-[27%] flex items-center justify-center text-center text-white text-[10px] sm:text-[11px] font-serif italic leading-4 drop-shadow-md">
-              Inspire Creativity<br />Enrich Life
+        <div className="experience-card-visual relative h-[238px] overflow-visible">
+          <span className="absolute left-1/2 top-[48%] h-44 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-100/65 blur-3xl" />
+          <img src={experience.logo} alt="" aria-hidden="true" className="absolute right-1 top-1 h-8 w-20 object-contain opacity-38 mix-blend-multiply" />
+          <div className="experience-card-visual-object absolute inset-0">
+            <div className="absolute left-1 -top-1 z-[3] h-[132px] w-[96px] rotate-[-6deg] rounded-[15px] border border-emerald-100 bg-white p-2.5 shadow-[0_14px_26px_rgba(5,150,105,.15)]">
+              <span className="absolute -top-9 left-1/2 h-12 w-1.5 -translate-x-1/2 rounded-full bg-blue-500 shadow-sm" /><span className="absolute -top-8 left-[44%] h-3 w-10 -translate-x-1/2 rounded-full border-[3px] border-blue-700 border-b-0" />
+              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50"><span className="relative h-5 w-5"><span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full bg-emerald-500" /><span className="absolute bottom-0 left-1/2 h-3 w-5 -translate-x-1/2 rounded-t-full bg-emerald-400" /></span></div>
+              <div className="mt-2 text-center text-[9px] font-black text-slate-700">面试协调</div><div className="mt-1 text-center text-[7px] text-slate-400">流程支持</div>
             </div>
-            <div className="absolute inset-x-0 bottom-0 h-[29%] bg-white/96 grid grid-cols-4 gap-1 p-2 pt-3">
-              {['招聘支持','组织发展','活动策划','数据分析'].map((item, index) => (
-                <div key={item} className="text-center text-[6px] font-medium text-emerald-800">
-                  <div className="mx-auto mb-1 w-6 h-6 rounded-lg border border-emerald-100 bg-emerald-50 flex items-center justify-center text-[11px]">{['♙','♧','♡','⌁'][index]}</div>{item}
-                </div>
-              ))}
+            <div className="absolute -right-1 top-4 z-[2] h-[120px] w-[140px] rotate-[6deg] rounded-[8px] border border-emerald-100 bg-white p-2 pb-6 shadow-[0_14px_26px_rgba(5,150,105,.14)]">
+              <div className="flex h-full items-end justify-center gap-1 overflow-hidden rounded bg-emerald-50 px-2 pb-2">
+                {[0,1,2,3,4].map((person) => <span key={person} className="relative h-10 w-4"><span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 rounded-full bg-emerald-300" /><span className="absolute bottom-0 left-1/2 h-7 w-4 -translate-x-1/2 rounded-t-full bg-emerald-500/80" /></span>)}
+              </div>
+              <div className="mt-1 text-center font-serif text-[8px] italic text-slate-500">Team Building</div>
             </div>
+            <div className="absolute bottom-4 left-4 right-3 z-[4] rotate-[-2deg] rounded-[13px] border border-dashed border-emerald-200 bg-[#F2FAF5] px-4 py-3 shadow-[0_13px_24px_rgba(5,150,105,.13)]">
+              <div className="text-[7px] font-bold tracking-[.12em] text-emerald-600">TEAM ENGAGEMENT</div><div className="mt-1 flex items-end justify-between"><div><span className="text-[24px] font-black leading-none text-emerald-700">170+</span><span className="ml-1 text-[7px] text-emerald-600">TEAM MEMBERS</span></div><span className="text-xl text-emerald-500">♟♟♟</span></div>
+            </div>
+            <div className="absolute -bottom-1 right-1 z-[5] flex h-11 w-11 rotate-[9deg] items-center justify-center rounded-full border-2 border-emerald-200 bg-emerald-500 text-xl text-white shadow-[0_11px_20px_rgba(5,150,105,.24)]">⌣</div>
           </div>
         </div>
       );
     }
 
-    function ExperienceCard({ experience, isHovered, hasHoveredCard, isSelected, onHover, onLeave, onSelect }) {
+    function ExperienceCard({ experience, isHovered, hasHoveredCard, onHover, onLeave, onSelect }) {
       return (
         <button
           type="button"
@@ -981,89 +1044,139 @@
           onFocus={onHover}
           onBlur={onLeave}
           onClick={onSelect}
-          aria-pressed={isSelected}
-          className={`experience-card relative min-w-0 h-[520px] rounded-[30px] border bg-white px-3 pb-3 text-left flex flex-col shadow-[0_14px_40px_rgba(15,23,42,.08)] ${hasHoveredCard && !isHovered ? 'experience-card-muted' : ''} ${isSelected ? 'border-slate-300' : 'border-slate-200/80'}`}
+          aria-label={`查看 ${experience.company} 经历详情`}
+          className={`experience-card group relative h-[412px] min-w-0 rounded-[30px] border bg-white p-3 text-left flex flex-col shadow-[0_18px_42px_rgba(15,23,42,.09)] ${hasHoveredCard && !isHovered ? 'experience-card-muted' : ''}`}
+          style={{ borderColor: experience.border }}
         >
-          <div className="relative h-[57%] -mt-7">
-            <ExperienceVisual type={experience.visual} />
-          </div>
-          <div className="px-3 pt-6 pb-2 flex-1 flex flex-col">
-            <span className={`font-mono text-[28px] leading-none font-black ${experience.numberColor}`}>{experience.num}</span>
-            <h3 className="mt-4 text-[18px] font-black tracking-tight text-[#07142D] leading-tight">{experience.company}</h3>
-            <p className="mt-2 text-[11px] leading-5 text-slate-500">{experience.role}</p>
-            <span className={`mt-3 self-start text-[8px] font-mono font-bold tracking-wider px-2 py-1 rounded-full border ${experience.tagClass}`}>{experience.tag}</span>
-            <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100 font-mono text-[10px]">
+          <span aria-hidden="true" className="experience-card-depth absolute inset-x-3 -bottom-2 h-8 rounded-b-[28px] opacity-45" style={{ background: experience.border }} />
+          <ExperienceCardVisual experience={experience} />
+          <div className="relative flex flex-1 flex-col px-3 pb-3 pt-4">
+            {experience.earlier && <div className="mb-2 text-[9px] font-mono font-bold tracking-[.16em] text-slate-400">EARLIER EXPERIENCE</div>}
+            <h3 className="text-[18px] font-black leading-tight tracking-[-.025em] text-[#07142D]">{experience.company}</h3>
+            <p className="mt-1.5 text-[11px] leading-5 text-slate-500">{experience.role}</p>
+            <p className="mt-4 font-mono text-[8px] font-black uppercase tracking-[.13em]" style={{ color: experience.accent }}>{experience.positioning}</p>
+            <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 font-mono text-[10px]">
               <span className="text-slate-400">{experience.year}</span>
-              <span className={`font-bold ${experience.numberColor}`}>VIEW →</span>
+              <span className="font-black transition-transform duration-300 group-hover:translate-x-1" style={{ color: experience.accent }}>VIEW →</span>
             </div>
           </div>
         </button>
       );
     }
 
-    function ExperienceSection() {
-      const [activeId, setActiveId] = useState('hello');
-      const [hoveredId, setHoveredId] = useState(null);
+    function ExperienceModal({ experience, onClose }) {
+      const closeButtonRef = useRef(null);
 
-      const experiences = [
-        { id: 'hello', num: '01', company: 'Hello 哈啰 - Calio', role: 'C端 AI 产品经理实习生', tag: 'PRODUCT', year: '2026', visual: 'calio', numberColor: 'text-violet-600', tagClass: 'bg-white text-violet-700 border-violet-300' },
-        { id: 'xiaohongshu', num: '02', company: '小红书', role: '商业化平台专家实习生', tag: 'BUSINESS & DATA', year: '2025', visual: 'xiaohongshu', numberColor: 'text-orange-500', tagClass: 'bg-white text-orange-600 border-orange-300' },
-        { id: 'tiktok', num: '03', company: 'ByteDance-TikTok', role: '大模型数据与项目经理实习生', tag: 'GLOBAL & AI', year: '2024', visual: 'tiktok', numberColor: 'text-blue-600', tagClass: 'bg-white text-blue-600 border-blue-300' },
-        { id: 'bytedance-hr', num: '04', company: 'ByteDance HR', role: 'HRBP / 组织项目实习生', tag: 'PEOPLE', year: '2021', visual: 'hr', numberColor: 'text-emerald-600', tagClass: 'bg-white text-emerald-700 border-emerald-300' },
-      ];
+      useEffect(() => {
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        closeButtonRef.current?.focus();
+        const handleEscape = (event) => { if (event.key === 'Escape') onClose(); };
+        document.addEventListener('keydown', handleEscape);
+        return () => {
+          document.body.style.overflow = previousOverflow;
+          document.removeEventListener('keydown', handleEscape);
+        };
+      }, [onClose]);
 
       return (
-        <section className="max-w-[1320px] mx-auto px-6 lg:px-8 pb-8">
+        <div className="experience-modal-backdrop fixed inset-0 z-[100] flex items-center justify-center bg-[#07142D]/35 p-4 backdrop-blur-[6px] sm:p-6" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+          <article role="dialog" aria-modal="true" aria-labelledby={`experience-${experience.id}-title`} className="experience-modal-panel relative max-h-[calc(100vh-2rem)] w-full max-w-[1120px] overflow-y-auto rounded-[28px] border border-white/80 bg-white shadow-[0_30px_100px_rgba(7,20,45,.28)]">
+            <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="关闭经历详情" className="absolute right-5 top-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-slate-500 shadow-sm transition hover:rotate-90 hover:border-slate-300 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-100">×</button>
+            <div className="p-5 sm:p-7">
+              <header className="flex items-center gap-4 border-b border-slate-100 pb-4 pr-12">
+                <div className="flex h-14 w-[86px] shrink-0 items-center justify-center overflow-hidden rounded-2xl border p-1" style={{ background: experience.tint, borderColor: experience.border }}>
+                  <img src={experience.logo} alt={experience.logoAlt} className={`h-full w-full rounded-xl object-contain ${experience.id === 'tiktok' ? '' : 'mix-blend-multiply'}`} style={{ transform: `scale(${experience.logoScale})` }} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <h2 id={`experience-${experience.id}-title`} className="text-[22px] font-black tracking-[-.03em] text-[#07142D] sm:text-2xl">{experience.company}</h2>
+                    <span className="font-mono text-[9px] font-bold tracking-[.15em] text-slate-300">EXPERIENCE / {experience.num}</span>
+                  </div>
+                  <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]">
+                    <span className="font-bold text-slate-700">{experience.role}</span>
+                    <span className="font-mono text-[10px] text-slate-400">{experience.location} · {experience.timeline}</span>
+                  </div>
+                </div>
+              </header>
+
+              <section className="mt-5 flex items-center gap-3">
+                <span className="h-8 w-1 shrink-0 rounded-full" style={{ background: experience.accent }} />
+                <p className="text-[15px] font-semibold leading-relaxed text-[#07142D]">{experience.opening}</p>
+              </section>
+
+              <section className="mt-5">
+                <div className="font-mono text-[11px] font-black tracking-[.14em]" style={{ color: experience.accent }}>角色与产出</div>
+                <div className={`mt-3 grid gap-4 ${experience.modules.length === 1 ? 'grid-cols-1' : 'md:grid-cols-3'}`}>
+                  {experience.modules.map((module) => (
+                    <article key={module.title} className="rounded-[18px] border border-slate-100 bg-slate-50/45 p-5">
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg text-[11px]" style={{ color: experience.accent, background: experience.tint }}>{module.icon}</span>
+                        <h3 className="text-[15px] font-semibold text-[#07142D]">{module.title}</h3>
+                      </div>
+                      <ul className="mt-4 space-y-2">
+                        {module.bullets.map((bullet) => <li key={bullet} className="flex gap-2.5 text-sm leading-[1.55] text-slate-600"><span className="mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: experience.accent }} />{bullet}</li>)}
+                      </ul>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              <section className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center">
+                <div className="shrink-0 font-mono text-[11px] font-black tracking-[.14em] text-slate-400">技能</div>
+                <div className="flex flex-wrap gap-2">
+                  {experience.skills.map((skill) => <span key={skill} className="rounded-full border px-3 py-1.5 text-[11px] font-bold" style={{ color: experience.accent, background: experience.tint, borderColor: experience.border }}>{skill}</span>)}
+                </div>
+              </section>
+            </div>
+          </article>
+        </div>
+      );
+    }
+
+    function ExperienceSection() {
+      const [activeExperience, setActiveExperience] = useState(null);
+      const [hoveredId, setHoveredId] = useState(null);
+
+      return (
+        <section className="max-w-7xl mx-auto px-6 lg:px-8 pb-8">
           <style>{`
-            .experience-card {
-              transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms ease, opacity 260ms ease, border-color 260ms ease;
-              transform: translateY(0) scale(1);
-            }
-            .experience-card:hover, .experience-card:focus-visible {
-              transform: translateY(-8px) scale(1.035);
-              box-shadow: 0 28px 60px rgba(15, 23, 42, .16);
-              z-index: 10;
-              outline: none;
-            }
-            .experience-card-muted { opacity: .86; transform: scale(.985); }
+            .experience-card { transition: transform 400ms cubic-bezier(.22,1,.36,1), box-shadow 400ms ease, opacity 300ms ease; transform: translateY(0); isolation: isolate; box-shadow: inset 0 1px 0 rgba(255,255,255,.96), 0 18px 42px rgba(15,23,42,.09); }
+            .experience-card:hover, .experience-card:focus-visible { transform: translateY(-6px) rotate(-.4deg); box-shadow: inset 0 1px 0 rgba(255,255,255,.96), 0 28px 58px rgba(15,23,42,.15); z-index: 10; outline: none; }
+            .experience-card:focus-visible { box-shadow: 0 0 0 4px rgba(124,58,237,.12), 0 26px 56px rgba(15,23,42,.14); }
+            .experience-card-muted { opacity: .82; transform: scale(.985); }
+            .experience-card-visual-object { transition: transform 420ms cubic-bezier(.22,1,.36,1); }
+            .experience-card:hover .experience-card-visual-object, .experience-card:focus-visible .experience-card-visual-object { transform: translateY(-3px) scale(1.01); }
+            .experience-card-depth { z-index: -1; filter: blur(.2px); }
+            .experience-modal-backdrop { animation: experienceFadeIn 180ms ease-out both; }
+            .experience-modal-panel { animation: experienceCardIn 300ms cubic-bezier(.22,1,.36,1) both; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+            @keyframes experienceFadeIn { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes experienceCardIn { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
             @media (prefers-reduced-motion: reduce) {
-              .experience-card, .experience-card:hover, .experience-card:focus-visible { transition: none; transform: none; }
+              .experience-card, .experience-card:hover, .experience-card:focus-visible, .experience-modal-backdrop, .experience-modal-panel { transition: none; transform: none; animation: none; }
             }
           `}</style>
 
-          <div className="relative mb-16 lg:mb-20 max-w-3xl">
-            <div className="text-xs font-mono font-bold text-emerald-600 tracking-wider">03 / EXPERIENCE</div>
-            <h2 className="mt-4 text-4xl sm:text-5xl lg:text-[56px] leading-[1.02] tracking-[-.04em] text-slate-900">
-              <span className="font-semibold">Where I learned<br />to build </span>
-              <span className="font-serif italic font-normal">products :)</span>
-            </h2>
-            <p className="mt-5 text-sm text-slate-500">真实业务里的四段成长经历，点击卡片查看更多细节。</p>
+          <div className="relative mb-[76px] space-y-1">
+            <div className="text-xs font-mono font-bold text-teal-600 tracking-wider">03 / EXPERIENCE</div>
+            <h2 className="whitespace-nowrap text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Where I learned to build products :)</h2>
+            <p className="text-xs sm:text-sm text-slate-500">真实业务里的产品成长经历</p>
 
-            <div className="hidden md:block absolute left-[104%] top-0 w-20 h-20 animate-float-1 pointer-events-none">
+            <div className="hidden lg:block absolute right-[18%] top-[-22px] w-14 h-14 animate-float-1 pointer-events-none">
               <div className="w-full h-full bg-gradient-to-br from-orange-300 to-[#FF4B00] [clip-path:polygon(50%_0,100%_100%,0_78%)] drop-shadow-xl rotate-12" />
             </div>
-            <div className="hidden md:block absolute left-[128%] top-12 w-16 h-16 rounded-full bg-gradient-to-br from-purple-300 to-violet-700 shadow-xl animate-float-2 pointer-events-none" />
-            <div className="hidden md:block absolute left-[149%] top-20 w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-300 to-emerald-700 rotate-12 shadow-xl animate-float-3 pointer-events-none" />
+            <div className="hidden lg:block absolute right-[8%] top-8 w-11 h-11 rounded-full bg-gradient-to-br from-purple-300 to-violet-700 shadow-xl animate-float-2 pointer-events-none" />
+            <div className="hidden lg:block absolute right-0 top-14 w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-300 to-emerald-700 rotate-12 shadow-xl animate-float-3 pointer-events-none" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-5 gap-y-12 pt-5">
-            {experiences.map((experience) => (
-              <ExperienceCard
-                key={experience.id}
-                experience={experience}
-                isHovered={hoveredId === experience.id}
-                hasHoveredCard={Boolean(hoveredId)}
-                isSelected={activeId === experience.id}
-                onHover={() => setHoveredId(experience.id)}
-                onLeave={() => setHoveredId(null)}
-                onSelect={() => setActiveId(experience.id)}
-              />
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-5">
+            {experienceData.map((experience) => (
+              <ExperienceCard key={experience.id} experience={experience} isHovered={hoveredId === experience.id} hasHoveredCard={Boolean(hoveredId)} onHover={() => setHoveredId(experience.id)} onLeave={() => setHoveredId(null)} onSelect={() => setActiveExperience(experience)} />
             ))}
           </div>
 
-          <p className="mt-8 text-center text-[11px] text-slate-400">
-            <span aria-hidden="true" className="mr-2">⌁</span>悬停卡片会微微放大，点击查看更多详细经历。
-          </p>
+          <p className="mt-5 text-center text-[11px] text-slate-400"><span aria-hidden="true" className="mr-2">⌁</span>点击一张职业卡片，探索 Cecilia 的职业经历。</p>
+          {activeExperience && <ExperienceModal experience={activeExperience} onClose={() => setActiveExperience(null)} />}
         </section>
       );
     }
