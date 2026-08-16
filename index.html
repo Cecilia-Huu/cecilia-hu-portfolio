@@ -13,14 +13,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     html {
-      --section-scroll-offset: 112px;
       scroll-behavior: smooth;
-      scroll-snap-type: y proximity;
-      scroll-padding-top: var(--section-scroll-offset);
-    }
-    .portfolio-section {
-      scroll-snap-align: start;
-      scroll-margin-top: var(--section-scroll-offset) !important;
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -241,6 +234,7 @@
     function App() {
       const [activeTab, setActiveTab] = useState('HOME');
       const [isModalOpen, setIsModalOpen] = useState(false);
+      const headerRef = useRef(null);
       const navRef = useRef(null);
       const navButtonRefs = useRef({});
       const sectionVisibilityRef = useRef({});
@@ -262,6 +256,24 @@
           left: button.offsetLeft,
           width: button.offsetWidth,
           opacity: 1,
+        });
+      };
+
+      const scrollToSection = (sectionId, behavior = 'smooth') => {
+        const target = document.getElementById(sectionId);
+        if (!target) return;
+
+        if (sectionId === 'home') {
+          window.scrollTo({ top: 0, behavior });
+          return;
+        }
+
+        const headerBottom = headerRef.current?.getBoundingClientRect().bottom || 72;
+        const topGap = 16;
+        const targetTop = window.scrollY + target.getBoundingClientRect().top;
+        window.scrollTo({
+          top: Math.max(0, targetTop - headerBottom - topGap),
+          behavior,
         });
       };
 
@@ -313,7 +325,7 @@
         const initialHash = window.location.hash.replace('#', '').toLowerCase();
         if (navItems.some((item) => item.sectionId === initialHash)) {
           window.requestAnimationFrame(() => {
-            document.getElementById(initialHash)?.scrollIntoView({ behavior: 'auto', block: 'start' });
+            scrollToSection(initialHash, 'auto');
           });
         }
 
@@ -325,14 +337,14 @@
         if (!target) return;
         setActiveTab(item.id);
         window.history.replaceState(null, '', '#' + item.sectionId);
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToSection(item.sectionId);
       };
 
       return (
         <div className="min-h-screen flex flex-col justify-between relative">
           
           {/* 1. 顶部悬浮胶囊导航 */}
-          <header className="fixed top-5 left-0 right-0 z-40 flex justify-center px-4">
+          <header ref={headerRef} className="fixed top-5 left-0 right-0 z-40 flex justify-center px-4">
             <div className="bg-white/90 backdrop-blur-xl border border-slate-200/80 rounded-full px-5 py-2.5 shadow-xl shadow-slate-100 flex items-center space-x-6">
               
               <div 
@@ -1216,7 +1228,6 @@
           suffix: '。',
           taglineLines: ['Less browsing.', 'Faster decisions.'],
           demoUrl: 'https://campus-food-adviser.vercel.app/',
-          ideaUrl: '/projects/chisha',
           domain: 'campus-food-adviser.vercel.app',
           homeImage: 'assets/chisha-home.png',
           resultImage: 'assets/chisha-result.png',
@@ -1238,7 +1249,6 @@
           suffix: '？',
           taglineLines: ['Fun to enter.', 'Useful when you leave.'],
           demoUrl: 'https://saidao-cece.vercel.app/',
-          ideaUrl: '/projects/saidao',
           domain: 'saidao-cece.vercel.app',
           homeImage: 'assets/saidao-home.png',
           resultImage: 'assets/saidao-result.png',
@@ -1273,13 +1283,13 @@
             {project.taglineLines.map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}
           </p>
 
-          <div className="mt-5 flex flex-nowrap items-center gap-1.5">
-            <a onClick={(event) => event.stopPropagation()} href={project.demoUrl} target="_blank" rel="noopener noreferrer" className={"inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-[9px] font-bold text-white transition-colors duration-200 2xl:text-[10px] " + project.buttonClass}>
+          <div className="mt-5">
+            <a onClick={(event) => event.stopPropagation()} href={project.demoUrl} target="_blank" rel="noopener noreferrer" className={"inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-5 py-2.5 text-[10px] font-extrabold text-white transition-colors duration-200 2xl:text-[11px] " + project.buttonClass}>
               在线体验 <span aria-hidden="true">↗</span>
             </a>
-            <a onClick={(event) => event.stopPropagation()} href={project.ideaUrl} className="inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-slate-200 bg-white px-3 py-2 text-[9px] font-bold text-slate-700 shadow-[0_5px_12px_rgba(15,23,42,.05)] transition-colors duration-200 hover:border-slate-300 hover:text-slate-950 2xl:text-[10px]">
-              查看产品思路 <span aria-hidden="true">→</span>
-            </a>
+            <p className="mt-3 whitespace-nowrap font-mono text-[8px] font-medium tracking-[.02em] text-slate-400 2xl:text-[9px]">
+              <span aria-hidden="true">●</span> LIVE · {project.domain}
+            </p>
           </div>
 
         </div>
@@ -1338,15 +1348,10 @@
 
       return (
         <section className="relative mx-auto -mt-4 max-w-[1480px] px-6 pb-2 lg:px-8">
-          <div className="relative z-10">
-            <div className="text-xs font-mono font-bold tracking-wider text-emerald-700">04&nbsp; / &nbsp;PROJECTS</div>
-            <div className="mt-2 flex items-center gap-4">
-              <h2 className="text-[38px] font-extrabold leading-none tracking-[-.045em] text-slate-950 sm:text-[50px]">VIBE CODING PRODUCTS</h2>
-              <span className="hidden text-[32px] text-emerald-700 sm:inline" aria-hidden="true">✦</span>
-            </div>
-            <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-500">
-              Two products. Two kinds of ambiguity.<br />One helps you decide. One helps you find direction.
-            </p>
+          <div className="relative z-10 space-y-1 mb-6 lg:mb-3">
+            <div className="text-xs font-mono font-bold text-teal-600 tracking-wider">04 / PROJECTS</div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">VIBE CODING PRODUCTS</h2>
+            <p className="text-xs sm:text-sm text-slate-500">One helps you decide. One helps you find direction.</p>
           </div>
 
           <span className="pointer-events-none absolute right-[8%] top-5 hidden h-14 w-14 rotate-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-700 shadow-xl md:block" />
@@ -1354,7 +1359,7 @@
           <span className="pointer-events-none absolute -left-1 bottom-16 hidden h-10 w-10 -rotate-12 rounded-xl bg-gradient-to-br from-amber-300 to-orange-500 shadow-lg xl:block" />
           <span className="pointer-events-none absolute right-0 top-[56%] hidden text-3xl text-emerald-700 2xl:block" aria-hidden="true">✦</span>
 
-          <div className="mt-7 grid grid-cols-1 gap-7 xl:grid-cols-2 xl:items-start xl:gap-8">
+          <div className="grid grid-cols-1 gap-7 xl:grid-cols-2 xl:items-start xl:gap-8">
             <ProductModule project={projects[0]} />
             <ProductModule project={projects[1]} />
           </div>
