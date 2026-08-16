@@ -13,13 +13,14 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     html {
+      --section-scroll-offset: 112px;
       scroll-behavior: smooth;
       scroll-snap-type: y proximity;
-      scroll-padding-top: 104px;
+      scroll-padding-top: var(--section-scroll-offset);
     }
     .portfolio-section {
       scroll-snap-align: start;
-      scroll-margin-top: 104px;
+      scroll-margin-top: var(--section-scroll-offset) !important;
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -391,7 +392,7 @@
               <ProjectsSection />
             </section>
 
-            <section id="skills" data-section="SKILLS" className="portfolio-section min-h-[calc(100vh-5rem)] scroll-mt-0 pt-16 pb-12 flex items-center">
+            <section id="skills" data-section="SKILLS" className="portfolio-section min-h-[calc(100vh-5rem)] pt-16 pb-12 flex items-center">
               <div className="w-full"><SkillsSection /></div>
             </section>
           </main>
@@ -1362,28 +1363,34 @@
     }
 
     /* =========================================================================
-       05. SKILLS — WHAT'S IN CECILIA'S BAG?
+       05. SKILLS — CECILIA'S PRODUCT TOOLKIT
        ========================================================================= */
     function SkillsSection() {
       const [activeSkill, setActiveSkill] = useState(null);
       const [hoveredSkill, setHoveredSkill] = useState(null);
+      const [activeHobby, setActiveHobby] = useState(null);
+      const [hoveredHobby, setHoveredHobby] = useState(null);
       const highlightedSkill = hoveredSkill || activeSkill;
+      const highlightedHobby = hoveredHobby || activeHobby;
 
       const skills = [
         { id: 'product', title: 'PRODUCT', details: ['PRD Writing', 'Requirement Analysis', 'User Flow', 'Figma', 'Cross-functional Collaboration'] },
-        { id: 'data', title: 'DATA & ANALYTICS', details: ['MySQL / SQL', 'Tableau', 'KNIME', 'SPSS', 'Stata'] },
+        { id: 'data', title: 'DATA', details: ['MySQL / SQL', 'Tableau', 'KNIME', 'SPSS', 'Stata'] },
         { id: 'ai', title: 'AI & VIBE CODING', details: ['Vibe Coding', 'Cursor', 'Claude', 'Dify', 'n8n'] },
-        { id: 'global', title: 'LANGUAGES & INTERNATIONAL', details: ['Chinese — Native', 'English — IELTS 7.0', 'International Experience'] },
+        { id: 'global', title: 'LANGUAGES & GLOBAL', details: ['Chinese — Native', 'English — IELTS 7.0', 'International Experience'] },
       ];
 
-      const objectState = (id, activeTransform) => {
-        if (highlightedSkill === id) return activeTransform + ' opacity-100 brightness-[1.035] drop-shadow-[0_20px_18px_rgba(15,23,42,.2)]';
-        if (highlightedSkill) return 'opacity-[.78]';
-        return 'opacity-100';
-      };
+      const hobbies = [
+        { id: 'pingpong', title: 'Ping Pong', detail: '校级团队第五', type: 'sphere', position: 'lg:left-[3%] lg:top-[24%] xl:left-[-8%] 2xl:left-[-18%]', size: 'h-[78px] w-[78px]', floatClass: 'hobby-float-one' },
+        { id: 'swimming', title: 'Swimming', detail: '保持节奏与耐力感的一种方式', type: 'goggles', position: 'lg:left-[2%] lg:bottom-[15%] xl:left-[-10%] 2xl:left-[-20%]', size: 'h-[74px] w-[124px]', floatClass: 'hobby-float-two' },
+        { id: 'dance', title: 'Dance', detail: '通过舞蹈释放能量与表达自己', type: 'dance', position: 'lg:right-[3%] lg:top-[18%] xl:right-[-8%] 2xl:right-[-17%]', size: 'h-[86px] w-[78px]', floatClass: 'hobby-float-three' },
+        { id: 'volunteering', title: 'Volunteering', detail: '人口普查 / 音乐节志愿者', type: 'badge', position: 'lg:right-[2%] lg:bottom-[13%] xl:right-[-10%] 2xl:right-[-20%]', size: 'h-[92px] w-[76px]', floatClass: 'hobby-float-four' },
+      ];
+
+      const isVisible = (id) => highlightedSkill === id;
       const interactionProps = (id, label) => ({
         type: 'button',
-        'aria-label': label + ' — hover or tap to explore',
+        'aria-label': label + ' — hover or tap to unpack skills',
         'aria-pressed': activeSkill === id,
         onMouseEnter: () => setHoveredSkill(id),
         onMouseLeave: () => setHoveredSkill(null),
@@ -1392,101 +1399,166 @@
         onClick: () => setActiveSkill(activeSkill === id ? null : id),
       });
 
+      const SkillTooltip = ({ skill, position }) => (
+        <div
+          className={`skill-tooltip pointer-events-none absolute z-30 w-[188px] rounded-[18px] border border-white/80 bg-white/[.94] px-4 py-3 text-left shadow-[0_14px_36px_rgba(15,23,42,.13)] backdrop-blur-xl ${position} ${isVisible(skill.id) ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-2 scale-[.97] opacity-0'}`}
+          aria-hidden={!isVisible(skill.id)}
+        >
+          <p className="text-[10px] font-extrabold tracking-[.14em] text-[#14213d]">{skill.title}</p>
+          <span className="mt-2 block h-[2px] w-7 rounded-full bg-[#FF5500]" />
+          <div className="mt-2.5 space-y-1 text-[11px] font-medium leading-[1.35] text-slate-500">
+            {skill.details.map((detail) => <p key={detail}>{detail}</p>)}
+          </div>
+        </div>
+      );
+
+      const hobbyInteractionProps = (hobby) => ({
+        type: 'button',
+        'aria-label': hobby.title + (hobby.detail ? ': ' + hobby.detail : ''),
+        'aria-pressed': activeHobby === hobby.id,
+        onMouseEnter: () => setHoveredHobby(hobby.id),
+        onMouseLeave: () => setHoveredHobby(null),
+        onFocus: () => setHoveredHobby(hobby.id),
+        onBlur: () => setHoveredHobby(null),
+        onClick: () => setActiveHobby(activeHobby === hobby.id ? null : hobby.id),
+      });
+
+      const HobbyVisual = ({ type }) => {
+        if (type === 'sphere') return <span className="hobby-sphere block h-full w-full rounded-full" />;
+        if (type === 'goggles') return (
+          <span className="hobby-goggles relative block h-full w-full">
+            <span className="hobby-goggle-lens absolute bottom-[7px] left-[8px] h-[48px] w-[48px] rounded-full" />
+            <span className="hobby-goggle-lens absolute bottom-[7px] right-[8px] h-[48px] w-[48px] rounded-full" />
+            <span className="absolute bottom-[28px] left-1/2 h-[7px] w-[22px] -translate-x-1/2 rounded-full bg-[#58cfc4]" />
+          </span>
+        );
+        if (type === 'dance') return (
+          <span className="hobby-dancer relative block h-full w-full" aria-hidden="true">
+            <span className="hobby-dancer-head absolute left-[35px] top-[2px] h-[18px] w-[18px] rounded-full" />
+            <span className="hobby-dancer-body absolute left-[31px] top-[20px] h-[43px] w-[17px] rounded-full" />
+            <span className="hobby-dancer-arm absolute left-[7px] top-[28px] h-[11px] w-[48px] -rotate-[24deg] rounded-full" />
+            <span className="hobby-dancer-leg absolute bottom-[6px] left-[17px] h-[12px] w-[45px] rotate-[26deg] rounded-full" />
+          </span>
+        );
+        return (
+          <span className="hobby-badge relative block h-full w-full" aria-hidden="true">
+            <span className="absolute left-1/2 top-[24px] h-[62px] w-[58px] -translate-x-1/2 -rotate-[7deg] rounded-[12px] border border-white/80 bg-[#a8e8d4] shadow-[0_12px_24px_rgba(33,140,120,.16)]">
+              <span className="absolute inset-[8px] rounded-[8px] bg-white/80" />
+              <span className="absolute left-1/2 top-[20px] -translate-x-1/2 text-[22px] text-[#39b99f]">♥</span>
+              <span className="absolute bottom-[10px] left-1/2 h-[3px] w-6 -translate-x-1/2 rounded-full bg-[#39b99f]/45" />
+            </span>
+          </span>
+        );
+      };
+
+      const HobbyObject = ({ hobby }) => {
+        const visible = highlightedHobby === hobby.id;
+        return (
+          <div className={`hobby-float absolute z-[24] hidden lg:block ${hobby.position} ${hobby.floatClass}`}>
+            <button {...hobbyInteractionProps(hobby)} data-active={visible} className={`hobby-object relative block border-0 bg-transparent p-0 outline-none ${hobby.size}`}>
+              <span className="hobby-motion block h-full w-full"><HobbyVisual type={hobby.type} /></span>
+            </button>
+            <div aria-hidden={!visible} className={`hobby-tooltip pointer-events-none absolute left-1/2 top-[calc(100%+8px)] z-40 w-max min-w-[126px] max-w-[190px] -translate-x-1/2 rounded-[16px] border border-slate-200/60 bg-white/[.94] px-3.5 py-2.5 text-center shadow-[0_12px_30px_rgba(15,23,42,.11)] backdrop-blur-xl ${visible ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-1.5 scale-[.97] opacity-0'}`}>
+              <p className="text-[11px] font-bold text-[#14213d]">{hobby.title}</p>
+              {hobby.detail && <p className="mt-1 text-[10px] leading-snug text-slate-500">{hobby.detail}</p>}
+            </div>
+          </div>
+        );
+      };
+
       return (
-        <section className="relative mx-auto min-h-[730px] max-w-[1480px] overflow-hidden px-6 pb-4 lg:min-h-[750px] lg:overflow-visible lg:px-8">
+        <section className="relative mx-auto min-h-[800px] max-w-[1480px] overflow-hidden px-5 pb-6 pt-3 sm:px-7 lg:min-h-[830px] lg:px-8">
           <style>{`
-            .carry-object { transform-origin: bottom center; transition: transform 240ms cubic-bezier(.2,.8,.2,1), opacity 200ms ease, filter 220ms ease; }
-            .carry-object img { user-select: none; -webkit-user-drag: none; }
-            .skill-hit::before { content: ''; position: absolute; inset: -26px; }
-            .bag-print { mix-blend-mode: multiply; text-shadow: 0 1px 0 rgba(255,255,255,.08); }
-            .skill-reveal { transition: opacity 190ms ease, transform 230ms cubic-bezier(.2,.8,.2,1); }
-            .skill-reveal p { text-shadow: 0 1px 10px rgba(255,255,255,.94); }
-            .tote-front { clip-path: inset(37.5% 0 0 0); }
-            @media (max-width: 639px) { .skill-hit::before { inset: -15px; } }
-            @media (prefers-reduced-motion: reduce) { .carry-object, .skill-reveal, .carry-object * { transition: none !important; } }
+            .skill-hero-image, .skill-object-highlight { user-select: none; -webkit-user-drag: none; }
+            .skill-blended-artwork {
+              -webkit-mask-image:
+                linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%),
+                linear-gradient(to bottom, transparent 0%, #000 7%, #000 93%, transparent 100%);
+              -webkit-mask-composite: source-in;
+              mask-image:
+                linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%),
+                linear-gradient(to bottom, transparent 0%, #000 7%, #000 93%, transparent 100%);
+              mask-composite: intersect;
+            }
+            .skill-object-highlight { transition: opacity 180ms ease, transform 260ms cubic-bezier(.2,.8,.2,1), filter 240ms ease; }
+            .skill-object-highlight[data-active="true"] { opacity: 1; transform: scale(1.05); filter: drop-shadow(0 14px 15px rgba(15,23,42,.16)); }
+            .skill-hotspot { -webkit-tap-highlight-color: transparent; }
+            .skill-tooltip { transition: opacity 180ms ease, transform 220ms cubic-bezier(.2,.8,.2,1); }
+            @keyframes skillDecorFloatA {
+              from { transform: translateY(0) rotate(11deg); }
+              to { transform: translateY(-5px) rotate(14deg); }
+            }
+            @keyframes skillDecorFloatB {
+              from { transform: translateY(0) rotate(-7deg); }
+              to { transform: translateY(4px) rotate(-4deg); }
+            }
+            .skill-decor-float-a { animation: skillDecorFloatA 5.8s ease-in-out infinite alternate; }
+            .skill-decor-float-b { animation: skillDecorFloatB 6.6s ease-in-out infinite alternate; }
+            @keyframes hobbyFloatOne { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-6px) rotate(2deg); } }
+            @keyframes hobbyFloatTwo { from { transform: translateY(0) rotate(2deg); } to { transform: translateY(5px) rotate(-2deg); } }
+            @keyframes hobbyFloatThree { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-5px) rotate(1deg); } }
+            @keyframes hobbyFloatFour { from { transform: translateY(0) rotate(3deg); } to { transform: translateY(6px) rotate(-1deg); } }
+            .hobby-float-one { animation: hobbyFloatOne 6.2s ease-in-out infinite alternate; }
+            .hobby-float-two { animation: hobbyFloatTwo 6.8s ease-in-out -1.6s infinite alternate; }
+            .hobby-float-three { animation: hobbyFloatThree 5.9s ease-in-out -.8s infinite alternate; }
+            .hobby-float-four { animation: hobbyFloatFour 7s ease-in-out -2.2s infinite alternate; }
+            .hobby-motion { transform-origin: center; transition: transform 240ms cubic-bezier(.2,.8,.2,1), filter 240ms ease; }
+            .hobby-object:hover .hobby-motion, .hobby-object:focus-visible .hobby-motion, .hobby-object[data-active="true"] .hobby-motion { transform: translateY(-10px) scale(1.07); filter: drop-shadow(0 13px 11px rgba(15,23,42,.18)); }
+            .hobby-object:focus-visible { border-radius: 22px; box-shadow: 0 0 0 3px rgba(255,85,0,.22); }
+            .hobby-tooltip { transition: opacity 180ms ease, transform 220ms cubic-bezier(.2,.8,.2,1); }
+            .hobby-sphere { background: radial-gradient(circle at 28% 22%, #fff 0 5%, #d9ccff 10%, #a783f5 34%, #744fdc 66%, #3d279f 100%); box-shadow: inset 8px 7px 13px rgba(255,255,255,.38), inset -11px -13px 18px rgba(48,28,130,.26), 0 15px 24px rgba(99,65,207,.22); }
+            .hobby-goggles { border-top: 7px solid #55c9bf; border-radius: 50% 50% 0 0; filter: drop-shadow(0 10px 10px rgba(55,168,158,.16)); }
+            .hobby-goggle-lens { border: 6px solid #52c9bf; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(177,244,238,.72) 38%, rgba(73,188,181,.48) 100%); box-shadow: inset 0 0 0 3px rgba(255,255,255,.5); }
+            .hobby-dancer-head, .hobby-dancer-body, .hobby-dancer-arm, .hobby-dancer-leg { background: linear-gradient(145deg, #ffd45c, #ff8a22 72%); box-shadow: inset 3px 2px 5px rgba(255,255,255,.35), 0 8px 13px rgba(245,139,28,.16); }
+            .hobby-badge::before { content: ''; position: absolute; left: 40px; top: -4px; width: 33px; height: 42px; border: 6px solid #55c9ae; border-left-color: transparent; border-bottom-color: transparent; border-radius: 50%; transform: rotate(24deg); }
+            @media (max-width: 767px) {
+              .skill-tooltip { position: fixed !important; left: 50% !important; right: auto !important; top: auto !important; bottom: 18px !important; width: min(82vw, 260px) !important; transform: translateX(-50%) translateY(10px) scale(.97); }
+              .skill-tooltip[aria-hidden="false"] { transform: translateX(-50%) translateY(0) scale(1); }
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .skill-object-highlight, .skill-tooltip, .hobby-motion, .hobby-tooltip { transition: none !important; }
+              .skill-decor-float-a, .skill-decor-float-b, .hobby-float { animation: none !important; }
+            }
           `}</style>
 
-          <div className="relative z-[90] max-w-[420px] pt-3 lg:pt-6">
+          <header className="relative z-30 max-w-[820px] pt-2">
             <div className="font-mono text-xs font-bold tracking-wider text-emerald-700">05 / SKILLS</div>
-            <h2 className="mt-5 text-[40px] font-black leading-[.98] tracking-[-.052em] text-slate-950 sm:text-[48px] lg:text-[52px]">
-              WHAT I BRING<br />
-              <span>TO <span className="text-[#FF5500]">THE TABLE</span></span>
+            <h2 className="mt-4 whitespace-nowrap font-black leading-none tracking-[-.052em] text-[#14213d]" style={{ fontSize: 'clamp(1.08rem, 4vw, 3.25rem)' }}>
+              WHAT I BRING <span className="text-[#FF5500]">TO THE TABLE</span>
             </h2>
-            <p className="mt-5 max-w-[390px] text-base leading-7 text-slate-500 sm:text-[17px]">A collection of skills, tools and perspectives I use to build products.</p>
-          </div>
+            <p className="mt-4 max-w-[520px] text-sm leading-6 text-slate-500 sm:text-base">A collection of skills, tools and perspectives I use to build products.</p>
+          </header>
 
-          <div className="relative -mx-5 mt-7 h-[570px] min-w-0 sm:mx-auto sm:h-[650px] sm:w-full sm:max-w-[1040px] lg:-mt-[150px] lg:h-[660px] lg:max-w-[1080px] xl:-mt-[160px]">
-            <div className="pointer-events-none absolute bottom-[62px] left-1/2 z-0 h-16 w-[62%] -translate-x-1/2 rounded-[50%] bg-orange-950/10 blur-2xl" />
+          <div className="mx-auto -mt-1 w-full max-w-[860px] sm:-mt-2 md:max-w-[920px]">
+            <div className="relative">
+              <span aria-hidden="true" className="skill-decor-float-a pointer-events-none absolute -left-[6%] top-[29%] hidden h-10 w-10 rounded-[11px] bg-[#FFB36B]/30 sm:block" />
+              <span aria-hidden="true" className="skill-decor-float-b pointer-events-none absolute -right-[4%] top-[14%] hidden text-[24px] leading-none text-[#FF5500]/70 sm:block" style={{ animationDelay: '-1.4s' }}>✦</span>
+              <span aria-hidden="true" className="skill-decor-float-a pointer-events-none absolute -left-[2%] bottom-[10%] hidden h-7 w-7 rounded-[9px] bg-[#FF8A4C]/20 sm:block" style={{ animationDelay: '-2.3s' }} />
 
-            {/* Layer 1 — complete tote acts as the back/interior layer. */}
-            <div className="pointer-events-none absolute bottom-[72px] left-1/2 z-10 w-[100%] -translate-x-1/2 sm:w-[84%] lg:w-[78%]">
-              <img src="assets/skills/cecilia-tote.png" alt="" className="block h-auto w-full drop-shadow-[0_24px_24px_rgba(121,61,19,.16)]" />
+              {hobbies.map((hobby) => <HobbyObject key={hobby.id} hobby={hobby} />)}
+
+              {/* The supplied artwork remains the single, complete visual composition. */}
+              <img src="assets/skills/cecilia-bag-hero-final.png" alt="Cecilia's orange tote bag containing a product notebook, data laptop, AI headphones and global passport" className="skill-hero-image skill-blended-artwork block h-auto w-full" />
+
+              {/* Interaction-only highlights reuse the same artwork; no separate objects are composed. */}
+              <img src="assets/skills/cecilia-bag-hero-final.png" alt="" aria-hidden="true" data-active={isVisible('product')} className="skill-object-highlight skill-blended-artwork pointer-events-none absolute inset-0 h-full w-full opacity-0" style={{ clipPath: 'polygon(10% 20%, 37% 20%, 41% 55%, 15% 56%)', transformOrigin: '25% 38%' }} />
+              <img src="assets/skills/cecilia-bag-hero-final.png" alt="" aria-hidden="true" data-active={isVisible('data')} className="skill-object-highlight skill-blended-artwork pointer-events-none absolute inset-0 h-full w-full opacity-0" style={{ clipPath: 'polygon(27% 7%, 68% 7%, 69% 53%, 35% 56%)', transformOrigin: '49% 30%' }} />
+              <img src="assets/skills/cecilia-bag-hero-final.png" alt="" aria-hidden="true" data-active={isVisible('ai')} className="skill-object-highlight skill-blended-artwork pointer-events-none absolute inset-0 h-full w-full opacity-0" style={{ clipPath: 'polygon(53% 15%, 82% 15%, 79% 55%, 55% 52%)', transformOrigin: '68% 34%' }} />
+              <img src="assets/skills/cecilia-bag-hero-final.png" alt="" aria-hidden="true" data-active={isVisible('global')} className="skill-object-highlight skill-blended-artwork pointer-events-none absolute inset-0 h-full w-full opacity-0" style={{ clipPath: 'polygon(70% 31%, 88% 33%, 87% 55%, 72% 54%)', transformOrigin: '79% 43%' }} />
+
+              <button {...interactionProps('product', 'Product notebook')} className="skill-hotspot absolute left-[11%] top-[21%] z-20 h-[35%] w-[28%] rounded-[32px] border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60" />
+              <button {...interactionProps('data', 'Data laptop')} className="skill-hotspot absolute left-[28%] top-[7%] z-10 h-[45%] w-[39%] rounded-[32px] border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60" />
+              <button {...interactionProps('ai', 'AI and vibe coding headphones')} className="skill-hotspot absolute left-[54%] top-[16%] z-20 h-[39%] w-[27%] rounded-full border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60" />
+              <button {...interactionProps('global', 'Languages and global passport')} className="skill-hotspot absolute left-[71%] top-[32%] z-30 h-[23%] w-[17%] rounded-[24px] border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60" />
+
+              <SkillTooltip skill={skills[0]} position="-left-[7%] top-[28%]" />
+              <SkillTooltip skill={skills[1]} position="right-[2%] top-[4%]" />
+              <SkillTooltip skill={skills[2]} position="right-[-8%] top-[24%]" />
+              <SkillTooltip skill={skills[3]} position="right-[-8%] top-[44%]" />
             </div>
 
-            {/* Layer 2 — the four skill objects live between the tote back and front. */}
-            <button {...interactionProps('data', 'Data and analytics laptop')} className={'skill-hit carry-object absolute left-[28%] top-[68px] z-20 w-[52%] -rotate-[1deg] outline-none drop-shadow-[0_15px_14px_rgba(15,23,42,.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300 sm:left-[30%] sm:top-[42px] sm:w-[49%] lg:left-[30%] lg:top-[34px] lg:w-[48%] ' + objectState('data', '-translate-y-5 scale-[1.02]')}>
-              <img src="assets/skills/data-laptop.png" alt="Open silver laptop representing data and analytics skills" className="block h-auto w-full" />
-              <div className="pointer-events-none absolute left-[20%] top-[15%] w-[48%] -rotate-[1deg] text-left font-sans text-white">
-                <p className={'text-[13px] font-bold tracking-[.16em] sm:text-[17px] lg:text-[20px] ' + (highlightedSkill === 'data' ? 'opacity-0' : 'opacity-100')}>DATA</p>
-                <div className={'skill-reveal absolute left-0 top-0 w-full ' + (highlightedSkill === 'data' ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0')}>
-                  <p className="text-[12px] font-bold tracking-wide sm:text-[17px] lg:text-[20px]">DATA & ANALYTICS</p>
-                  <div className="mt-1.5 grid grid-cols-2 gap-x-2 gap-y-0.5 text-[8px] font-medium leading-tight text-slate-200 sm:text-[12px] lg:text-[14px]">
-                    {skills[1].details.map((detail) => <p key={detail}><span className="mr-1 text-orange-400">•</span>{detail}</p>)}
-                  </div>
-                </div>
-              </div>
-            </button>
-
-            <button {...interactionProps('product', 'Product notebook')} className={'skill-hit carry-object absolute left-[12%] top-[118px] z-30 w-[36%] -rotate-[7deg] outline-none drop-shadow-[0_14px_13px_rgba(60,45,24,.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300 sm:left-[15%] sm:top-[72px] sm:w-[32%] lg:left-[16%] lg:top-[56px] lg:w-[31%] ' + objectState('product', '-translate-y-6 scale-[1.02] -rotate-[5deg]')}>
-              <img src="assets/skills/product-notebook.png" alt="Cream spiral notebook and black pen representing product skills" className="block h-auto w-full" />
-              <div className="pointer-events-none absolute left-[31%] top-[25%] w-[58%] rotate-[1deg] text-left font-sans text-slate-900">
-                <p className={'text-[12px] font-bold tracking-[.12em] sm:text-[16px] lg:text-[18px] ' + (highlightedSkill === 'product' ? 'opacity-0' : 'opacity-100')}>PRODUCT</p>
-                <div className={'skill-reveal absolute left-0 top-0 w-full ' + (highlightedSkill === 'product' ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0')}>
-                  <p className="text-[12px] font-bold sm:text-[17px] lg:text-[20px]">PRODUCT</p>
-                  <div className="mt-1 space-y-0.5 text-[7px] font-medium leading-tight text-slate-700 sm:text-[11px] lg:text-[13px]">
-                    {skills[0].details.map((detail) => <p key={detail}><span className="mr-1 text-[#FF5500]">•</span>{detail}</p>)}
-                  </div>
-                </div>
-              </div>
-            </button>
-
-            <button {...interactionProps('ai', 'AI and vibe coding APM over-ear headphones')} className={'skill-hit carry-object absolute right-[18%] top-[174px] z-40 w-[33%] rotate-[3deg] outline-none drop-shadow-[0_14px_14px_rgba(15,23,42,.13)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300 sm:right-[20%] sm:top-[108px] sm:w-[29%] lg:right-[22%] lg:top-[92px] lg:w-[28%] ' + objectState('ai', '-translate-y-4 scale-[1.02] rotate-[2deg]')}>
-              <img src="assets/skills/ai-headphones-apm.png" alt="Cream APM over-ear headphones representing AI and vibe coding skills" className="block h-auto w-full" />
-              <span className={'pointer-events-none absolute left-1/2 top-[46%] -translate-x-1/2 rounded-full bg-white/88 px-2.5 py-1 font-sans text-[12px] font-bold tracking-[.18em] text-slate-900 shadow-sm backdrop-blur-sm sm:text-[15px] ' + (highlightedSkill === 'ai' ? 'opacity-0' : 'opacity-100')}>AI</span>
-            </button>
-
-            <button {...interactionProps('global', 'Passport representing languages and international experience')} className={'skill-hit carry-object absolute right-[10%] top-[296px] z-[35] w-[21%] rotate-[7deg] outline-none drop-shadow-[0_13px_13px_rgba(74,40,26,.15)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-300 sm:right-[12%] sm:top-[214px] sm:w-[18%] lg:right-[13%] lg:top-[196px] lg:w-[17%] ' + objectState('global', '-translate-y-4 scale-[1.02] rotate-[5deg]')}>
-              <img src="assets/skills/global-passport.png" alt="Coral passport representing languages and international experience" className="block h-auto w-full" />
-              <span className={'pointer-events-none absolute left-1/2 top-[51%] -translate-x-1/2 whitespace-nowrap font-sans text-[7px] font-bold tracking-[.14em] text-[#4c2a22] sm:text-[9px] lg:text-[10px] ' + (highlightedSkill === 'global' ? 'opacity-0' : 'opacity-100')}>INTERNATIONAL</span>
-            </button>
-
-            {/* Lightweight editorial reveals for objects without a screen/page. */}
-            <div className={'skill-reveal pointer-events-none absolute right-[0%] top-[382px] z-[75] w-[260px] font-sans text-slate-900 sm:right-[2%] sm:top-[330px] sm:w-[300px] lg:right-[0%] lg:top-[320px] ' + (highlightedSkill === 'ai' ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0')}>
-              <p className="text-[20px] font-bold sm:text-[23px]">AI & VIBE CODING</p>
-              <span className="mt-2 block h-0.5 w-10 bg-[#FF5500]" />
-              <div className="mt-3 space-y-1 text-[15px] font-medium leading-snug text-slate-600 sm:text-[17px]">
-                {skills[2].details.map((detail) => <p key={detail}><span className="mr-2 text-[#FF5500]">•</span>{detail}</p>)}
-              </div>
-            </div>
-
-            <div className={'skill-reveal pointer-events-none absolute right-[0%] top-[92px] z-[75] w-[275px] font-sans text-slate-900 sm:right-[0%] sm:top-[82px] sm:w-[320px] lg:right-[-2%] lg:top-[86px] ' + (highlightedSkill === 'global' ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0')}>
-              <p className="text-[19px] font-bold sm:text-[22px]">LANGUAGES & INTERNATIONAL</p>
-              <span className="mt-2 block h-0.5 w-10 bg-[#FF5500]" />
-              <div className="mt-3 space-y-1.5 text-[14px] font-medium leading-snug text-slate-600 sm:text-[17px]">
-                {skills[3].details.map((detail) => <p key={detail}><span className="mr-2 text-[#FF5500]">•</span>{detail}</p>)}
-              </div>
-            </div>
-
-            {/* Layer 3 — same tote, clipped to its body, becomes the foreground mask. */}
-            <div className="tote-front pointer-events-none absolute bottom-[72px] left-1/2 z-[60] w-[100%] -translate-x-1/2 sm:w-[84%] lg:w-[78%]">
-              <img src="assets/skills/cecilia-tote.png" alt="" className="block h-auto w-full" />
-              <div className="bag-print absolute inset-x-[19%] bottom-[17%] text-center text-[#12203b] opacity-90">
-                <p className="font-serif text-[25px] leading-none sm:text-[40px] lg:text-[44px]">Cecilia’s Bag</p>
-              </div>
-            </div>
-
-            <div className="absolute bottom-[13px] left-1/2 z-[80] -translate-x-1/2 whitespace-nowrap font-serif text-[12px] italic text-slate-400 sm:text-sm">
-              <span aria-hidden="true" className="mr-2 font-sans text-[11px] not-italic text-[#FF5500]">⌁</span>
+            <div className="mt-4 text-center whitespace-nowrap font-serif text-[12px] italic text-slate-400 sm:text-sm">
+              <span aria-hidden="true" className="mr-2 font-sans text-[11px] not-italic text-slate-400">⌁</span>
               <span className="hidden sm:inline">Hover an item to unpack a skill.</span>
               <span className="sm:hidden">Tap an item to unpack a skill.</span>
             </div>
