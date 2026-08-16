@@ -169,9 +169,64 @@
       transition: opacity 220ms ease-out, transform 220ms ease-out;
       pointer-events: none;
     }
+    @keyframes matcherResultReveal {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes matcherPulse {
+      0%, 100% { opacity: .35; transform: scale(.82); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+    .matcher-result-reveal {
+      animation: matcherResultReveal 420ms cubic-bezier(.2,.75,.25,1) both;
+    }
+    .matcher-loading-dot { animation: matcherPulse 1s ease-in-out infinite; }
+    .matcher-loading-dot:nth-child(2) { animation-delay: 140ms; }
+    .matcher-loading-dot:nth-child(3) { animation-delay: 280ms; }
+    .matcher-dimension-card {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 210ms ease, transform 210ms ease;
+      pointer-events: none;
+    }
+    .matcher-dimension-card[data-visible="true"] {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .matcher-radar-label { cursor: pointer; outline: none; }
+    .matcher-radar-label:focus-visible .matcher-label-pill {
+      stroke: #ff6b1a;
+      stroke-width: 2;
+    }
+    .matcher-clamp-2 {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    @media (min-width: 1024px) {
+      .matcher-modal { width: min(92vw, 1160px); max-height: 90vh; }
+      .matcher-scroll-area { overflow: visible !important; }
+      .matcher-main-card { min-height: 250px !important; height: 250px !important; }
+      .matcher-radar { height: 250px !important; }
+      .matcher-bottom-card { min-height: 126px !important; height: 126px !important; overflow: hidden; }
+    }
+    @media (min-width: 1024px) and (max-height: 800px) {
+      .matcher-modal-header { padding-top: 14px; padding-bottom: 10px; }
+      .matcher-input-panel { padding-top: 10px; padding-bottom: 10px; gap: 8px; }
+      .matcher-main-card { min-height: 224px !important; height: 224px !important; }
+      .matcher-radar { height: 224px !important; }
+      .matcher-grade-letter { font-size: 82px !important; }
+      .matcher-grade-note { margin-top: 10px; padding-top: 8px; padding-bottom: 8px; }
+      .matcher-bottom-card { min-height: 126px !important; height: 126px !important; padding-top: 14px; padding-bottom: 14px; }
+      .matcher-result-reveal { gap: 10px; margin-top: 10px; }
+    }
     @media (prefers-reduced-motion: reduce) {
       .animate-float-1, .animate-float-2, .animate-float-3 { animation: none; }
       .home-object-motion, .home-object-floor-shadow, .home-fact-card { transition-duration: 1ms; }
+      .matcher-result-reveal, .matcher-loading-dot { animation-duration: 1ms; }
+      .matcher-dimension-card { transition-duration: 1ms; }
     }
   </style>
 </head>
@@ -1315,111 +1370,295 @@
     function AIMatcherModal({ onClose }) {
       const [jdText, setJdText] = useState('');
       const [isAnalyzing, setIsAnalyzing] = useState(false);
-      const [hasAnalyzed, setHasAnalyzed] = useState(true);
+      const [hasAnalyzed, setHasAnalyzed] = useState(false);
+      const [selectedRole, setSelectedRole] = useState('');
+      const [loadingStep, setLoadingStep] = useState(0);
+      const [activeDimension, setActiveDimension] = useState(null);
+      const [matchResult, setMatchResult] = useState(null);
+      const analysisTimerRef = useRef(null);
 
-      const handleStartMatch = (presetRole) => {
-        setIsAnalyzing(true);
-        setTimeout(() => {
-          setIsAnalyzing(false);
-          setHasAnalyzed(true);
-        }, 500);
+      const presetRoles = [
+        { label: 'C端产品经理', icon: '♙', color: '#8b5cf6' },
+        { label: 'AI 产品经理', icon: '✦', color: '#16a871' },
+        { label: '国际化 / 出海 PM', icon: '◎', color: '#3478f6' },
+        { label: '数据 / 策略 PM', icon: '▥', color: '#ff6b1a' },
+      ];
+      const dimensions = [
+        { id: 'product', title: '产品能力', accent: '#8b5cf6', icon: '◇', keywords: '需求分析 · PRD · User Flow · 产品设计 · 产品思维', description: '衡量从问题识别、需求拆解到产品方案设计的完整产品能力。' },
+        { id: 'data', title: '数据能力', accent: '#16a871', icon: '◫', keywords: 'SQL · Tableau · KNIME · 数据分析 · 数据驱动决策', description: '衡量使用数据发现问题、验证判断并支持产品决策的能力。' },
+        { id: 'ai', title: 'AI 能力', accent: '#a43dff', icon: '✦', keywords: 'Vibe Coding · Cursor · Dify · n8n · AI 产品实践', description: '衡量理解并使用 AI 工具进行产品设计、自动化与实际落地的能力。' },
+        { id: 'collaboration', title: '沟通协作', accent: '#3478f6', icon: '♙', keywords: '跨团队沟通 · 英文沟通 · 跨文化协作 · 项目推动', description: '衡量在研发、运营、数据等多角色环境中沟通并推动项目的能力。' },
+        { id: 'execution', title: '执行落地', accent: '#ff6b1a', icon: '◎', keywords: '独立 Own 需求 · 0→1 落地 · 推动上线 · 实际交付', description: '衡量将问题从需求阶段推进到真实产品上线与交付的能力。' },
+      ];
+      const candidateProfile = {
+        product: ['AI 健康产品经理实习', '独立输出 PRD', '需求分析与业务流程设计', '研发评审', 'Vibe Coding 独立产品'],
+        data: ['SQL Mapping 与数据口径', '埋点与数据分析体系', 'RedBI', 'KNIME / Tableau', 'SPSS / Stata'],
+        ai: ['Cursor', 'Vibe Coding', 'Dify', 'n8n', 'AI 数据运营与产品实践'],
+        collaboration: ['TikTok 跨国项目', '30+ 人项目协作', '10+ 轮英文校准会议', '跨团队沟通与研发评审'],
+        execution: ['独立 Own PRD', '0→1 数据分析体系', '推动需求评审', '独立产品上线', 'SOP 搭建'],
+        missingEngineering: ['Java', 'C++', 'Go', '后端开发', '服务端技术栈', '分布式系统', '微服务', '系统架构', 'DevOps', '云原生工程'],
       };
 
+      const classifyRole = (query) => {
+        const contains = (words) => words.some((word) => query.includes(word));
+        const engineeringCore = ['后端', '服务端', 'java', 'c++', 'golang', 'spring', 'redis', 'kafka', '微服务', '分布式', '高并发', '系统设计', 'database architecture', 'microservices', 'backend', 'server', 'devops', '云原生', '前端工程', '算法工程', '模型训练'];
+        if (contains(engineeringCore)) return { id: 'engineering', label: '研发 / Engineering' };
+        if (contains(['ai 产品', 'ai产品', '人工智能产品', '大模型产品'])) return { id: 'aiProduct', label: 'AI 产品' };
+        if (contains(['国际化 / 出海 pm', '国际化 pm', '出海 pm'])) return { id: 'product', label: '国际化产品' };
+        if (contains(['产品经理', '产品运营', 'product manager', 'product owner', 'c端产品', 'b端产品'])) return { id: 'product', label: '产品' };
+        if (contains(['数据分析师', '数据科学', '商业分析', 'data analyst', 'analytics'])) return { id: 'data', label: '数据' };
+        if (contains(['策略', '战略', 'strategy'])) return { id: 'strategy', label: '策略' };
+        if (contains(['运营', 'operations', 'operation'])) return { id: 'operations', label: '运营' };
+        if (contains(['市场', '营销', '品牌', 'marketing', 'growth'])) return { id: 'marketing', label: '市场' };
+        if (contains(['项目经理', '项目管理', 'project manager', 'pmo'])) return { id: 'project', label: '项目管理' };
+        return { id: 'other', label: '其他' };
+      };
+
+      const buildMatchResult = (sourceText) => {
+        const query = sourceText.toLowerCase().replace(/\s+/g, ' ').trim();
+        const contains = (words) => words.some((word) => query.includes(word));
+        const countHits = (words) => words.filter((word) => query.includes(word)).length;
+        const role = classifyRole(query);
+        const international = contains(['国际化', '出海', '海外', '全球', '跨文化', '英文']);
+        const senior = contains(['8年以上', '八年以上', '10年以上', '十年以上', '总监', '负责人']);
+        const commercial = contains(['多年商业化', '广告平台', '增长变现', '商业化负责人']);
+        const engineeringSkills = ['java', 'c++', 'go', 'golang', 'spring', 'redis', 'kafka', '微服务', '分布式', '高并发', '系统架构', '后端开发', '服务端开发', 'devops', '云原生'];
+        const missingCoreCount = countHits(engineeringSkills);
+
+        const roleModels = {
+          product: { score: 88, demand: [94, 76, 48, 82, 92], ability: [92, 84, 60, 88, 93] },
+          aiProduct: { score: 84, demand: [90, 76, 92, 78, 88], ability: [90, 83, 82, 86, 91] },
+          data: { score: 72, demand: [54, 96, 54, 66, 78], ability: [62, 88, 50, 76, 78] },
+          strategy: { score: 74, demand: [72, 88, 42, 82, 76], ability: [76, 87, 48, 86, 80] },
+          operations: { score: 69, demand: [66, 72, 38, 88, 92], ability: [68, 78, 42, 86, 88] },
+          marketing: { score: 56, demand: [48, 70, 28, 82, 84], ability: [52, 72, 34, 82, 76] },
+          project: { score: 78, demand: [62, 58, 34, 94, 94], ability: [72, 70, 42, 92, 91] },
+          engineering: { score: 34, demand: [22, 56, 28, 62, 86], ability: [18, 34, 22, 66, 48] },
+          other: { score: 52, demand: [50, 50, 40, 60, 65], ability: [48, 54, 42, 68, 66] },
+        };
+        const model = roleModels[role.id];
+        const demand = [...model.demand];
+        const ability = [...model.ability];
+        let internalScore = model.score;
+
+        if (international && ['product', 'aiProduct', 'project'].includes(role.id)) {
+          demand[3] = 95; ability[3] = 94; internalScore += role.id === 'product' ? 5 : 3;
+        }
+        if (contains(['sql', 'tableau', 'knime', '数据分析', '数据驱动', '指标'])) {
+          demand[1] = Math.max(demand[1], 88);
+          ability[1] = Math.max(ability[1], role.id === 'engineering' ? 42 : 90);
+          if (role.id !== 'engineering') internalScore += 2;
+        }
+        if (contains(['cursor', 'dify', 'n8n', 'vibe coding', 'ai 工具'])) {
+          demand[2] = Math.max(demand[2], 86);
+          ability[2] = Math.max(ability[2], 86);
+          if (['product', 'aiProduct', 'operations'].includes(role.id)) internalScore += 3;
+        }
+        if (senior) internalScore -= 14;
+        if (commercial) internalScore -= 7;
+        if (role.id === 'engineering') internalScore = Math.min(internalScore - Math.min(missingCoreCount * 2, 10), 39);
+
+        const grade = internalScore >= 82
+          ? { letter: 'A', title: '高度匹配', english: 'Strong Match', note: '岗位方向一致，核心要求有充分的履历证据支撑。' }
+          : internalScore >= 60
+            ? { letter: 'B', title: '比较匹配', english: 'Good Match', note: '方向相近且有可迁移优势，但仍存在明确能力缺口。' }
+            : { letter: 'C', title: '一般匹配', english: 'Partial Match', note: '岗位核心能力与当前职业经历存在明显差距。' };
+
+        const evidence = {
+          product: { id: 'product', title: '产品落地能力', text: 'PRD、需求分析与独立产品上线，为岗位提供直接证据。' },
+          data: { id: 'data', title: '数据驱动能力', text: 'SQL Mapping、KNIME 与 Tableau 支撑数据判断。' },
+          ai: { id: 'ai', title: 'AI 产品实践', text: 'Cursor、Dify、n8n 与 Vibe Coding 均有实际应用。' },
+          collaboration: { id: 'collaboration', title: international ? '跨文化沟通' : '跨团队推进', text: international ? 'TikTok 跨国项目及多轮英文校准会议提供直接证据。' : '具备 30+ 人协作与跨团队需求评审经验。' },
+          execution: { id: 'execution', title: '执行落地能力', text: '独立 Own PRD、推动评审并完成 0→1 上线。' },
+          transferableData: { id: 'data', title: '数据理解基础', text: 'SQL Mapping 与分析经验可迁移，但不等同于后端研发。' },
+          transferableCollab: { id: 'collaboration', title: '研发协作基础', text: '跨团队和研发评审经验可迁移至工程协作场景。' },
+        };
+
+        let highlights;
+        let summary;
+        let gap;
+        if (role.id === 'engineering') {
+          highlights = [evidence.transferableData, evidence.transferableCollab];
+          summary = '候选人有 SQL、数据分析及研发协作基础，但主要经历集中在产品管理与项目推进。';
+          gap = '后端开发、编程语言及服务端技术栈缺乏直接履历证据，因此判定为一般匹配。';
+        } else if (role.id === 'product') {
+          highlights = international ? [evidence.collaboration, evidence.product, evidence.data] : [evidence.product, evidence.execution, evidence.data];
+          summary = international ? '产品落地、英文沟通与跨文化项目经历，与该国际化产品岗位高度重合。' : 'PRD、需求分析、数据判断与独立推进经历，对产品岗位形成直接支撑。';
+          gap = senior ? '岗位要求的资深年限与组织管理跨度高于当前经历，是主要补充空间。' : commercial ? '多年商业化产品闭环与变现规模仍需更多直接案例证明。' : '复杂技术架构或大规模商业化经验，仍需结合岗位实际要求进一步验证。';
+        } else if (role.id === 'aiProduct') {
+          highlights = [evidence.ai, evidence.product, evidence.execution];
+          summary = 'AI 工具实践、产品设计与 0→1 落地经历，能够支撑 AI 产品岗位的主要工作。';
+          gap = '模型训练与底层算法工程并非当前强项，深技术岗位需要研发团队协同补位。';
+        } else if (role.id === 'data' || role.id === 'strategy') {
+          highlights = [evidence.data, evidence.product, evidence.collaboration];
+          summary = '数据分析工具、指标口径与业务洞察经验，可支撑数据和策略类岗位的核心任务。';
+          gap = role.id === 'data' ? '高级统计建模与数据工程经验在当前履历中证据有限。' : '长期战略规划与高层经营决策经验仍需更多项目证明。';
+        } else if (role.id === 'project' || role.id === 'operations') {
+          highlights = [evidence.collaboration, evidence.execution, evidence.data];
+          summary = '跨团队协作、SOP 搭建和项目推动能力，可迁移至该岗位的协同与交付场景。';
+          gap = '该岗位的垂直业务运营深度仍需结合具体行业要求进一步验证。';
+        } else {
+          highlights = [evidence.collaboration, evidence.data];
+          summary = '候选人具备数据理解和跨团队协作基础，但与该岗位的核心职业方向重合有限。';
+          gap = '当前简历缺少该岗位关键专业能力的直接证据，因此不做高匹配判断。';
+        }
+
+        const coreCoverage = role.id === 'engineering'
+          ? { matched: ['跨团队协作'], partial: ['SQL / 数据理解'], missing: engineeringSkills.filter((skill) => query.includes(skill)) }
+          : { matched: candidateProfile[role.id === 'aiProduct' ? 'ai' : role.id] || candidateProfile.collaboration, partial: [], missing: [] };
+
+        return { role, grade, ability, demand, summary, gap, highlights, coreCoverage };
+      };
+
+      useEffect(() => {
+        if (!isAnalyzing) return undefined;
+        const stepTimer = window.setInterval(() => setLoadingStep((current) => (current + 1) % 4), 190);
+        return () => window.clearInterval(stepTimer);
+      }, [isAnalyzing]);
+      useEffect(() => () => {
+        if (analysisTimerRef.current) window.clearTimeout(analysisTimerRef.current);
+      }, []);
+
+      const handleStartMatch = (presetRole) => {
+        const nextRole = typeof presetRole === 'string' ? presetRole : selectedRole;
+        if (typeof presetRole === 'string') setSelectedRole(presetRole);
+        setHasAnalyzed(false);
+        setActiveDimension(null);
+        setLoadingStep(0);
+        setIsAnalyzing(true);
+        if (analysisTimerRef.current) window.clearTimeout(analysisTimerRef.current);
+        analysisTimerRef.current = window.setTimeout(() => {
+          setMatchResult(buildMatchResult((nextRole + ' ' + jdText).trim()));
+          setIsAnalyzing(false);
+          setHasAnalyzed(true);
+        }, 760);
+      };
+
+      const center = { x: 220, y: 166 };
+      const radius = 108;
+      const angles = [-90, -18, 54, 126, 198];
+      const pointAt = (length, angle) => {
+        const radians = angle * Math.PI / 180;
+        return { x: center.x + Math.cos(radians) * length, y: center.y + Math.sin(radians) * length };
+      };
+      const polygonPoints = (values, maxRadius = radius) => values.map((value, index) => {
+        const point = pointAt(maxRadius * value / 100, angles[index]);
+        return point.x.toFixed(1) + ',' + point.y.toFixed(1);
+      }).join(' ');
+      const activeDimensionData = dimensions.find((item) => item.id === activeDimension);
+      const loadingMessages = ['识别岗位核心能力', '匹配 Cecilia 的经历', '分析能力结构', '生成匹配结论'];
+
       return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-              <div className="flex items-center space-x-2">
-                <span className="text-lg font-bold text-slate-900">综合等级</span>
-                <span className="text-xs font-bold bg-teal-100 text-teal-800 px-2.5 py-0.5 rounded-full">匹配</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/55 backdrop-blur-md animate-fade-in">
+          <div role="dialog" aria-modal="true" aria-labelledby="matcher-title" onClick={(event) => { if (!event.target.closest('[data-radar-dimension]')) setActiveDimension(null); }} className="matcher-modal bg-white w-full max-w-[1160px] rounded-[26px] shadow-[0_28px_90px_rgba(15,23,42,.24)] border border-white/80 overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="matcher-modal-header px-5 pt-4 pb-3 sm:px-7 sm:pt-5 flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <h2 id="matcher-title" className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#0c1836]">AI 岗位匹配器</h2>
+                  <span className="text-[11px] font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full">Beta</span>
+                </div>
+                <p className="mt-1 text-xs text-slate-400">粘贴 JD，看看我们有多匹配！</p>
               </div>
-              <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-xs">✕</button>
+              <button onClick={onClose} aria-label="关闭 AI 岗位匹配器" className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-sm transition-colors">✕</button>
             </div>
 
-            <div className="p-6 overflow-y-auto space-y-6">
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 space-y-2">
-                <div className="text-xs font-bold text-slate-500 flex justify-between">
-                  <span>AI 岗位匹配器</span>
-                  <span className="text-teal-600">选择预设快捷尝试:</span>
-                </div>
-                <div className="flex flex-wrap gap-1.5 pb-1">
-                  {['C端产品经理', 'AI 产品经理', '国际化/出海 PM', '数据/策略 PM'].map((preset) => (
-                    <button key={preset} onClick={() => handleStartMatch(preset)} className="text-[11px] bg-white border border-slate-200 px-2.5 py-1 rounded-lg text-slate-700 hover:border-teal-500 hover:text-teal-700 font-medium">
-                      {preset}
+            <div className="matcher-scroll-area px-4 pb-3 sm:px-7 sm:pb-4 overflow-y-auto">
+              <div className="matcher-input-panel bg-slate-50/70 p-3 rounded-[18px] border border-slate-200/80 space-y-2">
+                <div className="text-xs font-bold text-[#0c1836]">选择预设快捷尝试：</div>
+                <div className="flex flex-wrap gap-2">
+                  {presetRoles.map((preset) => (
+                    <button key={preset.label} onClick={() => handleStartMatch(preset.label)} aria-pressed={selectedRole === preset.label} className={'flex items-center gap-1.5 text-[11px] sm:text-xs bg-white border px-3 py-1.5 rounded-full text-slate-700 hover:-translate-y-0.5 hover:shadow-md font-semibold transition-all ' + (selectedRole === preset.label ? 'border-slate-400 shadow-sm' : 'border-slate-200')}>
+                      <span style={{ color: preset.color }} className="text-base leading-none">{preset.icon}</span>{preset.label}
                     </button>
                   ))}
                 </div>
-                <div className="flex items-center space-x-2 bg-white rounded-xl p-1.5 border border-slate-200">
+                <div className="flex items-center gap-2 bg-white rounded-2xl p-1.5 border border-slate-200 focus-within:border-slate-400 focus-within:shadow-sm transition-all">
                   <input
                     type="text"
                     value={jdText}
                     onChange={(e) => setJdText(e.target.value)}
-                    placeholder="粘贴您的 JD，查看胡敏雪与岗位之间的匹配度..."
-                    className="flex-1 text-xs px-2 outline-none text-slate-800"
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !isAnalyzing) handleStartMatch(); }}
+                    placeholder="粘贴您的 JD，看看胡敏雪与岗位之间的匹配度…"
+                    className="min-w-0 flex-1 text-xs sm:text-sm px-2 sm:px-3 outline-none text-slate-800 placeholder:text-slate-400"
                   />
-                  <button onClick={() => handleStartMatch()} className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-lg">
-                    {isAnalyzing ? '分析中...' : '开始匹配 ➔'}
+                  <button disabled={isAnalyzing} onClick={() => handleStartMatch()} className="shrink-0 bg-[#0c1836] hover:bg-slate-800 disabled:opacity-70 text-white text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl transition-colors">
+                    {isAnalyzing ? '分析中…' : '开始匹配 →'}
                   </button>
                 </div>
               </div>
 
-              {hasAnalyzed && (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
-                    <div className="sm:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl bg-rose-50/50 border border-rose-100 text-center">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase">综合分</div>
-                      <div className="text-4xl font-extrabold text-slate-900 my-1">89 <span className="text-xs font-normal text-slate-400">/100</span></div>
-                      <span className="text-[10px] text-rose-600 font-bold bg-white px-2 py-0.5 rounded-full border border-rose-100">高度契合</span>
-                    </div>
-
-                    <div className="sm:col-span-8 space-y-3">
-                      <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                          <span>学历背景 (同济硕士 & 都灵双学位)</span>
-                          <span className="font-mono text-blue-600">90</span>
-                        </div>
-                        <div className="h-2 rounded-full bg-slate-100 overflow-hidden"><div className="h-full bg-blue-500 rounded-full w-[90%]"></div></div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                          <span>工作经验 (哈啰/小红书/字节)</span>
-                          <span className="font-mono text-blue-600">85</span>
-                        </div>
-                        <div className="h-2 rounded-full bg-slate-100 overflow-hidden"><div className="h-full bg-blue-500 rounded-full w-[85%]"></div></div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
-                          <span>技能特长 (SQL/Figma/Vibe Coding)</span>
-                          <span className="font-mono text-blue-600">95</span>
-                        </div>
-                        <div className="h-2 rounded-full bg-slate-100 overflow-hidden"><div className="h-full bg-blue-500 rounded-full w-[95%]"></div></div>
-                      </div>
-                    </div>
+              {isAnalyzing && (
+                <div className="mt-4 min-h-[260px] flex flex-col items-center justify-center rounded-[22px] border border-slate-100 bg-white text-center">
+                  <div className="flex gap-1.5 mb-4" aria-hidden="true">
+                    <span className="matcher-loading-dot w-2.5 h-2.5 rounded-full bg-orange-500" /><span className="matcher-loading-dot w-2.5 h-2.5 rounded-full bg-violet-400" /><span className="matcher-loading-dot w-2.5 h-2.5 rounded-full bg-emerald-400" />
                   </div>
+                  <p className="text-base font-bold text-[#0c1836]">正在分析 JD…</p>
+                  <p className="mt-2 text-xs text-slate-400" aria-live="polite">{loadingMessages[loadingStep]}</p>
+                </div>
+              )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-                      <div className="text-xs font-bold text-slate-900">⭐ 匹配亮点</div>
-                      <div className="text-xs text-slate-600 space-y-1.5 leading-relaxed">
-                        <p><strong className="text-slate-800">数据敏感度：</strong> 熟练掌握 SQL/Tableau/KNIME，拥有小红书商业化归因与 Calio 埋点经验。</p>
-                        <p><strong className="text-slate-800">自驱与落地：</strong> 具备独立做 Vibe Coding 产品的实战案例（《吃啥》与《赛道测测》）。</p>
-                      </div>
-                    </div>
+              {hasAnalyzed && matchResult && (
+                <div className="matcher-result-reveal mt-3 grid grid-cols-1 lg:grid-cols-12 gap-3">
+                  <section className="matcher-main-card lg:col-span-4 min-h-[280px] relative overflow-hidden flex flex-col items-center justify-center p-4 rounded-[20px] bg-[#fff8f3] border border-orange-100 text-center">
+                    <div className="absolute -left-12 -top-12 w-40 h-40 rounded-full bg-orange-100/45 blur-2xl" />
+                    <div className="relative text-[11px] font-extrabold tracking-[.16em] text-orange-600">AI MATCH RESULT</div>
+                    <div className="matcher-grade-letter relative text-[92px] sm:text-[100px] leading-[.88] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-orange-400 to-orange-600 drop-shadow-[0_10px_13px_rgba(249,115,22,.18)]">{matchResult.grade.letter}</div>
+                    <div className="relative text-xl sm:text-2xl font-black tracking-tight text-[#0c1836]">{matchResult.grade.title}</div>
+                    <div className="relative mt-0.5 text-[11px] font-bold text-orange-600">{matchResult.grade.english}</div>
+                    <div className="matcher-grade-note relative mt-3 w-full rounded-xl border border-orange-200/80 bg-white/75 px-3 py-2 text-left text-[11px] leading-relaxed text-slate-600"><span className="mr-1.5">⭐</span>{matchResult.grade.note}</div>
+                  </section>
 
-                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-                      <div className="text-xs font-bold text-slate-900">📝 AI 评估总结</div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        候选人在专业技能上具备扎实的数据分析能力与产品策划经验；软技能突出表现为高自驱力与跨国团队推进能力。整体与产品经理岗位高度契合。
-                      </p>
+                  <section className="matcher-main-card lg:col-span-8 relative min-h-[280px] rounded-[20px] bg-white border border-slate-200/90 overflow-hidden">
+                    <div className="absolute right-4 top-4 z-10 flex items-center gap-1 text-[10px] text-slate-400"><span className="hidden sm:inline">悬停查看各能力维度的评估依据</span><span className="w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center font-serif">i</span></div>
+                    <svg viewBox="0 0 600 330" className="matcher-radar block w-full h-[280px]" aria-label="产品、数据、AI、沟通协作与执行落地五维能力雷达图">
+                      {[1, .75, .5, .25].map((level) => <polygon key={level} points={polygonPoints([100,100,100,100,100], radius * level)} fill="none" stroke="#dbe2eb" strokeWidth="1" />)}
+                      {angles.map((angle) => { const end = pointAt(radius, angle); return <line key={angle} x1={center.x} y1={center.y} x2={end.x} y2={end.y} stroke="#e3e8ef" strokeWidth="1" />; })}
+                      <polygon points={polygonPoints(matchResult.demand)} fill="rgba(148,163,184,.08)" stroke="#b8c1cf" strokeWidth="1.3" strokeDasharray="4 4" />
+                      <polygon points={polygonPoints(matchResult.ability)} fill="rgba(255,126,53,.18)" stroke="#ff6b1a" strokeWidth="2" />
+                      {matchResult.ability.map((value, index) => {
+                        const point = pointAt(radius * value / 100, angles[index]);
+                        const dimension = dimensions[index];
+                        return <circle key={dimension.id} data-radar-dimension="true" role="button" tabIndex="0" aria-label={'查看' + dimension.title + '评估依据'} cx={point.x} cy={point.y} r={activeDimension === dimension.id ? 8 : 5.5} fill={activeDimension === dimension.id ? dimension.accent : '#ff6b1a'} stroke="white" strokeWidth="3" className="matcher-radar-label transition-all" onMouseEnter={() => setActiveDimension(dimension.id)} onFocus={() => setActiveDimension(dimension.id)} onClick={(event) => { event.stopPropagation(); setActiveDimension((current) => current === dimension.id ? null : dimension.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setActiveDimension(dimension.id); } }} />;
+                      })}
+                      {[
+                        { x: 220, y: 22, anchor: 'middle' }, { x: 370, y: 110, anchor: 'start' }, { x: 333, y: 300, anchor: 'start' }, { x: 108, y: 300, anchor: 'end' }, { x: 64, y: 110, anchor: 'end' },
+                      ].map((position, index) => {
+                        const dimension = dimensions[index];
+                        return (
+                          <g key={dimension.id} data-radar-dimension="true" role="button" tabIndex="0" aria-label={'查看' + dimension.title + '评估依据'} className="matcher-radar-label" onMouseEnter={() => setActiveDimension(dimension.id)} onFocus={() => setActiveDimension(dimension.id)} onClick={(event) => { event.stopPropagation(); setActiveDimension((current) => current === dimension.id ? null : dimension.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setActiveDimension(dimension.id); } }}>
+                            <rect className="matcher-label-pill" x={position.anchor === 'middle' ? position.x - 53 : position.anchor === 'end' ? position.x - 112 : position.x - 7} y={position.y - 17} width="120" height="34" rx="17" fill={activeDimension === dimension.id ? dimension.accent + '12' : 'transparent'} stroke="transparent" />
+                            <text x={position.x} y={position.y + 5} textAnchor={position.anchor} fontSize="14" fontWeight="700" fill="#0c1836"><tspan fill={dimension.accent}>{dimension.icon} </tspan>{dimension.title}</text>
+                          </g>
+                        );
+                      })}
+                      <g transform="translate(145 318)"><line x1="0" y1="0" x2="20" y2="0" stroke="#ff6b1a" strokeWidth="2" /><circle cx="10" cy="0" r="3" fill="#ff6b1a" /><text x="28" y="4" fontSize="10" fill="#8290a6">你的匹配表现</text><line x1="125" y1="0" x2="145" y2="0" stroke="#b8c1cf" strokeWidth="1.3" strokeDasharray="4 3" /><text x="153" y="4" fontSize="10" fill="#8290a6">岗位需求强度</text></g>
+                    </svg>
+                    <div data-radar-dimension="true" data-visible={Boolean(activeDimensionData)} className="matcher-dimension-card absolute z-20 right-3 top-12 w-[238px] rounded-[18px] border border-slate-200 bg-white/95 p-4 shadow-[0_16px_40px_rgba(15,23,42,.14)] backdrop-blur-md">
+                      {activeDimensionData && <React.Fragment><div className="flex items-center gap-2 font-bold text-sm text-[#0c1836]"><span style={{ color: activeDimensionData.accent }} className="text-lg">{activeDimensionData.icon}</span>{activeDimensionData.title}</div><p className="mt-2.5 text-[11px] font-semibold leading-relaxed text-slate-700">{activeDimensionData.keywords}</p><div className="my-3 h-px bg-slate-100" /><p className="text-[10px] leading-relaxed text-slate-500">{activeDimensionData.description}</p></React.Fragment>}
                     </div>
-                  </div>
+                  </section>
+
+                  <section className="matcher-bottom-card lg:col-span-4 rounded-[20px] border border-slate-200/90 bg-white p-4">
+                    <h3 className="text-sm font-extrabold text-[#0c1836]">🤖 <span className="ml-1">AI 评估总结</span></h3>
+                    <div className="mt-2 text-[11px] sm:text-xs leading-relaxed text-slate-600 space-y-1.5"><p>{matchResult.summary}</p><p>{matchResult.gap}</p></div>
+                  </section>
+                  <section className="matcher-bottom-card lg:col-span-8 rounded-[20px] border border-slate-200/90 bg-white p-4">
+                    <h3 className="text-sm font-extrabold text-[#0c1836]">⭐ <span className="ml-1">匹配亮点</span></h3>
+                    <div className={'mt-2 grid grid-cols-1 gap-2 ' + (matchResult.highlights.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3')}>
+                      {matchResult.highlights.map((highlight, index) => {
+                        const dimension = dimensions.find((item) => item.id === highlight.id);
+                        return <article key={highlight.id} className="rounded-xl border border-slate-100 bg-slate-50/65 p-2.5"><div className="flex items-center gap-2"><span style={{ backgroundColor: dimension.accent }} className="w-5 h-5 shrink-0 rounded-full text-white text-[8px] font-bold flex items-center justify-center">{'0' + (index + 1)}</span><h4 className="text-[11px] font-bold text-[#0c1836]">{highlight.title}</h4></div><p className="matcher-clamp-2 mt-1.5 text-[10px] leading-relaxed text-slate-500">{highlight.text}</p></article>;
+                      })}
+                    </div>
+                  </section>
                 </div>
               )}
             </div>
 
-            <div className="p-4 border-t border-slate-100 flex justify-end bg-slate-50/50">
-              <button onClick={onClose} className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-6 py-2.5 rounded-full">
-                关闭弹窗
+            <div className="px-5 py-2 border-t border-slate-100 flex items-center justify-between gap-3 bg-white sm:px-7 min-h-[44px]">
+              <p className="hidden sm:block text-[10px] text-slate-400">💡 Tip：匹配结果仅供参考，最终以真实沟通为准！</p>
+              <button onClick={onClose} className="ml-auto bg-[#0c1836] hover:bg-slate-800 text-white text-xs font-bold px-5 py-2 rounded-full transition-colors">
+                ✕&nbsp;&nbsp;关闭
               </button>
             </div>
           </div>
