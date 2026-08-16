@@ -15,6 +15,61 @@
     html {
       scroll-behavior: smooth;
     }
+    .content-section {
+      min-height: 100vh;
+      padding-top: 64px;
+      padding-bottom: 80px;
+    }
+    .section-container {
+      width: 100%;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+    .section-label {
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .section-title {
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+    .section-subtitle {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    @media (min-width: 640px) {
+      .section-container {
+        padding-left: 32px;
+        padding-right: 32px;
+      }
+      .section-label { font-size: 13px; }
+      .section-title { font-size: 30px; }
+      .section-subtitle { font-size: 16px; }
+    }
+    @media (min-width: 1024px) {
+      .section-container {
+        padding-left: 60px;
+        padding-right: 60px;
+      }
+    }
+    @media (max-width: 639px) {
+      .content-section {
+        padding-top: 56px;
+        padding-bottom: 72px;
+      }
+      .section-header { margin-bottom: 36px; }
+    }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
     }
@@ -392,20 +447,20 @@
               </div>
             </section>
 
-            <section id="education" data-section="EDUCATION" className="portfolio-section min-h-[calc(100vh-5rem)] py-20 flex items-center">
-              <div className="w-full"><EducationSection /></div>
+            <section id="education" data-section="EDUCATION" className="portfolio-section content-section">
+              <EducationSection />
             </section>
 
-            <section id="experience" data-section="EXPERIENCE" className="portfolio-section pt-20 pb-16">
+            <section id="experience" data-section="EXPERIENCE" className="portfolio-section content-section">
               <ExperienceSection />
             </section>
 
-            <section id="projects" data-section="PROJECTS" className="portfolio-section py-24">
+            <section id="projects" data-section="PROJECTS" className="portfolio-section content-section">
               <ProjectsSection />
             </section>
 
-            <section id="skills" data-section="SKILLS" className="portfolio-section min-h-[calc(100vh-5rem)] pt-16 pb-12 flex items-center">
-              <div className="w-full"><SkillsSection /></div>
+            <section id="skills" data-section="SKILLS" className="portfolio-section content-section">
+              <SkillsSection />
             </section>
           </main>
 
@@ -817,7 +872,7 @@
       };
 
       return (
-        <section className="max-w-7xl mx-auto px-6 lg:px-8">
+        <section className="section-container">
           <style>{`
             @keyframes educationPlanetFloat {
               0%, 100% { transform: translateY(0px); }
@@ -825,16 +880,16 @@
             }
           `}</style>
 
-          <div className="space-y-1 mb-6 lg:mb-3">
-            <div className="text-xs font-mono font-bold text-teal-600 tracking-wider">02 / EDUCATION</div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">GLOBAL ACADEMIC JOURNEY</h2>
-            <p className="text-xs sm:text-sm text-slate-500">在不同的地方学习，也在不同的视角中理解世界。</p>
+          <div className="section-header">
+            <div className="section-label font-mono font-bold text-teal-600 tracking-wider">02 / EDUCATION</div>
+            <h2 className="section-title font-extrabold text-slate-900">GLOBAL ACADEMIC JOURNEY</h2>
+            <p className="section-subtitle text-slate-500">在不同的地方学习，也在不同的视角中理解世界。</p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-8 lg:gap-10 items-start">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.18fr)_minmax(0,1fr)] lg:gap-8 items-start">
             {/* 左侧：纯圆形 Tiny Planet + 本人全身原图抠图 */}
             <figure
-              className="group relative aspect-square w-[90%] lg:w-full max-w-[700px] mx-auto overflow-visible cursor-grab active:cursor-grabbing touch-none select-none"
+              className="group relative aspect-square w-[94%] lg:w-full max-w-[650px] mx-auto overflow-visible cursor-grab active:cursor-grabbing touch-none select-none"
               onPointerDown={startPlanetDrag}
               onPointerMove={movePlanet}
               onPointerUp={stopPlanetDrag}
@@ -863,10 +918,10 @@
             </figure>
 
             {/* 右侧：Academic Timeline */}
-            <div className="self-start lg:pl-1">
+            <div className="self-start lg:pl-3">
               <div>
                 {educationData.map((edu) => (
-                  <article key={edu.id} className="group grid grid-cols-[70px_minmax(0,1fr)] sm:grid-cols-[88px_minmax(0,1fr)] gap-3 border-b border-slate-200/90 px-2 py-5 sm:px-3 sm:py-6 rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:border-transparent hover:shadow-[0_14px_34px_rgba(15,23,42,0.08)]">
+                  <article key={edu.id} className="group grid grid-cols-[64px_minmax(0,1fr)] sm:grid-cols-[78px_minmax(0,1fr)] gap-3 border-b border-slate-200/90 px-2 py-3 sm:px-3 sm:py-3.5 rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:border-transparent hover:shadow-[0_14px_34px_rgba(15,23,42,0.08)]">
                     <div className="flex items-center gap-2.5 self-start pt-1.5">
                       <span className="font-mono text-xl sm:text-2xl font-medium leading-none" style={{ color: edu.accent }}>{edu.num}</span>
                       <AccentShape type={edu.shape} color={edu.accent} />
@@ -879,12 +934,12 @@
                         </div>
                         <time className="whitespace-nowrap pt-1 text-[11px] font-mono text-slate-500">{edu.period}</time>
                       </div>
-                      <p className="mt-3 text-xs sm:text-sm font-medium leading-6 text-slate-600">{edu.summary}</p>
-                      <div className="mt-3 flex flex-wrap gap-1.5" aria-label={`${edu.schoolZh}课程`}>
+                      <p className="mt-2 text-xs sm:text-sm font-medium leading-5 text-slate-600">{edu.summary}</p>
+                      <div className={edu.id === 'turin' ? 'mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-[max-content_max-content]' : 'mt-2 flex flex-wrap gap-1.5'} aria-label={`${edu.schoolZh}课程`}>
                         {edu.courses.map((course, courseIndex) => (
-                          <div key={course} className={edu.id === 'turin' && courseIndex === 2 ? 'basis-full' : ''}>
+                          <div key={course} className={edu.id === 'turin' && courseIndex === 2 ? 'sm:col-span-2' : ''}>
                             <span
-                              className="inline-flex max-w-full items-center whitespace-nowrap rounded-full border px-2.5 py-1 text-[10px] sm:text-[11px] font-medium leading-4 text-slate-600 transition-colors duration-300"
+                              className={`inline-flex max-w-full items-center whitespace-nowrap rounded-full border py-1 font-medium leading-4 text-slate-600 transition-colors duration-300 ${edu.id === 'turin' ? 'px-2 text-[9px] sm:text-[10px]' : 'px-2.5 text-[10px] sm:text-[11px]'}`}
                               style={{ backgroundColor: `${edu.accent}0A`, borderColor: `${edu.accent}24` }}
                             >
                               {course}
@@ -1074,7 +1129,7 @@
           onBlur={onLeave}
           onClick={onSelect}
           aria-label={`查看 ${experience.company} 经历详情`}
-          className={`experience-card group relative h-[412px] min-w-0 rounded-[30px] border bg-white p-3 text-left flex flex-col shadow-[0_18px_42px_rgba(15,23,42,.09)] ${hasHoveredCard && !isHovered ? 'experience-card-muted' : ''}`}
+          className={`experience-card group relative h-[430px] min-w-0 rounded-[30px] border bg-white p-3 text-left flex flex-col shadow-[0_18px_42px_rgba(15,23,42,.09)] ${hasHoveredCard && !isHovered ? 'experience-card-muted' : ''}`}
           style={{ borderColor: experience.border }}
         >
           <span aria-hidden="true" className="experience-card-depth absolute inset-x-3 -bottom-2 h-8 rounded-b-[28px] opacity-45" style={{ background: experience.border }} />
@@ -1168,7 +1223,7 @@
       const [hoveredId, setHoveredId] = useState(null);
 
       return (
-        <section className="max-w-7xl mx-auto px-6 lg:px-8 pb-8">
+        <section className="section-container">
           <style>{`
             .experience-card { transition: transform 400ms cubic-bezier(.22,1,.36,1), box-shadow 400ms ease, opacity 300ms ease; transform: translateY(0); isolation: isolate; box-shadow: inset 0 1px 0 rgba(255,255,255,.96), 0 18px 42px rgba(15,23,42,.09); }
             .experience-card:hover, .experience-card:focus-visible { transform: translateY(-6px) rotate(-.4deg); box-shadow: inset 0 1px 0 rgba(255,255,255,.96), 0 28px 58px rgba(15,23,42,.15); z-index: 10; outline: none; }
@@ -1186,10 +1241,10 @@
             }
           `}</style>
 
-          <div className="relative mb-[76px] space-y-1">
-            <div className="text-xs font-mono font-bold text-teal-600 tracking-wider">03 / EXPERIENCE</div>
-            <h2 className="whitespace-nowrap text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Where I learned to build products :)</h2>
-            <p className="text-xs sm:text-sm text-slate-500">真实业务里的产品成长经历</p>
+          <div className="section-header relative">
+            <div className="section-label font-mono font-bold text-teal-600 tracking-wider">03 / EXPERIENCE</div>
+            <h2 className="section-title font-extrabold text-slate-900">Where I learned to build products :)</h2>
+            <p className="section-subtitle text-slate-500">真实业务里的产品成长经历</p>
 
             <div className="hidden lg:block absolute right-[18%] top-[-22px] w-14 h-14 animate-float-1 pointer-events-none">
               <div className="w-full h-full bg-gradient-to-br from-orange-300 to-[#FF4B00] [clip-path:polygon(50%_0,100%_100%,0_78%)] drop-shadow-xl rotate-12" />
@@ -1198,13 +1253,13 @@
             <div className="hidden lg:block absolute right-0 top-14 w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-300 to-emerald-700 rotate-12 shadow-xl animate-float-3 pointer-events-none" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             {experienceData.map((experience) => (
               <ExperienceCard key={experience.id} experience={experience} isHovered={hoveredId === experience.id} hasHoveredCard={Boolean(hoveredId)} onHover={() => setHoveredId(experience.id)} onLeave={() => setHoveredId(null)} onSelect={() => setActiveExperience(experience)} />
             ))}
           </div>
 
-          <p className="mt-5 text-center text-[11px] text-slate-400"><span aria-hidden="true" className="mr-2">⌁</span>点击一张职业卡片，探索 Cecilia 的职业经历。</p>
+          <p className="mt-12 text-center text-[11px] text-slate-400"><span aria-hidden="true" className="mr-2">⌁</span>点击一张职业卡片，探索 Cecilia 的职业经历。</p>
           {activeExperience && <ExperienceModal experience={activeExperience} onClose={() => setActiveExperience(null)} />}
         </section>
       );
@@ -1347,11 +1402,11 @@
       };
 
       return (
-        <section className="relative mx-auto -mt-4 max-w-[1480px] px-6 pb-2 lg:px-8">
-          <div className="relative z-10 space-y-1 mb-6 lg:mb-3">
-            <div className="text-xs font-mono font-bold text-teal-600 tracking-wider">04 / PROJECTS</div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">VIBE CODING PRODUCTS</h2>
-            <p className="text-xs sm:text-sm text-slate-500">One helps you decide. One helps you find direction.</p>
+        <section className="section-container relative">
+          <div className="section-header relative z-10">
+            <div className="section-label font-mono font-bold text-teal-600 tracking-wider">04 / PROJECTS</div>
+            <h2 className="section-title font-extrabold text-slate-900">VIBE CODING PRODUCTS</h2>
+            <p className="section-subtitle text-slate-500">One helps you decide. One helps you find direction.</p>
           </div>
 
           <span className="pointer-events-none absolute right-[8%] top-5 hidden h-14 w-14 rotate-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-700 shadow-xl md:block" />
@@ -1359,7 +1414,7 @@
           <span className="pointer-events-none absolute -left-1 bottom-16 hidden h-10 w-10 -rotate-12 rounded-xl bg-gradient-to-br from-amber-300 to-orange-500 shadow-lg xl:block" />
           <span className="pointer-events-none absolute right-0 top-[56%] hidden text-3xl text-emerald-700 2xl:block" aria-hidden="true">✦</span>
 
-          <div className="grid grid-cols-1 gap-7 xl:grid-cols-2 xl:items-start xl:gap-8">
+          <div className="grid grid-cols-1 gap-8 xl:grid-cols-2 xl:items-start xl:gap-10">
             <ProductModule project={projects[0]} />
             <ProductModule project={projects[1]} />
           </div>
@@ -1472,7 +1527,7 @@
       };
 
       return (
-        <section className="relative mx-auto min-h-[800px] max-w-[1480px] overflow-hidden px-5 pb-6 pt-3 sm:px-7 lg:min-h-[830px] lg:px-8">
+        <section className="section-container relative overflow-hidden">
           <style>{`
             .skill-hero-image, .skill-object-highlight { user-select: none; -webkit-user-drag: none; }
             .skill-blended-artwork {
@@ -1526,15 +1581,15 @@
             }
           `}</style>
 
-          <header className="relative z-30 max-w-[820px] pt-2">
-            <div className="font-mono text-xs font-bold tracking-wider text-emerald-700">05 / SKILLS</div>
-            <h2 className="mt-4 whitespace-nowrap font-black leading-none tracking-[-.052em] text-[#14213d]" style={{ fontSize: 'clamp(1.08rem, 4vw, 3.25rem)' }}>
+          <header className="section-header relative z-30">
+            <div className="section-label font-mono font-bold tracking-wider text-emerald-700">05 / SKILLS</div>
+            <h2 className="section-title font-extrabold text-[#14213d]">
               WHAT I BRING <span className="text-[#FF5500]">TO THE TABLE</span>
             </h2>
-            <p className="mt-4 max-w-[520px] text-sm leading-6 text-slate-500 sm:text-base">A collection of skills, tools and perspectives I use to build products.</p>
+            <p className="section-subtitle max-w-[520px] text-slate-500">A collection of skills, tools and perspectives I use to build products.</p>
           </header>
 
-          <div className="mx-auto -mt-1 w-full max-w-[860px] sm:-mt-2 md:max-w-[920px]">
+          <div className="mx-auto w-full max-w-[720px] md:max-w-[760px]">
             <div className="relative">
               <span aria-hidden="true" className="skill-decor-float-a pointer-events-none absolute -left-[6%] top-[29%] hidden h-10 w-10 rounded-[11px] bg-[#FFB36B]/30 sm:block" />
               <span aria-hidden="true" className="skill-decor-float-b pointer-events-none absolute -right-[4%] top-[14%] hidden text-[24px] leading-none text-[#FF5500]/70 sm:block" style={{ animationDelay: '-1.4s' }}>✦</span>
