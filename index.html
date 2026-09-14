@@ -355,11 +355,44 @@
           },
         },
         projects: {
-          liveDemo: '在线体验',
-          previewAria: (title) => `${title}产品界面预览，点击切换悬浮效果`,
-          homeAlt: (title) => `${title}真实产品首页`, resultAlt: (title) => `${title}真实产品结果页`,
-          chisha: { title: '吃啥', label: 'AI FOOD DECISION ASSISTANT', headline: '今天吃什么？', supporting: '帮你', emphasis: '少纠结一点', suffix: '。', tagline: ['AI 日常决策助手'] },
-          saidao: { title: '赛道测测', label: 'INTERNET CAREER EXPLORER', headline: '我适合哪条', emphasis: '互联网职业赛道', suffix: '？', tagline: ['AI 职业探索产品', '帮助用户找到更适合自己的互联网职业赛道。'] },
+          headerTitle: '决策型产品',
+          headerSubtitle: '为那些「下一步不知道怎么选」的时刻，\n做一些小产品。',
+          liveDemo: '在线体验', liveStatus: '可在线体验', featured: '精选项目',
+          indexAria: '项目索引', tabsAria: (title) => `${title}项目详情`,
+          selectAria: (title) => `查看${title}项目`, liveAria: (title) => `在线体验${title}`,
+          screenshotAlt: (title) => `${title}真实产品首页截图`,
+          tabs: [
+            { id: 'problem', label: '01 问题场景' },
+            { id: 'logic', label: '02 决策 / 产品逻辑' },
+            { id: 'build', label: '03 构建与迭代' },
+          ],
+          items: {
+            goose: {
+              title: 'Goose On', subtitle: '旅途中即时决策助手',
+              indexTags: ['旅行', '情境感知', 'AI-native'], tags: ['Context-aware', 'Mobile-first', 'AI-native'],
+              hero: '计划被打乱时，\n只修补眼前的空档，\n不重新规划整趟旅行。',
+              support: '在当前的位置、状态和时间约束下，\n帮你快速找到接下来最值得做的事。',
+              problem: { intro: '旅途中经常会出现：', bullets: ['景点临时关门', '提前逛完', '突然多出时间', '已经很累', '但下一固定安排又不能动'], bridge: '核心不是重新规划整趟旅行，而是回答：', question: '「我现在下一步做什么？」' },
+              logic: { heading: '# 推荐', formula: ['我在哪', '我现在怎么样', '此刻有什么约束'], details: [{ key: 'Place', value: '当前位置' }, { key: 'Me', value: '状态 / 偏好' }, { key: 'Now', value: '时间窗口 / 下一固定安排' }] },
+              build: { steps: ['真实旅行痛点', '定义决策边界', '设计交互流程', 'AI Coding 原型', '边界测试', '持续迭代'], note: 'Prototype' },
+            },
+            chisha: {
+              title: '🥐 吃啥', subtitle: 'AI 日常吃饭决策助手',
+              tags: ['生活', '个性化', 'Daily Life'],
+              hero: '今天吃什么？\n帮你三步搞定，不纠结。', support: '',
+              problem: { intro: '每天都会碰到的小问题：', question: '「今天到底吃什么？」', bridge: '看似简单，实际上同时受这些因素影响：', bullets: ['时间', '预算', '距离', '心情', '饮食需求', '社交场景'] },
+              logic: { inputs: ['用户当下需求', '场景约束', '餐饮选项'], narrow: '减少选择范围', output: '给出更容易行动的推荐', emphasis: 'Reduce decision fatigue' },
+              build: { steps: ['日常痛点', '场景拆解', '三步决策流程', '推荐展示', 'Vibe Coding MVP', '上线体验'] },
+            },
+            saidao: {
+              title: '📊 赛道测测', subtitle: '互联网赛道探索助手',
+              tags: ['职业', '自我探索', 'Interactive'],
+              hero: '不确定未来方向？\n测一测，找到更适合你的互联网赛道。', support: '',
+              problem: { intro: '互联网岗位很多，但很多学生真正困难的不是：', notThis: '「有哪些岗位？」', bridge: '而是：', question: '「我到底更适合哪一种？」' },
+              logic: { inputs: ['兴趣', '性格', '工作场景偏好', '已有能力', '教育背景'], direction: '岗位方向', output: '进一步探索', note: '探索型产品，不是职业心理学诊断。' },
+              build: { steps: ['职业选择困惑', '拆分判断维度', '互动测评流程', '结果呈现', 'AI Coding MVP', '持续调整题目和体验'] },
+            },
+          },
         },
         skills: {
           product: ['PRD', '需求分析', 'User Flow', 'Figma', '跨团队协作'],
@@ -478,11 +511,44 @@
           },
         },
         projects: {
-          liveDemo: 'Live Demo',
-          previewAria: (title) => `Interactive preview of ${title}; hover to switch views`,
-          homeAlt: (title) => `${title} actual product home screen`, resultAlt: (title) => `${title} actual product result screen`,
-          chisha: { title: 'What to Eat?', label: 'AI FOOD DECISION ASSISTANT', headline: 'What should I eat today?', supporting: 'Let AI make the choice', emphasis: 'a little easier', suffix: '.', tagline: ['AI Everyday Decision Assistant'] },
-          saidao: { title: 'Internet Career Path Explorer', label: 'INTERNET CAREER EXPLORER', headline: 'Which internet career path', emphasis: 'fits me best', suffix: '?', tagline: ['AI Career Exploration Product', 'Helping users discover the internet career path that fits them best.'] },
+          headerTitle: 'DECISION PRODUCTS',
+          headerSubtitle: "Small products for moments\nwhen the next choice isn't obvious.",
+          liveDemo: 'Live Demo', liveStatus: 'Available online', featured: 'Featured Project',
+          indexAria: 'Project index', tabsAria: (title) => `${title} project details`,
+          selectAria: (title) => `View the ${title} project`, liveAria: (title) => `Try ${title} online`,
+          screenshotAlt: (title) => `Actual ${title} product home screen`,
+          tabs: [
+            { id: 'problem', label: '01 Problem' },
+            { id: 'logic', label: '02 Decision / Product Logic' },
+            { id: 'build', label: '03 Build & Iterate' },
+          ],
+          items: {
+            goose: {
+              title: 'Goose On', subtitle: 'In-trip decision assistant',
+              indexTags: ['Travel', 'Context-aware', 'AI-native'], tags: ['Context-aware', 'Mobile-first', 'AI-native'],
+              hero: 'When plans get disrupted,\nrepair the gap in front of you\nwithout replanning the entire trip.',
+              support: 'Using your current location, state and time constraints,\nfind the most worthwhile thing to do next.',
+              problem: { intro: 'Travel plans often change when:', bullets: ['A place closes unexpectedly', 'You finish early', 'Extra time opens up', 'You are already tired', 'The next fixed plan still cannot move'], bridge: 'The goal is not to replan the entire trip. It is to answer:', question: '“What should I do next, right now?”' },
+              logic: { heading: '# Recommendation', formula: ['Where I am', 'How I feel now', 'What constrains this moment'], details: [{ key: 'Place', value: 'Current location' }, { key: 'Me', value: 'State / preferences' }, { key: 'Now', value: 'Time window / next fixed plan' }] },
+              build: { steps: ['Real travel pain', 'Define the decision boundary', 'Design the interaction flow', 'AI Coding prototype', 'Edge-case testing', 'Continuous iteration'], note: 'Prototype' },
+            },
+            chisha: {
+              title: '🥐 What to Eat?', subtitle: 'AI everyday meal decision assistant',
+              tags: ['Lifestyle', 'Personalized', 'Daily Life'],
+              hero: 'What should I eat today?\nThree steps to a decision, no overthinking.', support: '',
+              problem: { intro: 'A small question that comes up every day:', question: '“What should I eat today?”', bridge: 'It looks simple, but the choice depends on:', bullets: ['Time', 'Budget', 'Distance', 'Mood', 'Dietary needs', 'Social setting'] },
+              logic: { inputs: ['Current needs', 'Context constraints', 'Food options'], narrow: 'Narrow the choice set', output: 'Offer a recommendation that is easier to act on', emphasis: 'Reduce decision fatigue' },
+              build: { steps: ['Everyday pain point', 'Break down the context', 'Three-step decision flow', 'Recommendation display', 'Vibe Coding MVP', 'Launch the experience'] },
+            },
+            saidao: {
+              title: '📊 Internet Career Path Explorer', subtitle: 'Internet career path exploration assistant',
+              tags: ['Career', 'Self-discovery', 'Interactive'],
+              hero: 'Not sure where you are headed?\nTake the quiz and find the internet career path that fits you better.', support: '',
+              problem: { intro: 'There are many internet roles, but the harder question for many students is not:', notThis: '“What roles exist?”', bridge: 'It is:', question: '“Which one actually fits me?”' },
+              logic: { inputs: ['Interests', 'Personality', 'Work-scenario preferences', 'Existing skills', 'Education'], direction: 'Career direction', output: 'Explore further', note: 'An exploration product, not a career psychology diagnosis.' },
+              build: { steps: ['Career-choice uncertainty', 'Break down judgment dimensions', 'Interactive assessment flow', 'Result presentation', 'AI Coding MVP', 'Keep refining questions and experience'] },
+            },
+          },
         },
         skills: {
           product: ['PRD Writing', 'Requirement Analysis', 'User Flow', 'Figma', 'Cross-functional Collaboration'],
@@ -1592,149 +1658,342 @@
     }
 
     /* =========================================================================
-       04. PROJECTS SECTION (🥐 吃啥 & ☕ 赛道测测)
+       04. PROJECTS — DECISION PRODUCTS
        ========================================================================= */
     function ProjectsSection() {
       const { copy } = useLanguage();
-      const [activeProject, setActiveProject] = useState(null);
+      const [activeProjectId, setActiveProjectId] = useState('goose');
+      const [activeTabId, setActiveTabId] = useState('problem');
 
       const projects = [
         {
-          id: 'chisha',
-          icon: '🥐',
-          ...copy.projects.chisha,
-          taglineLines: copy.projects.chisha.tagline,
-          demoUrl: 'https://cecilia-huu.github.io/chisha/',
-          domain: 'cecilia-huu.github.io/chisha',
-          homeImage: 'assets/chisha-home.png',
-          resultImage: 'assets/chisha-result.png',
-          accentClass: 'text-[#F05A24]',
-          ruleClass: 'bg-orange-300',
-          buttonClass: 'bg-[#F05A24] hover:bg-[#DB4A18] shadow-[0_9px_20px_rgba(240,90,36,.20)]',
-          dotClass: 'bg-amber-500',
-          blobClass: 'bg-[radial-gradient(circle_at_44%_42%,rgba(255,225,166,.64),rgba(255,246,226,.36)_62%,transparent_74%)]',
-          mainHeightClass: 'h-[325px]',
-          resultClass: '-left-[12%] top-[260px] w-[66%] -rotate-[1.4deg] aspect-[1.24/1]'
+          id: 'goose', number: '01', ...copy.projects.items.goose,
+          demoUrl: 'https://cecilia-huu.github.io/in-trip-decision/',
+          domain: 'cecilia-huu.github.io/in-trip-decision',
+          image: 'assets/goose-on-home.png', device: 'phone',
+          accent: '#D86F8E', soft: '#FFF2F6', border: '#F2CCD7',
         },
         {
-          id: 'saidao',
-          icon: '☕',
-          ...copy.projects.saidao,
-          taglineLines: copy.projects.saidao.tagline,
+          id: 'chisha', number: '02', ...copy.projects.items.chisha,
+          demoUrl: 'https://cecilia-huu.github.io/chisha/',
+          domain: 'cecilia-huu.github.io/chisha',
+          image: 'assets/chisha-home.png', device: 'browser',
+          accent: '#E45A2B', soft: '#FFF3E8', border: '#F4D2BD',
+        },
+        {
+          id: 'saidao', number: '03', ...copy.projects.items.saidao,
           demoUrl: 'https://cecilia-huu.github.io/saidao-cece/',
           domain: 'cecilia-huu.github.io/saidao-cece',
-          homeImage: 'assets/saidao-home.png',
-          resultImage: 'assets/saidao-result.png',
-          accentClass: 'text-[#0D6B57]',
-          ruleClass: 'bg-teal-400',
-          buttonClass: 'bg-[#0D6B57] hover:bg-[#095544] shadow-[0_9px_20px_rgba(13,107,87,.20)]',
-          dotClass: 'bg-emerald-500',
-          blobClass: 'bg-[radial-gradient(circle_at_52%_44%,rgba(197,236,217,.62),rgba(233,247,239,.40)_62%,transparent_75%)]',
-          mainHeightClass: 'h-[325px]',
-          resultClass: '-left-[12%] top-[260px] w-[68%] rotate-[.5deg] aspect-[1.24/1]'
+          image: 'assets/saidao-home-progress.png', device: 'browser',
+          accent: '#0D6B57', soft: '#EDF8F2', border: '#BFE1D4',
         },
       ];
 
-      const ProductCopy = ({ project }) => (
-        <div className="relative z-20 min-w-0 self-start pt-1">
-          <div className="flex items-center gap-2.5">
-            <span className="text-[32px] leading-none drop-shadow-sm 2xl:text-[36px]" aria-hidden="true">{project.icon}</span>
-            <div className="min-w-0">
-              <h3 className="text-[23px] font-extrabold leading-none tracking-[-.035em] text-slate-950 2xl:text-[25px]">{project.title}</h3>
-              <p className={"mt-1.5 max-w-[145px] text-[7px] font-mono font-bold leading-[1.4] tracking-[.11em] 2xl:text-[8px] " + project.accentClass}>{project.label}</p>
+      const activeProject = projects.find((project) => project.id === activeProjectId) || projects[0];
+      const themeStyle = {
+        '--projects-accent': activeProject.accent,
+        '--projects-soft': activeProject.soft,
+        '--projects-border': activeProject.border,
+      };
+
+      const FlowArrow = () => <span className="projects-flow-arrow" aria-hidden="true">→</span>;
+
+      const ProjectVisual = ({ project }) => (
+        <div className={'projects-visual-stage projects-visual-' + project.device}>
+          <span className="projects-doodle projects-doodle-star" aria-hidden="true">✦</span>
+          <span className="projects-doodle projects-doodle-line" aria-hidden="true">⌁</span>
+          {project.device === 'phone' ? (
+            <div className="projects-phone-frame">
+              <span className="projects-phone-speaker" />
+              <img src={project.image} alt={copy.projects.screenshotAlt(project.title)} />
             </div>
-          </div>
-
-          <h4 className="mt-7 text-[21px] leading-[1.25] font-extrabold tracking-[-.035em] text-slate-950 2xl:text-[24px]">
-            {project.headline}<br />
-            {project.supporting && <span>{project.supporting} </span>}
-            <span className={project.accentClass}>{project.emphasis}</span>{project.suffix}
-          </h4>
-
-          <div className={"mt-4 h-px w-7 " + project.ruleClass} />
-          <p className="mt-4 text-[11px] leading-[1.55] font-medium text-slate-500 2xl:text-[12px]">
-            {project.taglineLines.map((line) => <React.Fragment key={line}>{line}<br /></React.Fragment>)}
-          </p>
-
-          <div className="mt-5">
-            <a onClick={(event) => event.stopPropagation()} href={project.demoUrl} target="_blank" rel="noopener noreferrer" className={"inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-5 py-2.5 text-[10px] font-extrabold text-white transition-colors duration-200 2xl:text-[11px] " + project.buttonClass}>
-              {copy.projects.liveDemo} <span aria-hidden="true">↗</span>
-            </a>
-            <p className="mt-3 whitespace-nowrap font-mono text-[8px] font-medium tracking-[.02em] text-slate-400 2xl:text-[9px]">
-              <span aria-hidden="true">●</span> LIVE · {project.domain}
-            </p>
-          </div>
-
+          ) : (
+            <div className="projects-browser-frame">
+              <div className="projects-browser-bar">
+                <span className="bg-[#FF5F57]" /><span className="bg-[#FFBD2E]" /><span className="bg-[#28C840]" />
+                <small>{project.domain}</small>
+              </div>
+              <img src={project.image} alt={copy.projects.screenshotAlt(project.title)} />
+            </div>
+          )}
         </div>
       );
 
-      const ProductVisual = ({ project, isActive, onToggle }) => (
-        <button
-          type="button"
-          aria-pressed={isActive}
-          aria-label={copy.projects.previewAria(project.title)}
-          onClick={onToggle}
-          className={"group/visual relative h-[420px] w-full max-w-[350px] cursor-pointer overflow-visible justify-self-start rounded-2xl text-left outline-none transition-[transform,filter] duration-300 ease-out focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-4 " + (isActive ? '-translate-y-1.5' : '')}
-        >
-          <span className={"pointer-events-none absolute -left-[10%] -right-[7%] -top-[7%] bottom-[1%] rounded-[48%_52%_46%_54%/44%_48%_52%_56%] " + project.blobClass} />
-
-          <div className={"absolute left-0 top-0 w-full overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-[box-shadow,filter] duration-300 " + project.mainHeightClass + " " + (isActive ? 'grayscale-[18%] shadow-[0_26px_55px_rgba(15,23,42,.20)]' : 'shadow-[0_16px_36px_rgba(15,23,42,.11)]')}>
-            <div className="flex h-7 items-center gap-1.5 border-b border-slate-100 bg-white/95 px-3">
-              <span className="h-2 w-2 rounded-full bg-[#FF5F57]" />
-              <span className="h-2 w-2 rounded-full bg-[#FFBD2E]" />
-              <span className="h-2 w-2 rounded-full bg-[#28C840]" />
-              <span className="absolute left-1/2 max-w-[60%] -translate-x-1/2 truncate text-[8px] font-medium text-slate-500">{project.domain}</span>
-              <span className="ml-auto text-[10px] text-slate-400" aria-hidden="true">⌂ &nbsp; ↥</span>
-            </div>
-            <img src={project.homeImage} alt={copy.projects.homeAlt(project.title)} className="block h-[calc(100%_-_28px)] w-full object-cover object-top" />
+      const ProjectProblem = ({ project }) => {
+        const content = project.problem;
+        if (project.id === 'saidao') return (
+          <div className="projects-problem projects-problem-split">
+            <p>{content.intro} <span className="projects-muted-question">{content.notThis}</span></p>
+            <p>{content.bridge} <strong>{content.question}</strong></p>
           </div>
-
-          <div className={"absolute z-20 overflow-hidden rounded-xl border border-white/90 bg-white transition-[box-shadow,filter] duration-300 " + project.resultClass + " " + (isActive ? 'grayscale-[18%] shadow-[0_25px_48px_rgba(15,23,42,.24)]' : 'shadow-[0_17px_34px_rgba(15,23,42,.16)]')}>
-            <div className="flex h-5 items-center gap-1.5 border-b border-slate-100 bg-white px-2.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#FF5F57]" />
-              <span className="h-1.5 w-1.5 rounded-full bg-[#FFBD2E]" />
-              <span className="h-1.5 w-1.5 rounded-full bg-[#28C840]" />
-            </div>
-            <img src={project.resultImage} alt={copy.projects.resultAlt(project.title)} className="block h-[calc(100%_-_20px)] w-full object-cover object-top" />
-          </div>
-          <span className={"pointer-events-none absolute inset-0 z-30 rounded-2xl bg-slate-900 transition-opacity duration-300 " + (isActive ? 'opacity-[.035]' : 'opacity-0')} />
-        </button>
-      );
-
-      const ProductModule = ({ project }) => {
-        const isActive = activeProject === project.id;
+        );
         return (
-          <div
-            className="relative min-w-0 px-3 pb-2 pt-3 md:px-4 xl:px-3 2xl:px-4"
-          >
-            <div className="grid min-w-0 grid-cols-1 gap-y-5 md:grid-cols-[minmax(160px,.82fr)_minmax(0,1.55fr)] md:gap-x-3 md:gap-y-0 xl:grid-cols-[minmax(155px,.82fr)_minmax(0,1.55fr)] 2xl:grid-cols-[minmax(175px,.82fr)_minmax(0,1.55fr)]">
-              <ProductCopy project={project} />
-              <ProductVisual
-                project={project}
-                isActive={isActive}
-                onToggle={() => setActiveProject(isActive ? null : project.id)}
-              />
+          <div className="projects-problem">
+            <p>{content.intro} {content.question && project.id === 'chisha' && <strong>{content.question}</strong>}</p>
+            <div className="projects-chip-row">
+              {content.bullets.map((item) => <span key={item}>{item}</span>)}
             </div>
+            <p>{content.bridge} {content.question && project.id === 'goose' && <strong>{content.question}</strong>}</p>
           </div>
         );
       };
 
+      const ProjectLogic = ({ project }) => {
+        const content = project.logic;
+        if (project.id === 'goose') return (
+          <div className="projects-logic-goose">
+            <strong className="projects-logic-heading">{content.heading}</strong>
+            <div className="projects-factor-row">
+              {content.formula.map((item, index) => (
+                <React.Fragment key={item}>
+                  {index > 0 && <span aria-hidden="true">×</span>}
+                  <div><b>{content.details[index].key}</b><span>{item}</span><small>{content.details[index].value}</small></div>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        );
+        if (project.id === 'chisha') return (
+          <div className="projects-logic-flow">
+            <div className="projects-input-group">{content.inputs.map((item) => <span key={item}>{item}</span>)}</div>
+            <FlowArrow /><b>{content.narrow}</b><FlowArrow /><b>{content.output}</b>
+            <em>{content.emphasis}</em>
+          </div>
+        );
+        return (
+          <div className="projects-logic-flow projects-logic-saidao">
+            <div className="projects-input-group">{content.inputs.map((item) => <span key={item}>{item}</span>)}</div>
+            <FlowArrow /><b>{content.direction}</b><FlowArrow /><b>{content.output}</b>
+            <small>{content.note}</small>
+          </div>
+        );
+      };
+
+      const ProjectBuild = ({ project }) => (
+        <div className="projects-build-flow">
+          <div>
+            {project.build.steps.map((step, index) => (
+              <React.Fragment key={step}>
+                {index > 0 && <FlowArrow />}
+                <span>{step}</span>
+              </React.Fragment>
+            ))}
+          </div>
+          {project.id === 'goose' && (
+            <p><b>{project.build.note}</b><span>ChatGPT</span><span>Codex</span><span>React</span><span>Vite</span><span>GitHub Pages</span></p>
+          )}
+        </div>
+      );
+
+      const ProjectTabContent = ({ project }) => {
+        if (activeTabId === 'logic') return <ProjectLogic project={project} />;
+        if (activeTabId === 'build') return <ProjectBuild project={project} />;
+        return <ProjectProblem project={project} />;
+      };
+
       return (
-        <section className="section-container relative">
-          <div className="section-header relative z-10">
+        <section className="section-container relative projects-section-shell">
+          <style>{`
+            .projects-section-shell .projects-header { gap:6px; margin-bottom:18px; }
+            .projects-workbench { display:grid; grid-template-columns:248px minmax(0,1fr); gap:20px; align-items:stretch; }
+            .projects-index { display:grid; gap:10px; align-content:start; }
+            .projects-index-card { position:relative; width:100%; min-height:128px; padding:15px 42px 14px 16px; border:1px solid #e5e7eb; border-radius:22px; background:#fff; text-align:left; transition:transform 200ms ease,border-color 200ms ease,background 200ms ease,box-shadow 200ms ease; }
+            .projects-index-card:hover,.projects-index-card:focus-visible { transform:translateY(-2px); border-color:var(--index-accent); outline:none; }
+            .projects-index-card[data-active="true"] { border-color:var(--index-accent); background:var(--index-soft); box-shadow:0 12px 28px rgba(15,23,42,.07); }
+            .projects-index-number { display:block; color:#94a3b8; font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.12em; }
+            .projects-index-title { display:block; margin-top:8px; color:#0f172a; font-size:16px; font-weight:800; line-height:1.05; letter-spacing:-.025em; }
+            .projects-index-subtitle { display:block; margin-top:6px; color:#64748b; font-size:10px; line-height:1.35; }
+            .projects-index-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
+            .projects-index-tags span { border-radius:999px; background:rgba(255,255,255,.72); padding:3px 6px; color:#64748b; font:700 7px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-index-arrow { position:absolute; right:13px; top:50%; display:grid; width:25px; height:25px; place-items:center; border-radius:50%; background:#f1f5f9; color:#94a3b8; transform:translateY(-50%); transition:background 200ms ease,color 200ms ease,transform 200ms ease; }
+            .projects-index-card[data-active="true"] .projects-index-arrow { background:var(--index-accent); color:#fff; transform:translateY(-50%) translateX(2px); }
+            .projects-case { height:424px; overflow:hidden; border:1px solid var(--projects-border); border-radius:30px; background:linear-gradient(145deg,#fff 0%,var(--projects-soft) 100%); box-shadow:0 22px 55px rgba(15,23,42,.09); }
+            .projects-case-enter { display:flex; height:100%; flex-direction:column; padding:16px; animation:projectsCaseIn 220ms cubic-bezier(.2,.75,.25,1) both; }
+            .projects-case-top { display:grid; min-height:0; flex:1; grid-template-columns:minmax(205px,.72fr) minmax(0,1.38fr); gap:16px; }
+            .projects-project-copy { min-width:0; padding:2px 4px 0 2px; }
+            .projects-project-kicker { color:var(--projects-accent); font:800 9px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.13em; text-transform:uppercase; }
+            .projects-project-title { margin-top:7px; color:#0f172a; font-size:26px; font-weight:850; line-height:1; letter-spacing:-.04em; }
+            .projects-project-subtitle { margin-top:5px; color:#64748b; font-size:10px; font-weight:650; line-height:1.3; }
+            .projects-project-hero { margin-top:12px; color:#0f172a; font-size:18px; font-weight:820; line-height:1.22; letter-spacing:-.035em; white-space:pre-line; }
+            .projects-project-support { margin-top:6px; color:#64748b; font-size:9px; line-height:1.42; white-space:pre-line; }
+            .projects-case-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+            .projects-case-tags span { border:1px solid var(--projects-border); border-radius:999px; background:rgba(255,255,255,.74); padding:4px 7px; color:#475569; font:700 7px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-live-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:10px; }
+            .projects-live-button { display:inline-flex; align-items:center; gap:7px; border-radius:999px; background:var(--projects-accent); padding:8px 13px; color:#fff; font-size:9px; font-weight:850; box-shadow:0 8px 18px color-mix(in srgb,var(--projects-accent) 24%,transparent); transition:transform 180ms ease,filter 180ms ease; }
+            .projects-live-button:hover,.projects-live-button:focus-visible { transform:translateY(-2px); filter:saturate(1.08); outline:none; }
+            .projects-live-status { color:#94a3b8; font:650 7px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-live-status::before { content:'●'; margin-right:5px; color:var(--projects-accent); }
+            .projects-visual-stage { position:relative; min-width:0; overflow:hidden; border:1px solid rgba(255,255,255,.9); border-radius:24px; background:radial-gradient(circle at 70% 20%,rgba(255,255,255,.92),transparent 30%),var(--projects-soft); }
+            .projects-visual-stage::before { content:''; position:absolute; inset:14% 8%; border-radius:48% 52% 43% 57%/46% 42% 58% 54%; background:color-mix(in srgb,var(--projects-accent) 12%,transparent); filter:blur(2px); transform:rotate(-4deg); }
+            .projects-doodle { position:absolute; z-index:2; color:var(--projects-accent); opacity:.55; }
+            .projects-doodle-star { right:8%; top:8%; font-size:20px; }
+            .projects-doodle-line { bottom:7%; left:7%; font-size:22px; transform:rotate(-8deg); }
+            .projects-phone-frame { position:absolute; z-index:1; left:50%; top:50%; width:112px; aspect-ratio:430/932; overflow:hidden; border:5px solid #202124; border-radius:24px; background:#fff; box-shadow:0 20px 35px rgba(15,23,42,.22); transform:translate(-50%,-50%) rotate(-1.4deg); }
+            .projects-phone-frame img { display:block; width:100%; height:100%; object-fit:cover; object-position:top; }
+            .projects-phone-speaker { position:absolute; z-index:2; left:50%; top:5px; width:34px; height:4px; border-radius:999px; background:#202124; transform:translateX(-50%); }
+            .projects-browser-frame { position:absolute; z-index:1; left:50%; top:50%; width:min(94%,425px); aspect-ratio:16/9; overflow:hidden; border:1px solid rgba(148,163,184,.35); border-radius:14px; background:#fff; box-shadow:0 20px 38px rgba(15,23,42,.17); transform:translate(-50%,-50%) rotate(-.7deg); }
+            .projects-browser-bar { position:relative; display:flex; height:21px; align-items:center; gap:4px; border-bottom:1px solid #eef2f7; background:#fff; padding:0 8px; }
+            .projects-browser-bar>span { width:5px; height:5px; border-radius:50%; }
+            .projects-browser-bar small { position:absolute; left:50%; max-width:62%; overflow:hidden; color:#94a3b8; font-size:6px; text-overflow:ellipsis; white-space:nowrap; transform:translateX(-50%); }
+            .projects-browser-frame img { display:block; width:100%; height:calc(100% - 21px); object-fit:cover; object-position:top; }
+            .projects-detail { flex:0 0 136px; margin-top:10px; overflow:hidden; border:1px solid rgba(255,255,255,.9); border-radius:20px; background:rgba(255,255,255,.77); }
+            .projects-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-bottom:1px solid #eef2f7; }
+            .projects-tab { position:relative; min-width:0; padding:8px 8px 7px; color:#94a3b8; font:750 8px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace; transition:color 180ms ease,background 180ms ease; }
+            .projects-tab:hover,.projects-tab:focus-visible { color:#475569; background:rgba(248,250,252,.75); outline:none; }
+            .projects-tab[aria-selected="true"] { color:var(--projects-accent); }
+            .projects-tab[aria-selected="true"]::after { content:''; position:absolute; right:18%; bottom:-1px; left:18%; height:2px; border-radius:2px; background:var(--projects-accent); }
+            .projects-tab-panel { height:105px; padding:9px 14px; animation:projectsTabIn 190ms ease-out both; }
+            .projects-problem { display:grid; grid-template-columns:minmax(130px,.72fr) minmax(0,1.35fr); gap:8px 14px; align-items:center; height:100%; color:#64748b; font-size:9px; line-height:1.45; }
+            .projects-problem>p:last-child { grid-column:1/-1; }
+            .projects-problem strong { color:#0f172a; font-size:11px; }
+            .projects-problem-split { grid-template-columns:1fr 1fr; }
+            .projects-problem-split>p:last-child { grid-column:auto; }
+            .projects-muted-question { color:#94a3b8; text-decoration:line-through; text-decoration-thickness:1px; }
+            .projects-chip-row { display:flex; flex-wrap:wrap; gap:5px; }
+            .projects-chip-row span,.projects-input-group span { border:1px solid var(--projects-border); border-radius:999px; background:var(--projects-soft); padding:4px 7px; color:#475569; font-size:8px; font-weight:700; line-height:1.1; }
+            .projects-logic-goose { height:100%; }
+            .projects-logic-heading { color:var(--projects-accent); font:800 9px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-factor-row { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:8px; align-items:center; margin-top:8px; }
+            .projects-factor-row>span { color:var(--projects-accent); font-size:13px; }
+            .projects-factor-row>div { display:grid; min-width:0; gap:2px; border:1px solid var(--projects-border); border-radius:12px; background:var(--projects-soft); padding:7px 8px; }
+            .projects-factor-row b { color:var(--projects-accent); font:800 7px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-factor-row span { color:#0f172a; font-size:8px; font-weight:800; line-height:1.2; }
+            .projects-factor-row small { color:#64748b; font-size:7px; line-height:1.2; }
+            .projects-logic-flow { display:flex; height:100%; align-items:center; gap:7px; color:#64748b; font-size:8px; }
+            .projects-input-group { display:flex; flex:1 1 42%; flex-wrap:wrap; gap:5px; }
+            .projects-logic-flow>b { max-width:120px; color:#0f172a; font-size:9px; line-height:1.25; text-align:center; }
+            .projects-flow-arrow { flex:0 0 auto; color:var(--projects-accent); font-size:12px; font-style:normal; font-weight:850; }
+            .projects-logic-flow em { margin-left:auto; color:var(--projects-accent); font:800 8px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; white-space:nowrap; }
+            .projects-logic-saidao small { max-width:100px; color:#94a3b8; font-size:7px; line-height:1.35; }
+            .projects-build-flow { display:flex; height:100%; flex-direction:column; justify-content:center; gap:10px; }
+            .projects-build-flow>div { display:flex; align-items:center; gap:5px; }
+            .projects-build-flow>div>span:not(.projects-flow-arrow) { flex:1; border:1px solid var(--projects-border); border-radius:10px; background:var(--projects-soft); padding:7px 5px; color:#334155; font-size:7px; font-weight:750; line-height:1.2; text-align:center; }
+            .projects-build-flow>p { display:flex; align-items:center; gap:5px; color:#94a3b8; font:650 7px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-build-flow>p b { margin-right:3px; color:var(--projects-accent); }
+            .projects-build-flow>p span { border-radius:999px; background:#f8fafc; padding:3px 6px; }
+            @keyframes projectsCaseIn { from { opacity:0; transform:translateY(7px); } }
+            @keyframes projectsTabIn { from { opacity:0; transform:translateY(5px); } }
+            @media (max-width:1023px) {
+              .projects-workbench { grid-template-columns:1fr; }
+              .projects-index { grid-template-columns:repeat(3,minmax(0,1fr)); }
+              .projects-index-card { min-height:120px; }
+              .projects-case { height:auto; min-height:540px; }
+              .projects-case-top { min-height:330px; }
+            }
+            @media (max-width:639px) {
+              .projects-section-shell .projects-header { margin-bottom:20px; }
+              .projects-workbench { gap:12px; }
+              .projects-index { gap:6px; }
+              .projects-index-card { min-height:94px; padding:11px 8px 10px; border-radius:16px; }
+              .projects-index-title { margin-top:7px; font-size:11px; line-height:1.2; }
+              .projects-index-subtitle { margin-top:4px; font-size:8px; }
+              .projects-index-tags,.projects-index-arrow { display:none; }
+              .projects-case { min-height:0; border-radius:24px; }
+              .projects-case-enter { padding:14px; }
+              .projects-case-top { grid-template-columns:1fr; min-height:0; gap:14px; }
+              .projects-project-copy { padding:0; }
+              .projects-project-title { font-size:25px; }
+              .projects-project-hero { margin-top:13px; font-size:18px; }
+              .projects-project-support { font-size:9px; }
+              .projects-live-row { margin-top:12px; }
+              .projects-visual-stage { height:250px; }
+              .projects-visual-phone { height:300px; }
+              .projects-phone-frame { width:128px; }
+              .projects-browser-frame { width:98%; }
+              .projects-detail { flex-basis:auto; margin-top:12px; }
+              .projects-tab { min-height:44px; padding:9px 4px; font-size:7px; }
+              .projects-tab-panel { height:auto; min-height:168px; padding:12px; }
+              .projects-problem,.projects-problem-split { grid-template-columns:1fr; align-content:center; }
+              .projects-problem-split>p:last-child { grid-column:1/-1; }
+              .projects-factor-row { grid-template-columns:1fr; gap:5px; }
+              .projects-factor-row>span { display:none; }
+              .projects-factor-row>div { grid-template-columns:42px 1fr; align-items:center; }
+              .projects-factor-row small { grid-column:2; }
+              .projects-logic-flow { flex-wrap:wrap; align-content:center; }
+              .projects-input-group { flex-basis:100%; }
+              .projects-logic-flow em,.projects-logic-saidao small { width:100%; margin-left:0; }
+              .projects-build-flow>div { flex-wrap:wrap; }
+              .projects-build-flow>div>span:not(.projects-flow-arrow) { flex:1 1 27%; }
+              .projects-build-flow .projects-flow-arrow { display:none; }
+              .projects-build-flow>p { flex-wrap:wrap; }
+            }
+            @media (prefers-reduced-motion:reduce) {
+              .projects-case-enter,.projects-tab-panel { animation:none; }
+              .projects-index-card,.projects-live-button { transition:none; }
+            }
+          `}</style>
+
+          <div className="section-header projects-header relative z-10">
             <div className="section-label font-mono font-bold text-teal-600 tracking-wider">04 / PROJECTS</div>
-            <h2 className="section-title font-extrabold text-slate-900">VIBE CODING PRODUCTS</h2>
-            <p className="section-subtitle text-slate-500">One helps you decide. One helps you find direction.</p>
+            <h2 className="section-title font-extrabold text-slate-900">{copy.projects.headerTitle}</h2>
+            <p className="section-subtitle whitespace-pre-line text-slate-500">{copy.projects.headerSubtitle}</p>
           </div>
 
-          <span className="pointer-events-none absolute right-[8%] top-5 hidden h-14 w-14 rotate-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-700 shadow-xl md:block" />
-          <span className="pointer-events-none absolute right-[1%] top-[45%] hidden h-8 w-8 rounded-full bg-gradient-to-br from-purple-300 to-violet-700 shadow-lg xl:block" />
-          <span className="pointer-events-none absolute -left-1 bottom-16 hidden h-10 w-10 -rotate-12 rounded-xl bg-gradient-to-br from-amber-300 to-orange-500 shadow-lg xl:block" />
-          <span className="pointer-events-none absolute right-0 top-[56%] hidden text-3xl text-emerald-700 2xl:block" aria-hidden="true">✦</span>
+          <div className="projects-workbench">
+            <nav className="projects-index" aria-label={copy.projects.indexAria}>
+              {projects.map((project) => {
+                const isActive = project.id === activeProjectId;
+                return (
+                  <button
+                    key={project.id}
+                    type="button"
+                    aria-label={copy.projects.selectAria(project.title)}
+                    aria-pressed={isActive}
+                    data-active={isActive}
+                    onClick={() => setActiveProjectId(project.id)}
+                    className="projects-index-card"
+                    style={{ '--index-accent': project.accent, '--index-soft': project.soft }}
+                  >
+                    <span className="projects-index-number">{project.number}</span>
+                    <span className="projects-index-title">{project.title}</span>
+                    <span className="projects-index-subtitle">{project.subtitle}</span>
+                    <span className="projects-index-tags">{(project.indexTags || project.tags).map((tag) => <span key={tag}>{tag}</span>)}</span>
+                    <span className="projects-index-arrow" aria-hidden="true">→</span>
+                  </button>
+                );
+              })}
+            </nav>
 
-          <div className="grid grid-cols-1 gap-8 xl:grid-cols-2 xl:items-start xl:gap-10">
-            <ProductModule project={projects[0]} />
-            <ProductModule project={projects[1]} />
+            <div className="projects-case" style={themeStyle}>
+              <div key={activeProject.id} className="projects-case-enter">
+                <div className="projects-case-top">
+                  <article className="projects-project-copy">
+                    <p className="projects-project-kicker">{activeProject.id === 'goose' ? copy.projects.featured : `PROJECT ${activeProject.number}`}</p>
+                    <h3 className="projects-project-title">{activeProject.title}</h3>
+                    <p className="projects-project-subtitle">{activeProject.subtitle}</p>
+                    <p className="projects-project-hero">{activeProject.hero}</p>
+                    {activeProject.support && <p className="projects-project-support">{activeProject.support}</p>}
+                    <div className="projects-case-tags">{activeProject.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+                    <div className="projects-live-row">
+                      <a href={activeProject.demoUrl} target="_blank" rel="noopener noreferrer" className="projects-live-button" aria-label={copy.projects.liveAria(activeProject.title)}>
+                        {copy.projects.liveDemo}<span aria-hidden="true">↗</span>
+                      </a>
+                      <span className="projects-live-status">{copy.projects.liveStatus}</span>
+                    </div>
+                  </article>
+                  <ProjectVisual project={activeProject} />
+                </div>
+
+                <div className="projects-detail">
+                  <div className="projects-tabs" role="tablist" aria-label={copy.projects.tabsAria(activeProject.title)}>
+                    {copy.projects.tabs.map((tab) => (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={activeTabId === tab.id}
+                        aria-controls={`projects-panel-${activeProject.id}`}
+                        onClick={() => setActiveTabId(tab.id)}
+                        className="projects-tab"
+                      >{tab.label}</button>
+                    ))}
+                  </div>
+                  <div key={`${activeProject.id}-${activeTabId}`} id={`projects-panel-${activeProject.id}`} role="tabpanel" className="projects-tab-panel">
+                    <ProjectTabContent project={activeProject} />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       );
