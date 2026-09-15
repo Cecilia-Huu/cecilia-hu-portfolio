@@ -356,41 +356,131 @@
         },
         projects: {
           headerTitle: '决策型产品',
-          headerSubtitle: '为那些「下一步不知道怎么选」的时刻，\n做一些小产品。',
+          headerSubtitle: '从日常的小纠结出发，把想法一点点做成可以体验的产品。',
           liveDemo: '在线体验', liveStatus: '可在线体验', featured: '精选项目',
           indexAria: '项目索引', tabsAria: (title) => `${title}项目详情`,
           selectAria: (title) => `查看${title}项目`, liveAria: (title) => `在线体验${title}`,
           screenshotAlt: (title) => `${title}真实产品首页截图`,
+          modalCloseAria: '关闭项目案例弹窗', funnelQuestion: '我现在真正关心什么？',
           tabs: [
-            { id: 'problem', label: '01 问题场景' },
-            { id: 'logic', label: '02 决策 / 产品逻辑' },
-            { id: 'build', label: '03 构建与迭代' },
+            { id: 'problem', number: '01', eyebrow: 'PROBLEM', label: '问题洞察', subtitle: '我看到了什么真正值得解决的问题？' },
+            { id: 'logic', number: '02', eyebrow: 'REASONING', label: '产品判断', subtitle: '为什么我选择这样解决？' },
+            { id: 'build', number: '03', eyebrow: 'ITERATION', label: '验证迭代', subtitle: '做出来以后，我改变了什么？' },
           ],
           items: {
             goose: {
               title: 'Goose On', subtitle: '旅途中即时决策助手',
               indexTags: ['旅行', '情境感知', 'AI-native'], tags: ['Context-aware', 'Mobile-first', 'AI-native'],
-              hero: '计划被打乱时，\n只修补眼前的空档，\n不重新规划整趟旅行。',
-              support: '在当前的位置、状态和时间约束下，\n帮你快速找到接下来最值得做的事。',
-              problem: { intro: '旅途中经常会出现：', bullets: ['景点临时关门', '提前逛完', '突然多出时间', '已经很累', '但下一固定安排又不能动'], bridge: '核心不是重新规划整趟旅行，而是回答：', question: '「我现在下一步做什么？」' },
-              logic: { heading: '# 推荐', formula: ['我在哪', '我现在怎么样', '此刻有什么约束'], details: [{ key: 'Place', value: '当前位置' }, { key: 'Me', value: '状态 / 偏好' }, { key: 'Now', value: '时间窗口 / 下一固定安排' }] },
-              build: { steps: ['真实旅行痛点', '定义决策边界', '设计交互流程', 'AI Coding 原型', '边界测试', '持续迭代'], note: 'Prototype' },
+              hero: '计划被打乱时，\n不重做整趟行程，\n只帮你决定下一步。',
+              support: '基于你在哪、现在怎么样，以及接下来不能动的安排，给出此刻更合适的下一步。',
+              core: '不重排整趟旅行，只解决眼前这一段。',
+              problem: {
+                title: '旅行最难处理的，\n不一定是没有计划，\n而是计划突然失效。',
+                support: '大多数旅行工具擅长解决「出发前怎么规划」，但真正身处旅途中时，人常常被计划失效后突然出现的一段空档卡住。',
+                timeline: [
+                  { time: '14:00—16:00', kicker: '原计划', text: '博物馆参观' },
+                  { time: '16:00', kicker: 'CLOSED', text: '计划突然失效' },
+                  { time: '16:00—17:30', kicker: '90 MIN GAP', text: '「那我现在做什么？」', goose: true },
+                  { time: '19:00', kicker: '下一固定安排', text: '已预约晚餐' },
+                ],
+                insight: '不是重新规划整趟旅行，而是解决计划失效后的这段 Gap。', emphasis: '这段 Gap',
+              },
+              logic: {
+                title: '不是推荐更多地方，而是判断此刻最合适的下一步。', formula: 'Place × Me × Now', result: 'Next Move',
+                factors: [
+                  { key: 'PLACE', question: '我在哪里？', text: '当前位置 · 当前区域 · 可行动范围', example: '博物馆附近' },
+                  { key: 'ME', question: '我现在怎么样？', text: '体力 · 情绪 · 偏好 · 临时需求', example: '有点累，但还想继续逛' },
+                  { key: 'NOW', question: '此刻有什么约束？', text: '可用时间 · 下一固定安排 · 时间窗口', example: '90min · 19:00 已预约晚餐' },
+                ],
+                resultText: '此刻最值得做的一件事。',
+                decisions: [
+                  { number: '01', title: '只问必要 Context', text: '信息足够做判断就开始，不把用户拖进长问卷。' },
+                  { number: '02', title: 'Fixed Anchor 不动', text: '晚餐、车次、预约等已经确定的安排作为边界。' },
+                  { number: '03', title: '给 Next Move，不给十几个选项', text: '减少当下决策负担，而不是制造新的浏览任务。' },
+                ],
+              },
+              build: {
+                title: '原型不是终点。\n真正做出来以后，才开始发现哪些假设需要被推翻。', eyebrow: 'ITERATION JOURNEY',
+                iterations: [
+                  { number: '01', name: 'Location', before: '自动获取当前位置。', problem: '用户不知道系统拿到的位置是否正确。一旦 Location Context 错，后续判断都会建立在错误前提上。', after: '位置始终可见，可以直接修改；定位失败有 fallback。' },
+                  { number: '02', name: 'Recommendation', before: '结果提供较多信息和选择。', problem: '旅途中真正需要的是行动，而不是继续研究。', after: '收缩信息密度，突出 Next Move + Why。' },
+                  { number: '03', name: 'Adjustment', before: '条件变化后重新生成整套结果。', problem: '很多时候用户只是改变一个临时条件，例如：还想继续逛，但不想走太远。', after: '保留已有 Context，只针对当前决策做局部调整。' },
+                ],
+                insight: '原型不是终点。', tools: 'ChatGPT · Codex · React · Vite · GitHub Pages',
+              },
             },
             chisha: {
-              title: '🥐 吃啥', subtitle: 'AI 日常吃饭决策助手',
+              title: '吃啥', selectorMark: '🥐', subtitle: '校园吃饭决策助手',
               tags: ['生活', '个性化', 'Daily Life'],
-              hero: '今天吃什么？\n帮你三步搞定，不纠结。', support: '',
-              problem: { intro: '每天都会碰到的小问题：', question: '「今天到底吃什么？」', bridge: '看似简单，实际上同时受这些因素影响：', bullets: ['时间', '预算', '距离', '心情', '饮食需求', '社交场景'] },
-              logic: { inputs: ['用户当下需求', '场景约束', '餐饮选项'], narrow: '减少选择范围', output: '给出更容易行动的推荐', emphasis: 'Reduce decision fatigue' },
-              build: { steps: ['日常痛点', '场景拆解', '三步决策流程', '推荐展示', 'Vibe Coding MVP', '上线体验'] },
+              hero: '今天吃什么？\n别从几十个选项里硬选。',
+              support: '把预算、距离、心情和饮食需求放进同一个选择里，\n帮你更快缩小范围，减少「吃什么」带来的决策疲劳。',
+              core: '不是替你算出「最好吃的」，而是帮你更容易做决定。',
+              problem: {
+                title: '当选择越来越多，\n决定反而越来越难。',
+                support: '外卖、点评和地图已经提供了大量餐厅信息，但用户真正卡住的往往是：在预算、距离、时间、心情和饮食需求之间，怎么快速做一个现在就能执行的选择。',
+                needs: ['便宜', '近', '不排队', '健康', '分量大', '今天吃素', '一个人', '想外卖'],
+                stages: ['Too Many', 'Smaller Set', 'A Few Better Fits'],
+                insight: '这个产品不是增加推荐，而是先减少选择。', emphasis: '减少选择',
+              },
+              logic: {
+                title: '先缩小选择，\n再做推荐。', formula: 'Need × Context × Options', narrow: 'Narrow', result: 'Recommend',
+                factors: [
+                  { key: 'NEED', question: '我现在真正想满足什么？', text: '便宜一点 · 健康 · 分量大 · 吃素' },
+                  { key: 'CONTEXT', question: '我现在是什么场景？', text: '一个人 · 和朋友 · 赶时间 · 不排队 · 外卖' },
+                  { key: 'OPTIONS', question: '附近有什么？', text: '距离 · 类型 · 已有餐饮选择' },
+                ],
+                narrowText: '先把明显不适合现在的排掉。', resultText: '留下少量更容易行动的选择。',
+                decisions: [
+                  { number: '01', title: '不先问「想吃什么」', text: '真正纠结时，用户往往答不上来。' },
+                  { number: '02', title: '使用低认知成本入口', text: '「便宜管饱 / 不想排队 / 健康一点」比输入一段需求更容易。' },
+                  { number: '03', title: '结果少而明确', text: '不让用户继续刷，而是帮助结束选择。' },
+                ],
+              },
+              build: {
+                title: '推荐的价值，也可以是让用户更快结束纠结。', eyebrow: 'BEFORE / AFTER',
+                iterations: [
+                  { number: '01', name: 'Input', before: '自由描述「今天想吃什么？」', problem: '如果已经知道，其实不需要这个产品', after: '改成「便宜管饱 / 超近 / 不排队」等场景入口' },
+                  { number: '02', name: 'Flow', before: '一次展示太多条件', problem: '还没开始选餐厅，用户先被产品问累', after: '拆成更短步骤，只保留真正影响结果的条件' },
+                  { number: '03', name: 'Result', before: '结果页提供很多候选', problem: '推荐很多家，本质上还是把选择题还给用户', after: '收缩推荐范围，突出少量更符合当下条件的选项' },
+                ],
+                insight: '产品一直在做减法。', tools: 'React · Vite · GitHub Pages · AI-assisted Coding',
+              },
             },
             saidao: {
-              title: '📊 赛道测测', subtitle: '互联网赛道探索助手',
+              title: '赛道测测', selectorMark: '📊', subtitle: '互联网职业探索工具',
               tags: ['职业', '自我探索', 'Interactive'],
-              hero: '不确定未来方向？\n测一测，找到更适合你的互联网赛道。', support: '',
-              problem: { intro: '互联网岗位很多，但很多学生真正困难的不是：', notThis: '「有哪些岗位？」', bridge: '而是：', question: '「我到底更适合哪一种？」' },
-              logic: { inputs: ['兴趣', '性格', '工作场景偏好', '已有能力', '教育背景'], direction: '岗位方向', output: '进一步探索', note: '探索型产品，不是职业心理学诊断。' },
-              build: { steps: ['职业选择困惑', '拆分判断维度', '互动测评流程', '结果呈现', 'AI Coding MVP', '持续调整题目和体验'] },
+              hero: '不是告诉你「该做什么」，\n而是帮你找到更值得探索的方向。',
+              support: '把兴趣、性格、工作偏好、已有能力和教育背景放在一起，\n生成一组更适合继续了解的互联网岗位方向。',
+              core: '它不是职业诊断，而是帮你缩小探索范围。',
+              problem: {
+                title: '真正难的不是不知道有哪些岗位，\n而是不知道哪个方向更像自己。',
+                support: '产品、运营、策略、商业化、数据、内容……岗位信息并不稀缺，但用户很难把自己的兴趣、工作偏好、已有能力和背景映射到具体方向。',
+                self: ['我喜欢什么？', '我习惯怎样工作？', '我已经会什么？', '我的背景是什么？'], roles: ['Product', 'Operations', 'Strategy', 'Commercialization', 'Data', 'Content'],
+                gap: 'MAPPING GAP', question: '「那我到底从哪里开始探索？」',
+                insight: '缺的不是岗位列表，而是从「我是谁」到「可以往哪走」的映射。', emphasis: '映射',
+              },
+              logic: {
+                title: '不是给一个标准答案，而是缩小值得探索的范围。', inputLabel: 'SELF SIGNALS', result: 'ROLE DIRECTIONS', resultText: '值得继续探索的岗位方向',
+                signals: [
+                  { key: 'INTEREST', text: '我对什么更有兴趣' }, { key: 'PERSONALITY', text: '我更习惯怎样互动和决策' },
+                  { key: 'WORK CONTEXT', text: '我喜欢什么样的工作环境和任务' }, { key: 'ABILITY', text: '我已经具备哪些工具和能力' },
+                  { key: 'BACKGROUND', text: '专业 / 教育背景提供了什么基础' },
+                ],
+                decisions: [
+                  { number: '01', title: '不输出唯一答案', text: '职业选择不是一道单选题。' },
+                  { number: '02', title: '结果同时给理由', text: '用户需要知道「为什么」。' },
+                  { number: '03', title: 'Explore，不是 Diagnose', text: '帮助缩小范围，不冒充科学职业诊断。' },
+                ],
+              },
+              build: {
+                title: '不是把用户「测出来」，\n而是让结果成为下一步探索的起点。', eyebrow: 'FROM TEST TO EXPLORATION',
+                iterations: [
+                  { number: '01', name: 'Result', before: '给一个「最匹配岗位」', problem: '结论太重，容易让用户觉得被定义', after: '多个值得探索的方向 + 匹配理由' },
+                  { number: '02', name: 'Questions', before: '用更多题目追求完整覆盖', problem: '容易变成正式测评，认知成本变高', after: '保留真正帮助区分方向的维度' },
+                  { number: '03', name: 'Next Step', before: '展示结果后结束', problem: '用户知道「可能适合」，但不知道下一步做什么', after: '把结果变成继续探索的入口' },
+                ],
+                insight: '好的职业探索产品，不应该替用户下结论，而应该帮助用户提出更好的下一步问题。', tools: 'Interactive prototype · AI-assisted Coding · GitHub Pages',
+              },
             },
           },
         },
@@ -512,41 +602,131 @@
         },
         projects: {
           headerTitle: 'DECISION PRODUCTS',
-          headerSubtitle: "Small products for moments\nwhen the next choice isn't obvious.",
+          headerSubtitle: 'Turning everyday uncertainties into small products people can actually try.',
           liveDemo: 'Live Demo', liveStatus: 'Available online', featured: 'Featured Project',
           indexAria: 'Project index', tabsAria: (title) => `${title} project details`,
           selectAria: (title) => `View the ${title} project`, liveAria: (title) => `Try ${title} online`,
           screenshotAlt: (title) => `Actual ${title} product home screen`,
+          modalCloseAria: 'Close project case study', funnelQuestion: 'What matters to me right now?',
           tabs: [
-            { id: 'problem', label: '01 Problem' },
-            { id: 'logic', label: '02 Decision / Product Logic' },
-            { id: 'build', label: '03 Build & Iterate' },
+            { id: 'problem', number: '01', eyebrow: 'PROBLEM', label: 'Problem Framing', subtitle: 'What was the real problem?' },
+            { id: 'logic', number: '02', eyebrow: 'REASONING', label: 'Product Reasoning', subtitle: 'Why did I design it this way?' },
+            { id: 'build', number: '03', eyebrow: 'ITERATION', label: 'Validate & Iterate', subtitle: 'What changed after I built it?' },
           ],
           items: {
             goose: {
               title: 'Goose On', subtitle: 'In-trip decision assistant',
               indexTags: ['Travel', 'Context-aware', 'AI-native'], tags: ['Context-aware', 'Mobile-first', 'AI-native'],
-              hero: 'When plans get disrupted,\nrepair the gap in front of you\nwithout replanning the entire trip.',
-              support: 'Using your current location, state and time constraints,\nfind the most worthwhile thing to do next.',
-              problem: { intro: 'Travel plans often change when:', bullets: ['A place closes unexpectedly', 'You finish early', 'Extra time opens up', 'You are already tired', 'The next fixed plan still cannot move'], bridge: 'The goal is not to replan the entire trip. It is to answer:', question: '“What should I do next, right now?”' },
-              logic: { heading: '# Recommendation', formula: ['Where I am', 'How I feel now', 'What constrains this moment'], details: [{ key: 'Place', value: 'Current location' }, { key: 'Me', value: 'State / preferences' }, { key: 'Now', value: 'Time window / next fixed plan' }] },
-              build: { steps: ['Real travel pain', 'Define the decision boundary', 'Design the interaction flow', 'AI Coding prototype', 'Edge-case testing', 'Continuous iteration'], note: 'Prototype' },
+              hero: 'When plans fall apart,\ndon’t rebuild the whole trip.\nJust decide what comes next.',
+              support: 'Using where you are, how you feel, and what cannot move next, it helps surface a better next step for right now.',
+              core: 'Don’t replan the whole trip. Solve the gap in front of you.',
+              problem: {
+                title: 'The hardest travel moment is not always having no plan. It is when the plan suddenly stops working.',
+                support: 'Most travel tools help before departure. In the middle of a trip, the harder moment is the unplanned gap that appears when something changes.',
+                timeline: [
+                  { time: '14:00—16:00', kicker: 'ORIGINAL PLAN', text: 'Museum visit' },
+                  { time: '16:00', kicker: 'CLOSED', text: 'The plan breaks' },
+                  { time: '16:00—17:30', kicker: '90 MIN GAP', text: '“What should I do now?”', goose: true },
+                  { time: '19:00', kicker: 'FIXED ANCHOR', text: 'Dinner reservation' },
+                ],
+                insight: 'The job is not to rebuild the whole trip. It is to solve the Gap after a plan fails.', emphasis: 'the Gap',
+              },
+              logic: {
+                title: 'Not more places. The best next move for this moment.', formula: 'Place × Me × Now', result: 'Next Move',
+                factors: [
+                  { key: 'PLACE', question: 'Where am I?', text: 'Location · Current area · Reachable radius', example: 'Near the museum' },
+                  { key: 'ME', question: 'How am I doing?', text: 'Energy · Mood · Preference · Immediate need', example: 'Tired, but still want to explore' },
+                  { key: 'NOW', question: 'What constrains this moment?', text: 'Available time · Fixed anchor · Time window', example: '90 min · Dinner at 19:00' },
+                ],
+                resultText: 'One worthwhile thing to do next.',
+                decisions: [
+                  { number: '01', title: 'Ask only for needed context', text: 'Start once there is enough information—no long questionnaire.' },
+                  { number: '02', title: 'Keep fixed anchors fixed', text: 'Bookings, trains and activities define the boundary.' },
+                  { number: '03', title: 'Give a Next Move', text: 'One direction, not another browsing task.' },
+                ],
+              },
+              build: {
+                title: 'A prototype is not the finish line. Building it exposed the assumptions that needed to change.', eyebrow: 'ITERATION JOURNEY',
+                iterations: [
+                  { number: '01', name: 'Location', before: 'Automatically capture the current location.', problem: 'People cannot tell whether the location is right. If the context is wrong, every later decision starts from a false premise.', after: 'Keep location visible and editable, with a fallback when positioning fails.' },
+                  { number: '02', name: 'Recommendation', before: 'Show more information and options.', problem: 'In the middle of a trip, people need action—not another research task.', after: 'Reduce density and make Next Move + Why unmistakable.' },
+                  { number: '03', name: 'Adjustment', before: 'Regenerate the entire result when one condition changes.', problem: 'Often a person only changes one temporary constraint: still want to explore, but do not want to walk far.', after: 'Keep existing context and adjust only the decision in front of them.' },
+                ],
+                insight: 'A prototype is not the finish line.', tools: 'ChatGPT · Codex · React · Vite · GitHub Pages',
+              },
             },
             chisha: {
-              title: '🥐 What to Eat?', subtitle: 'AI everyday meal decision assistant',
+              title: '吃啥', selectorMark: '🥐', subtitle: 'Campus meal decision assistant',
               tags: ['Lifestyle', 'Personalized', 'Daily Life'],
-              hero: 'What should I eat today?\nThree steps to a decision, no overthinking.', support: '',
-              problem: { intro: 'A small question that comes up every day:', question: '“What should I eat today?”', bridge: 'It looks simple, but the choice depends on:', bullets: ['Time', 'Budget', 'Distance', 'Mood', 'Dietary needs', 'Social setting'] },
-              logic: { inputs: ['Current needs', 'Context constraints', 'Food options'], narrow: 'Narrow the choice set', output: 'Offer a recommendation that is easier to act on', emphasis: 'Reduce decision fatigue' },
-              build: { steps: ['Everyday pain point', 'Break down the context', 'Three-step decision flow', 'Recommendation display', 'Vibe Coding MVP', 'Launch the experience'] },
+              hero: 'What should I eat today?\nDon’t force a choice from dozens of options.',
+              support: 'Bring budget, distance, mood and dietary needs into one choice, then narrow the field and reduce decision fatigue.',
+              core: 'Not the “best” meal—just an easier decision.',
+              problem: {
+                title: 'As the number of options grows, deciding becomes harder.',
+                support: 'Delivery apps, reviews and maps already offer abundant information. The real challenge is turning budget, distance, time, mood and dietary needs into a choice someone can act on now.',
+                needs: ['Affordable', 'Nearby', 'No queue', 'Healthy', 'Filling', 'Vegetarian', 'Eating alone', 'Delivery'],
+                stages: ['Too Many', 'Smaller Set', 'A Few Better Fits'],
+                insight: 'This product does not add recommendations. It reduces the choice set first.', emphasis: 'reduces the choice set',
+              },
+              logic: {
+                title: 'Narrow first. Recommend second.', formula: 'Need × Context × Options', narrow: 'Narrow', result: 'Recommend',
+                factors: [
+                  { key: 'NEED', question: 'What do I need right now?', text: 'Affordable · Healthy · Filling · Vegetarian' },
+                  { key: 'CONTEXT', question: 'What is the situation?', text: 'Alone · With friends · In a rush · No queue · Delivery' },
+                  { key: 'OPTIONS', question: 'What is nearby?', text: 'Distance · Cuisine · Available food choices' },
+                ],
+                narrowText: 'Remove what clearly does not fit the moment.', resultText: 'Keep a few options that are easier to act on.',
+                decisions: [
+                  { number: '01', title: 'Don’t begin with “What do you want?”', text: 'If people knew, they would not need the product.' },
+                  { number: '02', title: 'Low-effort inputs', text: '“Affordable and filling” is easier than writing a request.' },
+                  { number: '03', title: 'Keep results few and clear', text: 'Help people finish choosing instead of scrolling.' },
+                ],
+              },
+              build: {
+                title: 'Recommendation can simply mean helping someone stop overthinking sooner.', eyebrow: 'BEFORE / AFTER',
+                iterations: [
+                  { number: '01', name: 'Input', before: 'Ask “What do you want to eat?”', problem: 'If users know, they do not need this product', after: 'Use quick entries such as affordable / nearby / no queue' },
+                  { number: '02', name: 'Flow', before: 'Show every condition at once', problem: 'The product becomes tiring before the choice begins', after: 'Shorter steps · Keep only conditions that change the result' },
+                  { number: '03', name: 'Result', before: 'Return many candidates', problem: 'More recommendations hand the decision back to the user', after: 'A smaller set that better fits the moment' },
+                ],
+                insight: 'The product kept getting smaller on purpose.', tools: 'React · Vite · GitHub Pages · AI-assisted Coding',
+              },
             },
             saidao: {
-              title: '📊 Internet Career Path Explorer', subtitle: 'Internet career path exploration assistant',
+              title: '赛道测测', selectorMark: '📊', subtitle: 'Internet career exploration tool',
               tags: ['Career', 'Self-discovery', 'Interactive'],
-              hero: 'Not sure where you are headed?\nTake the quiz and find the internet career path that fits you better.', support: '',
-              problem: { intro: 'There are many internet roles, but the harder question for many students is not:', notThis: '“What roles exist?”', bridge: 'It is:', question: '“Which one actually fits me?”' },
-              logic: { inputs: ['Interests', 'Personality', 'Work-scenario preferences', 'Existing skills', 'Education'], direction: 'Career direction', output: 'Explore further', note: 'An exploration product, not a career psychology diagnosis.' },
-              build: { steps: ['Career-choice uncertainty', 'Break down judgment dimensions', 'Interactive assessment flow', 'Result presentation', 'AI Coding MVP', 'Keep refining questions and experience'] },
+              hero: 'Not to tell you what you “should” do,\nbut to surface directions worth exploring.',
+              support: 'Interests, personality, work preferences, existing skills and education come together to suggest internet roles worth learning more about.',
+              core: 'Not a career diagnosis—a smaller space to explore.',
+              problem: {
+                title: 'The hard part is not knowing what roles exist. It is knowing which direction feels more like you.',
+                support: 'Product, operations, strategy, commercialization, data and content roles are easy to find. Mapping personal signals to those directions is much harder.',
+                self: ['What do I enjoy?', 'How do I like to work?', 'What can I already do?', 'What do I dislike?'], roles: ['Product', 'Operations', 'Strategy', 'Commercialization', 'Data', 'Content'],
+                gap: 'MAPPING GAP', question: '“Where should I begin exploring?”',
+                insight: 'The missing piece is not a role list. It is the mapping from “Who am I?” to “Where could I go?”', emphasis: 'the mapping',
+              },
+              logic: {
+                title: 'Not one standard answer. A smaller set of directions worth exploring.', inputLabel: 'SELF SIGNALS', result: 'ROLE DIRECTIONS', resultText: 'Directions worth exploring further',
+                signals: [
+                  { key: 'INTEREST', text: 'What draws my attention' }, { key: 'PERSONALITY', text: 'How I interact and decide' },
+                  { key: 'WORK CONTEXT', text: 'The environments and tasks I prefer' }, { key: 'ABILITY', text: 'Tools and skills I already have' },
+                  { key: 'BACKGROUND', text: 'Foundations from education and discipline' },
+                ],
+                decisions: [
+                  { number: '01', title: 'No single answer', text: 'A career choice is not a multiple-choice question.' },
+                  { number: '02', title: 'Direction plus reasoning', text: 'People need to understand why.' },
+                  { number: '03', title: 'Explore, don’t diagnose', text: 'Narrow the space without pretending to be a scientific assessment.' },
+                ],
+              },
+              build: {
+                title: 'Not to “test” someone into a label, but to make the result a starting point for exploration.', eyebrow: 'FROM TEST TO EXPLORATION',
+                iterations: [
+                  { number: '01', name: 'Result', before: 'Return one “best-match role”', problem: 'The conclusion feels too final and defining', after: 'Several directions to explore + the reasons behind them' },
+                  { number: '02', name: 'Questions', before: 'Add more questions for completeness', problem: 'It starts to feel like a formal test', after: 'Keep only signals that help distinguish directions' },
+                  { number: '03', name: 'Next Step', before: 'Stop after showing the result', problem: 'Users know what might fit, but not what to do next', after: 'Turn every result into an entry point for further exploration' },
+                ],
+                insight: 'From giving a conclusion to supporting exploration.', tools: 'Interactive prototype · AI-assisted Coding · GitHub Pages',
+              },
             },
           },
         },
@@ -1663,7 +1843,23 @@
     function ProjectsSection() {
       const { copy } = useLanguage();
       const [activeProjectId, setActiveProjectId] = useState('goose');
-      const [activeTabId, setActiveTabId] = useState('problem');
+      const [activeModalId, setActiveModalId] = useState(null);
+      const modalCloseRef = useRef(null);
+      const modalTriggerRef = useRef(null);
+
+      useEffect(() => {
+        if (!activeModalId) return;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        modalCloseRef.current?.focus();
+        const closeWithEscape = (event) => { if (event.key === 'Escape') setActiveModalId(null); };
+        document.addEventListener('keydown', closeWithEscape);
+        return () => {
+          document.body.style.overflow = previousOverflow;
+          document.removeEventListener('keydown', closeWithEscape);
+          if (modalTriggerRef.current?.isConnected) modalTriggerRef.current.focus();
+        };
+      }, [activeModalId]);
 
       const projects = [
         {
@@ -1696,8 +1892,6 @@
         '--projects-border': activeProject.border,
       };
 
-      const FlowArrow = () => <span className="projects-flow-arrow" aria-hidden="true">→</span>;
-
       const ProjectVisual = ({ project }) => (
         <div className={'projects-visual-stage projects-visual-' + project.device}>
           <span className="projects-doodle projects-doodle-star" aria-hidden="true">✦</span>
@@ -1719,21 +1913,59 @@
         </div>
       );
 
+      const StoryHead = ({ title, support, eyebrow }) => (
+        <header className="projects-story-head">
+          <div>{eyebrow && <span>{eyebrow}</span>}<h4>{title}</h4></div>
+          {support && <p>{support}</p>}
+        </header>
+      );
+
+      const StoryInsight = ({ children }) => <p className="projects-story-insight"><span aria-hidden="true">↗</span>{children}</p>;
+
       const ProjectProblem = ({ project }) => {
         const content = project.problem;
-        if (project.id === 'saidao') return (
-          <div className="projects-problem projects-problem-split">
-            <p>{content.intro} <span className="projects-muted-question">{content.notThis}</span></p>
-            <p>{content.bridge} <strong>{content.question}</strong></p>
+        if (project.id === 'goose') return (
+          <div className="projects-story projects-story-goose-problem">
+            <StoryHead title={content.title} support={content.support} eyebrow="GAP TIMELINE" />
+            <div className="projects-gap-timeline">
+              {content.timeline.map((point, index) => (
+                <React.Fragment key={point.time + point.kicker}>
+                  {index > 0 && <span className="projects-story-arrow" aria-hidden="true">→</span>}
+                  <div className={point.goose ? 'is-gap' : ''}>
+                    <time>{point.time}</time><b>{point.kicker}</b>
+                    {point.goose && <span className="projects-mini-goose" aria-hidden="true"><img src="assets/goose-on-home.png" alt="" /></span>}
+                    <small>{point.text}</small>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+            <StoryInsight>{content.insight}</StoryInsight>
           </div>
         );
-        return (
-          <div className="projects-problem">
-            <p>{content.intro} {content.question && project.id === 'chisha' && <strong>{content.question}</strong>}</p>
-            <div className="projects-chip-row">
-              {content.bullets.map((item) => <span key={item}>{item}</span>)}
+
+        if (project.id === 'chisha') return (
+          <div className="projects-story projects-story-chisha-problem">
+            <StoryHead title={content.title} support={content.support} eyebrow="CHOICE OVERLOAD" />
+            <div className="projects-choice-funnel">
+              <div data-stage="1"><b>TOO MANY OPTIONS</b><div className="projects-choice-noise" aria-hidden="true">{Array.from({ length: 18 }, (_, index) => <span key={index} />)}</div></div>
+              <span className="projects-funnel-arrow" aria-hidden="true">↓</span>
+              <div data-stage="2"><b>{content.stages[1]}</b><strong>{copy.projects.funnelQuestion}</strong><p>{content.needs.map((need) => <span key={need}>{need}</span>)}</p></div>
+              <span className="projects-funnel-arrow" aria-hidden="true">↓</span>
+              <div data-stage="3"><b>{content.stages[2]}</b></div>
             </div>
-            <p>{content.bridge} {content.question && project.id === 'goose' && <strong>{content.question}</strong>}</p>
+            <StoryInsight>{content.insight}</StoryInsight>
+          </div>
+        );
+
+        return (
+          <div className="projects-story projects-story-saidao-problem">
+            <StoryHead title={content.title} support={content.support} eyebrow="SELF ↔ ROLE MAPPING" />
+            <div className="projects-mapping-gap">
+              <div><b>ME</b>{content.self.map((item) => <small key={item}>{item}</small>)}</div>
+              <div className="projects-gap-bridge"><span>{content.gap}</span><i aria-hidden="true" /><strong>{content.question}</strong></div>
+              <div><b>INTERNET ROLES</b><p>{content.roles.map((role) => <span key={role}>{role}</span>)}</p></div>
+            </div>
+            <StoryInsight>{content.insight}</StoryInsight>
           </div>
         );
       };
@@ -1741,53 +1973,77 @@
       const ProjectLogic = ({ project }) => {
         const content = project.logic;
         if (project.id === 'goose') return (
-          <div className="projects-logic-goose">
-            <strong className="projects-logic-heading">{content.heading}</strong>
-            <div className="projects-factor-row">
-              {content.formula.map((item, index) => (
-                <React.Fragment key={item}>
+          <div className="projects-story projects-story-goose-logic">
+            <StoryHead title={content.title} eyebrow={content.formula + ' → ' + content.result} />
+            <div className="projects-decision-formula">
+              {content.factors.map((factor, index) => (
+                <React.Fragment key={factor.key}>
                   {index > 0 && <span aria-hidden="true">×</span>}
-                  <div><b>{content.details[index].key}</b><span>{item}</span><small>{content.details[index].value}</small></div>
+                  <div><b>{factor.key}</b><strong>{factor.question}</strong><small>{factor.text}</small><em>{factor.example}</em></div>
                 </React.Fragment>
               ))}
+              <span aria-hidden="true">→</span>
+              <div className="is-result"><b>{content.result}</b><strong>{content.resultText}</strong></div>
             </div>
+            <div className="projects-decision-notes">{content.decisions.map((item) => <p key={item.number}><b>{item.number}</b><strong>{item.title}</strong><small>{item.text}</small></p>)}</div>
           </div>
         );
+
         if (project.id === 'chisha') return (
-          <div className="projects-logic-flow">
-            <div className="projects-input-group">{content.inputs.map((item) => <span key={item}>{item}</span>)}</div>
-            <FlowArrow /><b>{content.narrow}</b><FlowArrow /><b>{content.output}</b>
-            <em>{content.emphasis}</em>
+          <div className="projects-story projects-story-chisha-logic">
+            <StoryHead title={content.title} eyebrow={content.formula} />
+            <div className="projects-narrow-flow">
+              <div className="projects-narrow-inputs">{content.factors.map((factor) => <p key={factor.key}><b>{factor.key}</b><strong>{factor.question}</strong><small>{factor.text}</small></p>)}</div>
+              <span aria-hidden="true">⇢</span><div><b>{content.narrow}</b><small>{content.narrowText}</small></div>
+              <span aria-hidden="true">⇢</span><div className="is-result"><b>{content.result}</b><small>{content.resultText}</small></div>
+            </div>
+            <div className="projects-decision-notes is-orange">{content.decisions.map((item) => <p key={item.number}><b>{item.number}</b><strong>{item.title}</strong><small>{item.text}</small></p>)}</div>
           </div>
         );
+
         return (
-          <div className="projects-logic-flow projects-logic-saidao">
-            <div className="projects-input-group">{content.inputs.map((item) => <span key={item}>{item}</span>)}</div>
-            <FlowArrow /><b>{content.direction}</b><FlowArrow /><b>{content.output}</b>
-            <small>{content.note}</small>
+          <div className="projects-story projects-story-saidao-logic">
+            <StoryHead title={content.title} eyebrow={content.inputLabel + ' → ' + content.result} />
+            <div className="projects-signal-map">
+              <div>{content.signals.map((signal, index) => <p key={signal.key} style={{ '--signal-index': index }}><i aria-hidden="true" /><b>{signal.key}</b><small>{signal.text}</small></p>)}</div>
+              <span className="projects-signal-lines" aria-hidden="true" />
+              <strong><b>{content.result}</b><small>{content.resultText}</small></strong>
+            </div>
+            <div className="projects-decision-notes is-green">{content.decisions.map((item) => <p key={item.number}><b>{item.number}</b><strong>{item.title}</strong><small>{item.text}</small></p>)}</div>
           </div>
         );
       };
 
-      const ProjectBuild = ({ project }) => (
-        <div className="projects-build-flow">
-          <div>
-            {project.build.steps.map((step, index) => (
-              <React.Fragment key={step}>
-                {index > 0 && <FlowArrow />}
-                <span>{step}</span>
-              </React.Fragment>
-            ))}
+      const ProjectBuild = ({ project }) => {
+        const content = project.build;
+        if (project.id === 'goose') return (
+          <div className="projects-story projects-story-goose-build">
+            <StoryHead title={content.title} eyebrow={content.eyebrow} />
+            <div className="projects-iteration-journey">{content.iterations.map((item) => <article key={item.number}><header><b>{item.number}</b><strong>{item.name}</strong></header><p><span>V1</span>{item.before}</p><i aria-hidden="true">→</i><p className="is-problem"><span>PROBLEM</span>{item.problem}</p><i aria-hidden="true">→</i><p><span>V2</span>{item.after}</p></article>)}</div>
+            <footer><strong>{content.insight}</strong><small>{content.tools}</small></footer>
           </div>
-          {project.id === 'goose' && (
-            <p><b>{project.build.note}</b><span>ChatGPT</span><span>Codex</span><span>React</span><span>Vite</span><span>GitHub Pages</span></p>
-          )}
-        </div>
-      );
+        );
 
-      const ProjectTabContent = ({ project }) => {
-        if (activeTabId === 'logic') return <ProjectLogic project={project} />;
-        if (activeTabId === 'build') return <ProjectBuild project={project} />;
+        if (project.id === 'chisha') return (
+          <div className="projects-story projects-story-chisha-build">
+            <StoryHead title={content.title} eyebrow={content.eyebrow} />
+            <div className="projects-before-after">{content.iterations.map((item) => <article key={item.number}><header><b>{item.number}</b><strong>{item.name}</strong></header><div><p><span>BEFORE</span>{item.before}</p><small>{item.problem}</small><p><span>AFTER</span>{item.after}</p></div></article>)}</div>
+            <footer><strong>{content.insight}</strong><small>{content.tools}</small></footer>
+          </div>
+        );
+
+        return (
+          <div className="projects-story projects-story-saidao-build">
+            <StoryHead title={content.title} eyebrow={content.eyebrow} />
+            <div className="projects-exploration-shift">{content.iterations.map((item, index) => <React.Fragment key={item.number}>{index > 0 && <span aria-hidden="true">⌑</span>}<article><header><b>{item.number}</b><strong>{item.name}</strong></header><p><span>BEFORE</span>{item.before}</p><small>{item.problem}</small><p><span>AFTER</span>{item.after}</p></article></React.Fragment>)}</div>
+            <footer><strong>{content.insight}</strong><small>{content.tools}</small></footer>
+          </div>
+        );
+      };
+
+      const ProjectModalContent = ({ project }) => {
+        if (activeModalId === 'logic') return <ProjectLogic project={project} />;
+        if (activeModalId === 'build') return <ProjectBuild project={project} />;
         return <ProjectProblem project={project} />;
       };
 
@@ -1871,14 +2127,213 @@
             .projects-build-flow>p { display:flex; align-items:center; gap:5px; color:#94a3b8; font:650 7px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
             .projects-build-flow>p b { margin-right:3px; color:var(--projects-accent); }
             .projects-build-flow>p span { border-radius:999px; background:#f8fafc; padding:3px 6px; }
+            .projects-index-identity { display:flex; align-items:center; gap:10px; margin-top:7px; }
+            .projects-index-identity>span:last-child { min-width:0; }
+            .projects-index-identity .projects-index-title { margin-top:0; }
+            .projects-index-goose,.projects-index-mark { position:relative; display:grid; flex:0 0 44px; width:44px; height:44px; place-items:center; overflow:hidden; border-radius:15px; background:#fff; box-shadow:0 7px 16px rgba(15,23,42,.08); }
+            .projects-index-goose img { position:absolute; top:0; left:0; width:150px; max-width:none; transform:translate(-20px,-46px); }
+            .projects-index-mark { font-size:23px; }
+            .projects-index-mark-chisha { background:#fff5e9; }
+            .projects-index-mark-saidao { background:#eaf6ef; }
+            .projects-project-core { display:flex; gap:5px; margin-top:7px; color:var(--projects-accent); font-size:8px; font-weight:760; line-height:1.35; }
+            .projects-project-core span { flex:0 0 auto; }
+            .projects-tab>span,.projects-tab>small { display:block; }
+            .projects-tab>span { color:inherit; font-weight:800; }
+            .projects-tab>span b { margin-right:6px; font:800 .85em/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-tab>small { margin-top:3px; color:#94a3b8; font-size:6px; font-weight:600; line-height:1.25; }
+            .projects-tab[aria-selected="true"]>small { color:color-mix(in srgb,var(--projects-accent) 68%,#94a3b8); }
+            .projects-story { height:100%; min-height:0; color:#475569; }
+            .projects-story-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:6px; }
+            .projects-story-head>div { min-width:0; }
+            .projects-story-head span { display:block; margin-bottom:2px; color:var(--projects-accent); font:800 6px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.1em; }
+            .projects-story-head h4 { color:#0f172a; font-size:10px; font-weight:850; line-height:1.2; letter-spacing:-.015em; }
+            .projects-story-head>p { max-width:47%; color:#64748b; font-size:6.5px; line-height:1.35; }
+            .projects-story-insight { display:flex; align-items:center; gap:6px; margin-top:6px; color:#334155; font-size:7px; font-weight:720; line-height:1.3; }
+            .projects-story-insight>span { color:var(--projects-accent); font-size:10px; }
+            .projects-gap-timeline { display:grid; grid-template-columns:1fr auto 1fr auto 1.16fr auto 1fr; align-items:stretch; gap:5px; }
+            .projects-gap-timeline>div { position:relative; min-width:0; border-top:2px solid var(--projects-border); padding:5px 5px 3px; }
+            .projects-gap-timeline>div.is-gap { border-top-color:var(--projects-accent); background:var(--projects-soft); border-radius:0 0 10px 10px; }
+            .projects-gap-timeline time,.projects-gap-timeline b,.projects-gap-timeline small { display:block; }
+            .projects-gap-timeline time { color:#94a3b8; font:700 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-gap-timeline b { margin-top:3px; color:var(--projects-accent); font-size:7px; line-height:1.05; }
+            .projects-gap-timeline small { margin-top:2px; color:#334155; font-size:6.5px; line-height:1.15; }
+            .projects-story-arrow { align-self:center; color:var(--projects-accent); font-size:10px; }
+            .projects-mini-goose { position:absolute; right:4px; top:4px; width:23px; height:23px; overflow:hidden; border-radius:8px; background:#fff; }
+            .projects-mini-goose img { position:absolute; top:0; left:0; width:79px; max-width:none; transform:translate(-11px,-24px); }
+            .projects-choice-funnel { display:flex; align-items:center; gap:7px; min-height:48px; padding:0 2%; }
+            .projects-choice-funnel>div:not(.projects-choice-noise) { position:relative; display:grid; place-items:center; min-height:38px; text-align:center; }
+            .projects-choice-funnel>div[data-stage="1"] { flex:1.25; border-bottom:12px solid #f6d3bd; }
+            .projects-choice-funnel>div[data-stage="2"] { flex:1; border-bottom:8px solid #ee9e70; }
+            .projects-choice-funnel>div[data-stage="3"] { flex:.78; border-bottom:4px solid var(--projects-accent); }
+            .projects-choice-funnel b { color:#0f172a; font:850 8px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-choice-funnel small { margin-top:3px; color:#64748b; font-size:5.5px; line-height:1.15; }
+            .projects-funnel-arrow { color:var(--projects-accent); font-size:12px; }
+            .projects-choice-noise { display:grid; width:30px; grid-template-columns:repeat(3,1fr); gap:3px; }
+            .projects-choice-noise span { width:4px; height:4px; border-radius:50%; background:#f0b58f; }
+            .projects-mapping-gap { display:grid; grid-template-columns:1fr .8fr 1fr; align-items:center; gap:10px; }
+            .projects-mapping-gap>div:first-child,.projects-mapping-gap>div:last-child { min-width:0; }
+            .projects-mapping-gap b { display:block; color:var(--projects-accent); font:850 7px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-mapping-gap>div>small { display:inline-block; margin:3px 7px 0 0; color:#475569; font-size:6px; line-height:1.15; }
+            .projects-mapping-gap>div:last-child p { display:flex; flex-wrap:wrap; gap:3px 7px; margin-top:4px; }
+            .projects-mapping-gap>div:last-child p span { color:#0f172a; font-size:6.5px; font-weight:750; }
+            .projects-gap-bridge { display:grid; justify-items:center; text-align:center; }
+            .projects-gap-bridge>span { color:#d97706; font:850 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; }
+            .projects-gap-bridge i { position:relative; display:block; width:100%; height:15px; margin:2px 0; border-top:1px dashed var(--projects-accent); }
+            .projects-gap-bridge i::after { content:'?'; position:absolute; left:50%; top:-8px; display:grid; width:16px; height:16px; place-items:center; border-radius:50%; background:var(--projects-soft); color:var(--projects-accent); font-size:8px; font-style:normal; transform:translateX(-50%); }
+            .projects-gap-bridge strong { color:#0f172a; font-size:7px; line-height:1.2; }
+            .projects-decision-formula { display:flex; align-items:stretch; gap:6px; }
+            .projects-decision-formula>div { flex:1; min-width:0; border-bottom:2px solid var(--projects-border); padding:4px 5px 5px; }
+            .projects-decision-formula>span { align-self:center; color:var(--projects-accent); font-size:10px; font-weight:900; }
+            .projects-decision-formula b,.projects-decision-formula strong,.projects-decision-formula small,.projects-decision-formula em { display:block; }
+            .projects-decision-formula b { color:var(--projects-accent); font:850 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-decision-formula strong { margin-top:2px; color:#0f172a; font-size:7px; line-height:1.1; }
+            .projects-decision-formula small { margin-top:2px; color:#64748b; font-size:5.5px; line-height:1.15; }
+            .projects-decision-formula em { margin-top:3px; color:#94a3b8; font-size:5.5px; line-height:1.1; }
+            .projects-decision-formula .is-result { display:flex; flex:.76; flex-direction:column; justify-content:center; border:0; border-radius:11px; background:var(--projects-accent); padding:6px 8px; }
+            .projects-decision-formula .is-result b,.projects-decision-formula .is-result strong { color:#fff; }
+            .projects-decision-notes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:6px; }
+            .projects-decision-notes p { position:relative; min-width:0; border-top:1px dashed var(--projects-border); padding:5px 3px 0 18px; }
+            .projects-decision-notes p>b { position:absolute; left:1px; top:5px; color:var(--projects-accent); font:850 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-decision-notes strong,.projects-decision-notes small { display:block; }
+            .projects-decision-notes strong { color:#0f172a; font-size:6.5px; line-height:1.12; }
+            .projects-decision-notes small { margin-top:2px; color:#64748b; font-size:5.5px; line-height:1.15; }
+            .projects-narrow-flow { display:flex; align-items:center; gap:7px; }
+            .projects-narrow-inputs { display:grid; flex:1.5; grid-template-columns:repeat(3,1fr); gap:6px; }
+            .projects-narrow-inputs p { min-width:0; border-left:2px solid #f0a579; padding-left:6px; }
+            .projects-narrow-inputs b,.projects-narrow-inputs strong,.projects-narrow-inputs small { display:block; }
+            .projects-narrow-inputs b,.projects-narrow-flow>div>b { color:var(--projects-accent); font:850 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-narrow-inputs strong { margin-top:2px; color:#0f172a; font-size:6.5px; line-height:1.1; }
+            .projects-narrow-inputs small,.projects-narrow-flow>div>small { margin-top:2px; color:#64748b; font-size:5.5px; line-height:1.15; }
+            .projects-narrow-flow>span { color:var(--projects-accent); font-size:13px; }
+            .projects-narrow-flow>div:not(.projects-narrow-inputs) { flex:.58; text-align:center; }
+            .projects-narrow-flow>div.is-result { border-radius:50% 44% 48% 45%; background:#fff0e5; padding:8px 5px; }
+            .projects-signal-map { display:grid; grid-template-columns:1fr 34px .42fr; align-items:center; gap:5px; }
+            .projects-signal-map>div { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
+            .projects-signal-map p { position:relative; min-width:0; padding-top:8px; text-align:center; }
+            .projects-signal-map p i { position:absolute; left:50%; top:0; width:6px; height:6px; border-radius:50%; background:var(--projects-accent); transform:translateX(-50%); }
+            .projects-signal-map p b,.projects-signal-map p small,.projects-signal-map>strong b,.projects-signal-map>strong small { display:block; }
+            .projects-signal-map p b { color:#0f172a; font:800 5.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-signal-map p small { margin-top:2px; color:#64748b; font-size:5px; line-height:1.1; }
+            .projects-signal-lines { height:30px; border-top:1px dashed var(--projects-accent); border-bottom:1px dashed #f59e0b; transform:skewY(-12deg); }
+            .projects-signal-map>strong { border-radius:12px; background:#0d6b57; padding:9px 7px; text-align:center; }
+            .projects-signal-map>strong b { color:#fff; font:850 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-signal-map>strong small { margin-top:3px; color:#d6f5e9; font-size:5.5px; line-height:1.15; }
+            .projects-iteration-journey { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+            .projects-iteration-journey article { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:center; gap:4px; min-width:0; }
+            .projects-iteration-journey article header { grid-column:1/-1; display:flex; gap:5px; margin-bottom:2px; }
+            .projects-iteration-journey header b { color:var(--projects-accent); font:850 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-iteration-journey header strong { color:#0f172a; font-size:6.5px; line-height:1; }
+            .projects-iteration-journey article p { min-width:0; color:#475569; font-size:5.5px; line-height:1.12; }
+            .projects-iteration-journey article p span { display:block; margin-bottom:2px; color:var(--projects-accent); font:850 5px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-iteration-journey article p.is-problem { color:#9f1239; }
+            .projects-iteration-journey article>i { color:var(--projects-accent); font-size:7px; font-style:normal; }
+            .projects-story footer { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:6px; border-top:1px dashed var(--projects-border); padding-top:5px; }
+            .projects-story footer strong { color:var(--projects-accent); font-size:6.5px; }
+            .projects-story footer small { color:#94a3b8; font:600 5.5px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-before-after { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+            .projects-before-after article { min-width:0; }
+            .projects-before-after header { display:flex; gap:5px; margin-bottom:3px; color:#0f172a; font-size:6.5px; }
+            .projects-before-after header b { color:var(--projects-accent); font:850 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-before-after article>div { display:grid; grid-template-columns:1fr .82fr 1fr; align-items:center; gap:5px; }
+            .projects-before-after p { min-width:0; color:#475569; font-size:5.5px; line-height:1.12; }
+            .projects-before-after p span { display:block; margin-bottom:2px; color:var(--projects-accent); font:850 5px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-before-after article small { border-right:1px solid #f4d2bd; border-left:1px solid #f4d2bd; padding:0 4px; color:#9a3412; font-size:5px; line-height:1.1; text-align:center; }
+            .projects-exploration-shift { display:flex; align-items:center; gap:6px; }
+            .projects-exploration-shift>span { color:#f59e0b; font-size:11px; transform:rotate(90deg); }
+            .projects-exploration-shift article { flex:1; min-width:0; border-left:2px solid var(--projects-accent); padding-left:7px; }
+            .projects-exploration-shift header { display:flex; gap:5px; color:#0f172a; font-size:6.5px; }
+            .projects-exploration-shift header b { color:#f59e0b; font:850 6px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-exploration-shift article p,.projects-exploration-shift article small { display:block; margin-top:3px; font-size:5.5px; line-height:1.12; }
+            .projects-exploration-shift article p { color:#334155; }
+            .projects-exploration-shift article p span { margin-right:4px; color:var(--projects-accent); font:850 5px/1 ui-monospace,SFMono-Regular,Menlo,monospace; }
+            .projects-exploration-shift article small { color:#9a3412; }
             @keyframes projectsCaseIn { from { opacity:0; transform:translateY(7px); } }
             @keyframes projectsTabIn { from { opacity:0; transform:translateY(5px); } }
+            @media (min-width:1024px) {
+              .projects-section-shell { width:min(90vw,1520px); max-width:1520px; padding-left:0; padding-right:0; }
+              .projects-section-shell .projects-header { margin-bottom:14px; }
+              .projects-section-shell .projects-header .section-subtitle { white-space:nowrap; }
+              .projects-workbench { grid-template-columns:minmax(260px,25%) minmax(0,1fr); gap:24px; }
+              .projects-index { grid-template-rows:repeat(3,minmax(0,1fr)); gap:14px; }
+              .projects-index-card { min-height:0; padding:18px 50px 17px 20px; border-radius:25px; }
+              .projects-index-number { font-size:11px; }
+              .projects-index-title { margin-top:10px; font-size:18px; }
+              .projects-index-subtitle { margin-top:7px; font-size:11px; }
+              .projects-index-tags { gap:5px; margin-top:10px; }
+              .projects-index-tags span { padding:4px 7px; font-size:8px; }
+              .projects-index-arrow { right:16px; width:30px; height:30px; }
+              .projects-index-goose,.projects-index-mark { flex-basis:56px; width:56px; height:56px; border-radius:18px; }
+              .projects-index-goose img { width:190px; transform:translate(-26px,-58px); }
+              .projects-index-mark { font-size:29px; }
+              .projects-case { height:580px; border-radius:34px; }
+              .projects-case-enter { padding:20px; }
+              .projects-case-top { grid-template-columns:minmax(230px,.82fr) minmax(0,1.38fr); gap:22px; }
+              .projects-project-copy { padding:4px 8px 0 4px; }
+              .projects-project-kicker { font-size:10px; }
+              .projects-project-title { margin-top:9px; font-size:32px; }
+              .projects-project-subtitle { margin-top:6px; font-size:11px; }
+              .projects-project-hero { margin-top:15px; font-size:22px; line-height:1.2; }
+              .projects-project-support { margin-top:8px; font-size:10px; line-height:1.5; }
+              .projects-project-core { margin-top:9px; font-size:9px; }
+              .projects-case-tags { gap:6px; margin-top:11px; }
+              .projects-case-tags span { padding:5px 9px; font-size:8px; }
+              .projects-live-row { gap:10px; margin-top:13px; }
+              .projects-live-button { padding:10px 16px; font-size:10px; }
+              .projects-live-status { font-size:8px; }
+              .projects-visual-stage { border-radius:28px; }
+              .projects-visual-stage::before { inset:9% 5%; }
+              .projects-doodle-star { font-size:25px; }
+              .projects-doodle-line { font-size:27px; }
+              .projects-phone-frame { width:auto; height:min(calc(100% - 12px),360px); border-width:6px; border-radius:30px; }
+              .projects-phone-speaker { top:7px; width:42px; height:5px; }
+              .projects-browser-frame { width:min(92%,580px); border-radius:18px; }
+              .projects-browser-bar { height:25px; padding:0 10px; }
+              .projects-browser-bar>span { width:6px; height:6px; }
+              .projects-browser-bar small { font-size:7px; }
+              .projects-browser-frame img { height:calc(100% - 25px); }
+              .projects-detail { flex-basis:170px; margin-top:14px; border-radius:24px; }
+              .projects-tab { padding:10px 10px 9px; font-size:9px; }
+              .projects-tab-panel { height:130px; padding:10px 18px; }
+              .projects-story-head h4 { font-size:11px; }
+              .projects-story-head>p { font-size:7px; }
+              .projects-problem { grid-template-columns:minmax(170px,.8fr) minmax(0,1.35fr); gap:10px 18px; font-size:10px; line-height:1.5; }
+              .projects-problem strong { font-size:12px; }
+              .projects-problem-split { grid-template-columns:1fr 1fr; }
+              .projects-chip-row { gap:7px; }
+              .projects-chip-row span,.projects-input-group span { padding:5px 9px; font-size:9px; }
+              .projects-logic-heading { font-size:10px; }
+              .projects-factor-row { gap:11px; margin-top:11px; }
+              .projects-factor-row>span { font-size:16px; }
+              .projects-factor-row>div { gap:3px; border-radius:15px; padding:10px 12px; }
+              .projects-factor-row b { font-size:8px; }
+              .projects-factor-row span { font-size:10px; }
+              .projects-factor-row small { font-size:8px; }
+              .projects-logic-flow { gap:10px; font-size:9px; }
+              .projects-logic-flow>b { max-width:150px; font-size:10px; }
+              .projects-flow-arrow { font-size:15px; }
+              .projects-logic-flow em { font-size:9px; }
+              .projects-logic-saidao small { max-width:145px; font-size:8px; }
+              .projects-build-flow { gap:13px; }
+              .projects-build-flow>div { gap:7px; }
+              .projects-build-flow>div>span:not(.projects-flow-arrow) { border-radius:13px; padding:10px 7px; font-size:8px; }
+              .projects-build-flow>p { gap:7px; font-size:8px; }
+              .projects-build-flow>p span { padding:4px 7px; }
+            }
+            @media (min-width:1024px) and (max-width:1199px) {
+              .projects-workbench { grid-template-columns:250px minmax(0,1fr); gap:18px; }
+              .projects-case-top { grid-template-columns:minmax(220px,.8fr) minmax(0,1.2fr); gap:16px; }
+              .projects-project-title { font-size:29px; }
+              .projects-project-hero { font-size:20px; }
+              .projects-browser-frame { width:96%; }
+            }
             @media (max-width:1023px) {
               .projects-workbench { grid-template-columns:1fr; }
               .projects-index { grid-template-columns:repeat(3,minmax(0,1fr)); }
               .projects-index-card { min-height:120px; }
               .projects-case { height:auto; min-height:540px; }
               .projects-case-top { min-height:330px; }
+              .projects-detail { flex-basis:auto; }
+              .projects-tab-panel { height:auto; min-height:190px; }
             }
             @media (max-width:639px) {
               .projects-section-shell .projects-header { margin-bottom:20px; }
@@ -1895,6 +2350,7 @@
               .projects-project-title { font-size:25px; }
               .projects-project-hero { margin-top:13px; font-size:18px; }
               .projects-project-support { font-size:9px; }
+              .projects-project-core { font-size:8px; }
               .projects-live-row { margin-top:12px; }
               .projects-visual-stage { height:250px; }
               .projects-visual-phone { height:300px; }
@@ -1916,10 +2372,309 @@
               .projects-build-flow>div>span:not(.projects-flow-arrow) { flex:1 1 27%; }
               .projects-build-flow .projects-flow-arrow { display:none; }
               .projects-build-flow>p { flex-wrap:wrap; }
+              .projects-index-identity { gap:4px; margin-top:6px; }
+              .projects-index-goose,.projects-index-mark { flex-basis:30px; width:30px; height:30px; border-radius:10px; }
+              .projects-index-goose img { width:102px; transform:translate(-14px,-31px); }
+              .projects-index-mark { font-size:17px; }
+              .projects-tab>span b { display:block; margin:0 0 2px; }
+              .projects-tab>small { font-size:5.5px; }
+              .projects-tab-panel { min-height:0; }
+              .projects-story { height:auto; }
+              .projects-story-head { display:block; margin-bottom:12px; }
+              .projects-story-head h4 { font-size:13px; }
+              .projects-story-head>p { max-width:none; margin-top:6px; font-size:9px; }
+              .projects-story-head span { font-size:7px; }
+              .projects-story-insight { margin-top:12px; font-size:9px; }
+              .projects-gap-timeline { display:flex; flex-direction:column; gap:7px; }
+              .projects-gap-timeline>div { border-top:0; border-left:2px solid var(--projects-border); padding:6px 8px; }
+              .projects-gap-timeline>div.is-gap { border-left-color:var(--projects-accent); border-radius:0 10px 10px 0; }
+              .projects-gap-timeline time { font-size:7px; }
+              .projects-gap-timeline b { font-size:9px; }
+              .projects-gap-timeline small { font-size:8px; }
+              .projects-story-arrow { display:none; }
+              .projects-choice-funnel { flex-direction:column; align-items:stretch; padding:0 10%; }
+              .projects-choice-noise { display:none; }
+              .projects-funnel-arrow { align-self:center; transform:rotate(90deg); }
+              .projects-choice-funnel>div:not(.projects-choice-noise) { min-height:45px; }
+              .projects-choice-funnel b { font-size:10px; }
+              .projects-choice-funnel small { font-size:7px; }
+              .projects-mapping-gap { grid-template-columns:1fr; gap:12px; }
+              .projects-mapping-gap b { font-size:9px; }
+              .projects-mapping-gap>div>small,.projects-mapping-gap>div:last-child p span { font-size:8px; }
+              .projects-gap-bridge i { height:20px; transform:rotate(90deg); }
+              .projects-gap-bridge strong { font-size:9px; }
+              .projects-decision-formula { display:grid; grid-template-columns:1fr; gap:7px; }
+              .projects-decision-formula>span { display:none; }
+              .projects-decision-formula>div { border-left:2px solid var(--projects-border); border-bottom:0; padding:7px 9px; }
+              .projects-decision-formula b { font-size:7px; }
+              .projects-decision-formula strong { font-size:9px; }
+              .projects-decision-formula small,.projects-decision-formula em { font-size:7px; }
+              .projects-decision-formula .is-result { min-height:54px; }
+              .projects-decision-notes { grid-template-columns:1fr; gap:7px; margin-top:12px; }
+              .projects-decision-notes p { padding:7px 5px 2px 24px; }
+              .projects-decision-notes p>b { top:8px; font-size:7px; }
+              .projects-decision-notes strong { font-size:9px; }
+              .projects-decision-notes small { font-size:7px; }
+              .projects-narrow-flow { flex-direction:column; align-items:stretch; }
+              .projects-narrow-inputs { grid-template-columns:1fr; gap:8px; }
+              .projects-narrow-inputs p { padding:6px 8px; }
+              .projects-narrow-inputs b,.projects-narrow-flow>div>b { font-size:7px; }
+              .projects-narrow-inputs strong { font-size:9px; }
+              .projects-narrow-inputs small,.projects-narrow-flow>div>small { font-size:7px; }
+              .projects-narrow-flow>span { align-self:center; transform:rotate(90deg); }
+              .projects-narrow-flow>div:not(.projects-narrow-inputs) { padding:10px; }
+              .projects-signal-map { grid-template-columns:1fr; gap:10px; }
+              .projects-signal-map>div { grid-template-columns:repeat(2,1fr); gap:10px; }
+              .projects-signal-map p b { font-size:7px; }
+              .projects-signal-map p small { font-size:7px; }
+              .projects-signal-lines { height:12px; transform:rotate(90deg) scale(.45); }
+              .projects-signal-map>strong b { font-size:8px; }
+              .projects-signal-map>strong small { font-size:7px; }
+              .projects-iteration-journey,.projects-before-after { grid-template-columns:1fr; gap:14px; }
+              .projects-iteration-journey article { gap:7px; }
+              .projects-iteration-journey header b,.projects-before-after header b { font-size:7px; }
+              .projects-iteration-journey header strong,.projects-before-after header { font-size:9px; }
+              .projects-iteration-journey article p,.projects-before-after p { font-size:7px; }
+              .projects-before-after article small { font-size:6.5px; }
+              .projects-exploration-shift { flex-direction:column; align-items:stretch; gap:12px; }
+              .projects-exploration-shift>span { display:none; }
+              .projects-exploration-shift article { padding:8px 10px; }
+              .projects-exploration-shift header { font-size:9px; }
+              .projects-exploration-shift article p,.projects-exploration-shift article small { font-size:7px; }
+              .projects-story footer { align-items:flex-start; flex-direction:column; margin-top:12px; }
+              .projects-story footer strong { font-size:8px; }
+              .projects-story footer small { font-size:7px; }
             }
             @media (prefers-reduced-motion:reduce) {
               .projects-case-enter,.projects-tab-panel { animation:none; }
               .projects-index-card,.projects-live-button { transition:none; }
+            }
+            /* Projects case chapters and independent case-study modal. */
+            .projects-case { height:auto; min-height:580px; overflow:visible; }
+            .projects-case-enter { height:auto; min-height:580px; }
+            .projects-case-top { flex:0 0 auto; min-height:0; height:416px; }
+            .projects-detail { flex:0 0 auto; margin-top:14px; overflow:visible; border:0; border-radius:0; background:transparent; }
+            .projects-chapters { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+            .projects-chapter { position:relative; min-width:0; min-height:110px; padding:15px 36px 14px 18px; border:1px solid var(--projects-border); border-radius:20px; background:rgba(255,255,255,.86); text-align:left; box-shadow:0 7px 18px rgba(15,23,42,.035); transition:transform 200ms ease,border-color 200ms ease,background 200ms ease,box-shadow 200ms ease; }
+            .projects-chapter:hover,.projects-chapter:focus-visible { transform:translateY(-3px); border-color:var(--projects-accent); background:#fff; box-shadow:0 10px 24px rgba(15,23,42,.08); outline:none; }
+            .projects-chapter-number { display:block; color:var(--projects-accent); font:800 13px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.04em; }
+            .projects-chapter-number i { color:#94a3b8; font-size:11px; font-style:normal; }
+            .projects-chapter strong { display:block; margin-top:9px; color:#172033; font-size:19px; font-weight:850; line-height:1.12; letter-spacing:-.025em; }
+            .projects-chapter-subtitle { display:block; margin-top:5px; color:#64748b; font-size:13px; line-height:1.3; }
+            .projects-chapter-arrow { position:absolute; right:16px; top:23px; color:var(--projects-accent); font-size:19px; transition:transform 200ms ease; }
+            .projects-chapter:hover .projects-chapter-arrow { transform:translate(2px,2px); }
+            .projects-modal-backdrop { position:fixed; z-index:200; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(7,20,45,.48); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); padding:24px; animation:projectsModalFadeIn 200ms ease-out both; }
+            .projects-modal-panel { width:min(76vw,1180px); max-height:78vh; overflow-y:auto; overscroll-behavior:contain; border:1px solid rgba(255,255,255,.86); border-radius:30px; background:linear-gradient(145deg,#fff 78%,var(--projects-soft)); padding:0 36px 38px; box-shadow:0 30px 100px rgba(7,20,45,.28); scrollbar-width:thin; animation:projectsModalCardIn 260ms cubic-bezier(.2,.75,.25,1) both; }
+            @keyframes projectsModalFadeIn { from { opacity:0; } to { opacity:1; } }
+            @keyframes projectsModalCardIn { from { opacity:0; transform:translateY(10px) scale(.985); } to { opacity:1; transform:translateY(0) scale(1); } }
+            .projects-modal-header { position:sticky; z-index:3; top:0; display:flex; align-items:center; gap:24px; border-bottom:1px solid var(--projects-border); background:rgba(255,255,255,.97); padding:25px 0 20px; }
+            .projects-modal-identity { display:flex; flex:1; min-width:0; align-items:center; gap:13px; }
+            .projects-modal-identity .projects-index-goose,.projects-modal-identity .projects-index-mark { flex-basis:54px; width:54px; height:54px; border-radius:17px; }
+            .projects-modal-identity .projects-index-goose img { width:184px; transform:translate(-26px,-56px); }
+            .projects-modal-identity .projects-index-mark { font-size:28px; }
+            .projects-modal-identity>span:last-child { min-width:0; }
+            .projects-modal-identity strong,.projects-modal-identity small { display:block; }
+            .projects-modal-identity strong { color:#172033; font-size:20px; line-height:1.2; }
+            .projects-modal-identity small { margin-top:4px; color:#64748b; font-size:14px; line-height:1.35; }
+            .projects-modal-chapter { flex:1; text-align:center; }
+            .projects-modal-chapter small { color:var(--projects-accent); font:850 13px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; }
+            .projects-modal-chapter h3 { margin-top:5px; color:#172033; font-size:22px; font-weight:850; line-height:1.2; }
+            .projects-modal-close { display:grid; flex:0 0 43px; width:43px; height:43px; place-items:center; border:1px solid var(--projects-border); border-radius:50%; background:#fff; color:#64748b; font-size:27px; line-height:1; transition:background 180ms ease,color 180ms ease,transform 180ms ease; }
+            .projects-modal-close:hover,.projects-modal-close:focus-visible { background:var(--projects-soft); color:var(--projects-accent); transform:rotate(90deg); outline:none; }
+            .projects-modal-content { padding-top:30px; }
+            .projects-story { height:auto; color:#475569; }
+            .projects-story-head { display:block; margin-bottom:29px; }
+            .projects-story-head span { margin-bottom:10px; font-size:13px; line-height:1.3; }
+            .projects-story-head h4 { max-width:820px; color:#172033; font-size:clamp(28px,2.2vw,34px); line-height:1.27; white-space:pre-line; }
+            .projects-story-head>p { max-width:850px; margin-top:15px; color:#64748b; font-size:17px; line-height:1.65; }
+            .projects-story-insight { gap:11px; margin-top:28px; color:#334155; font-size:17px; line-height:1.6; }
+            .projects-story-insight>span { font-size:23px; }
+            .projects-gap-timeline { grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1.25fr) 24px minmax(0,1fr); gap:10px; margin-top:35px; }
+            .projects-gap-timeline>div { border-top-width:3px; padding:16px 12px 15px; }
+            .projects-gap-timeline>div.is-gap { border-radius:0 0 20px 20px; }
+            .projects-gap-timeline time { font-size:14px; }
+            .projects-gap-timeline b { margin-top:15px; font-size:20px; line-height:1.25; }
+            .projects-gap-timeline small { margin-top:10px; font-size:16px; line-height:1.4; }
+            .projects-story-arrow { font-size:24px; }
+            .projects-mini-goose { right:8px; top:8px; width:37px; height:37px; border-radius:11px; }
+            .projects-mini-goose img { width:126px; transform:translate(-17px,-37px); }
+            .projects-choice-funnel { display:flex; flex-direction:column; align-items:stretch; gap:0; width:min(100%,760px); min-height:0; margin:30px auto 0; padding:0; text-align:center; }
+            .projects-choice-funnel>div:not(.projects-choice-noise) { display:block; min-height:0; border:0; }
+            .projects-choice-funnel>div[data-stage="1"] { border-bottom:0; }
+            .projects-choice-funnel>div[data-stage="2"] { border-bottom:0; background:linear-gradient(180deg,#fff8f1,#fff2e5); padding:24px 30px; clip-path:polygon(8% 0,92% 0,78% 100%,22% 100%); }
+            .projects-choice-funnel>div[data-stage="3"] { width:62%; margin:auto; border-bottom:3px solid var(--projects-accent); padding:13px 10px; }
+            .projects-choice-funnel b { font-size:19px; line-height:1.3; }
+            .projects-choice-funnel strong { display:block; margin-top:9px; color:#9a3412; font-size:17px; }
+            .projects-choice-funnel>div p { display:flex; flex-wrap:wrap; justify-content:center; gap:7px 15px; max-width:470px; margin:15px auto 0; color:#64748b; }
+            .projects-choice-funnel>div p span { font-size:15px; }
+            .projects-choice-noise { width:min(100%,590px); grid-template-columns:repeat(9,1fr); gap:8px 17px; margin:20px auto 2px; }
+            .projects-choice-noise span { width:11px; height:11px; background:#efb18d; opacity:.6; }
+            .projects-choice-noise span:nth-child(3n) { opacity:.3; }
+            .projects-funnel-arrow { align-self:center; margin:11px 0; font-size:24px; }
+            .projects-mapping-gap { grid-template-columns:minmax(0,1fr) minmax(150px,.7fr) minmax(0,1fr); gap:24px; align-items:center; margin-top:42px; }
+            .projects-mapping-gap>div:first-child,.projects-mapping-gap>div:last-child { padding:20px 0; }
+            .projects-mapping-gap b { font-size:14px; }
+            .projects-mapping-gap>div>small { display:block; margin-top:13px; font-size:17px; }
+            .projects-mapping-gap>div:last-child p { gap:10px 17px; margin-top:17px; }
+            .projects-mapping-gap>div:last-child p span { font-size:17px; }
+            .projects-gap-bridge>span { font-size:13px; }
+            .projects-gap-bridge i { height:44px; margin:19px 0 5px; border-top-width:2px; }
+            .projects-gap-bridge i::after { top:-22px; width:40px; height:40px; font-size:24px; }
+            .projects-gap-bridge strong { font-size:17px; line-height:1.45; }
+            .projects-decision-formula { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px; margin-top:36px; }
+            .projects-story-goose-logic .projects-decision-formula>div:not(.is-result) { display:flex; flex:0 1 27%; min-width:180px; min-height:185px; flex-direction:column; justify-content:center; border:0; border-radius:48% 52% 46% 54%/51% 43% 57% 49%; background:var(--projects-soft); padding:22px; text-align:center; }
+            .projects-decision-formula>span { font-size:27px; }
+            .projects-story-goose-logic .projects-decision-formula>span:nth-last-child(2) { flex-basis:100%; text-align:center; transform:rotate(90deg); }
+            .projects-decision-formula b { font-size:14px; }
+            .projects-decision-formula strong { margin-top:10px; font-size:20px; line-height:1.25; }
+            .projects-decision-formula small { margin-top:11px; font-size:15px; line-height:1.5; }
+            .projects-decision-formula em { margin-top:11px; font-size:14px; line-height:1.4; }
+            .projects-story-goose-logic .projects-decision-formula .is-result { flex:0 1 310px; min-height:88px; border-radius:24px; padding:20px; text-align:center; }
+            .projects-decision-formula .is-result b,.projects-decision-formula .is-result strong { color:#fff; }
+            .projects-decision-notes { grid-template-columns:repeat(3,minmax(0,1fr)); gap:26px; margin-top:36px; }
+            .projects-decision-notes p { border-top:1px dashed var(--projects-border); padding:17px 4px 0 36px; }
+            .projects-decision-notes p>b { top:18px; font-size:13px; }
+            .projects-decision-notes strong { font-size:18px; line-height:1.3; }
+            .projects-decision-notes small { margin-top:9px; font-size:15px; line-height:1.55; }
+            .projects-narrow-flow { flex-wrap:wrap; justify-content:center; gap:14px; margin-top:34px; }
+            .projects-narrow-inputs { flex:0 0 100%; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+            .projects-narrow-inputs p { border-left-width:3px; padding:16px 18px; background:#fffaf5; }
+            .projects-narrow-inputs b,.projects-narrow-flow>div>b { font-size:14px; }
+            .projects-narrow-inputs strong { margin-top:12px; font-size:19px; line-height:1.3; }
+            .projects-narrow-inputs small,.projects-narrow-flow>div>small { margin-top:10px; font-size:15px; line-height:1.5; }
+            .projects-narrow-flow>span { font-size:26px; transform:rotate(90deg); }
+            .projects-narrow-flow>div:not(.projects-narrow-inputs) { flex:0 1 250px; padding:14px; }
+            .projects-narrow-flow>div.is-result { border-radius:45% 55% 48% 52%; padding:22px; }
+            .projects-signal-map { grid-template-columns:1fr; gap:15px; margin-top:38px; }
+            .projects-signal-map>div { grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; }
+            .projects-signal-map p { padding:31px 8px 0; text-align:center; }
+            .projects-signal-map p i { width:16px; height:16px; }
+            .projects-signal-map p:nth-child(even) { margin-top:26px; }
+            .projects-signal-map p b { font-size:13px; line-height:1.3; }
+            .projects-signal-map p small { margin-top:12px; font-size:15px; line-height:1.45; }
+            .projects-signal-lines { width:60%; height:48px; margin:4px auto 0; transform:skewY(-7deg); }
+            .projects-signal-map>strong { width:min(100%,420px); margin:auto; border-radius:26px; padding:24px; }
+            .projects-signal-map>strong b { font-size:17px; }
+            .projects-signal-map>strong small { margin-top:10px; font-size:16px; line-height:1.45; }
+            .projects-iteration-journey { grid-template-columns:1fr; gap:26px; margin-top:32px; }
+            .projects-iteration-journey article { grid-template-columns:minmax(0,1fr) 24px minmax(0,1.1fr) 24px minmax(0,1fr); gap:16px; padding:0 0 21px; border-bottom:1px dashed var(--projects-border); }
+            .projects-iteration-journey article header { margin-bottom:7px; }
+            .projects-iteration-journey header b { font-size:14px; }
+            .projects-iteration-journey header strong { font-size:20px; }
+            .projects-iteration-journey article p { font-size:16px; line-height:1.55; }
+            .projects-iteration-journey article p span { margin-bottom:9px; font-size:13px; }
+            .projects-iteration-journey article>i { font-size:18px; }
+            .projects-story footer { gap:20px; margin-top:26px; padding-top:19px; }
+            .projects-story footer strong { font-size:16px; line-height:1.55; }
+            .projects-story footer small { font-size:13px; line-height:1.4; }
+            .projects-before-after { grid-template-columns:1fr; gap:24px; margin-top:30px; }
+            .projects-before-after article { border-left:3px solid var(--projects-accent); padding:0 0 2px 20px; }
+            .projects-before-after header { margin-bottom:12px; font-size:20px; }
+            .projects-before-after header b { font-size:14px; }
+            .projects-before-after article>div { grid-template-columns:minmax(0,1fr) minmax(0,.75fr) minmax(0,1fr); gap:18px; }
+            .projects-before-after p { font-size:16px; line-height:1.55; }
+            .projects-before-after p span { margin-bottom:7px; font-size:13px; }
+            .projects-before-after article small { padding:7px 18px; font-size:15px; line-height:1.5; }
+            .projects-exploration-shift { align-items:stretch; gap:24px; margin-top:36px; }
+            .projects-exploration-shift>span { align-self:center; font-size:25px; }
+            .projects-exploration-shift article { border-left-width:3px; padding:12px 0 12px 18px; }
+            .projects-exploration-shift header { gap:10px; font-size:20px; }
+            .projects-exploration-shift header b { font-size:14px; }
+            .projects-exploration-shift article p,.projects-exploration-shift article small { margin-top:14px; font-size:16px; line-height:1.55; }
+            .projects-exploration-shift article p span { display:block; margin-bottom:6px; font-size:13px; }
+            .projects-exploration-shift article small { padding:11px 0; }
+            @media (max-width:1199px) {
+              .projects-chapter { min-height:104px; padding:14px 25px 14px 13px; }
+              .projects-chapter strong { font-size:17px; }
+              .projects-chapter-subtitle { font-size:12px; }
+              .projects-chapter-arrow { right:9px; }
+            }
+            @media (max-width:1023px) {
+              .projects-case,.projects-case-enter { min-height:0; }
+              .projects-case-top { height:auto; min-height:330px; }
+              .projects-visual-stage { min-height:330px; }
+              .projects-detail { margin-top:14px; }
+              .projects-modal-panel { width:min(92vw,1180px); padding-right:28px; padding-left:28px; }
+              .projects-gap-timeline { grid-template-columns:1fr; }
+              .projects-gap-timeline .projects-story-arrow { display:none; }
+              .projects-gap-timeline>div { border-top:0; border-left:3px solid var(--projects-border); }
+              .projects-gap-timeline>div.is-gap { border-left-color:var(--projects-accent); border-radius:0 16px 16px 0; }
+              .projects-mapping-gap { gap:12px; }
+              .projects-story-goose-logic .projects-decision-formula>div:not(.is-result) { flex-basis:27%; min-width:140px; }
+              .projects-exploration-shift { flex-direction:column; }
+              .projects-exploration-shift>span { display:none; }
+            }
+            @media (max-width:639px) {
+              .projects-case-top { display:grid; min-height:0; }
+              .projects-visual-stage { min-height:0; }
+              .projects-chapters { grid-template-columns:1fr; gap:8px; }
+              .projects-chapter { min-height:84px; padding:12px 42px 12px 15px; }
+              .projects-chapter strong { margin-top:5px; font-size:18px; }
+              .projects-chapter-subtitle { margin-top:3px; font-size:13px; }
+              .projects-chapter-arrow { right:16px; top:25px; }
+              .projects-modal-backdrop { padding:12px; }
+              .projects-modal-panel { width:calc(100vw - 24px); max-height:86vh; border-radius:24px; padding:0 17px 28px; }
+              .projects-modal-header { flex-wrap:wrap; gap:10px; padding:15px 0; }
+              .projects-modal-identity { flex:1 1 calc(100% - 50px); }
+              .projects-modal-identity .projects-index-goose,.projects-modal-identity .projects-index-mark { flex-basis:42px; width:42px; height:42px; border-radius:13px; }
+              .projects-modal-identity .projects-index-goose img { width:143px; transform:translate(-20px,-43px); }
+              .projects-modal-identity .projects-index-mark { font-size:23px; }
+              .projects-modal-identity strong { font-size:17px; }
+              .projects-modal-identity small { font-size:12px; }
+              .projects-modal-chapter { flex:1 1 100%; order:3; text-align:left; }
+              .projects-modal-chapter h3 { font-size:19px; }
+              .projects-modal-close { flex-basis:40px; width:40px; height:40px; }
+              .projects-modal-content { padding-top:22px; }
+              .projects-story-head h4 { font-size:27px; }
+              .projects-story-head>p { font-size:16px; }
+              .projects-story-head span { font-size:12px; }
+              .projects-story-insight { font-size:16px; }
+              .projects-gap-timeline time { font-size:14px; }
+              .projects-gap-timeline b { font-size:18px; }
+              .projects-gap-timeline small { font-size:16px; }
+              .projects-mini-goose { width:37px; height:37px; }
+              .projects-choice-funnel { padding:0; }
+              .projects-choice-funnel>div[data-stage="2"] { clip-path:none; border-radius:22px; padding:20px; }
+              .projects-choice-noise { grid-template-columns:repeat(6,1fr); gap:8px; }
+              .projects-choice-funnel b { font-size:18px; }
+              .projects-choice-funnel strong { font-size:16px; }
+              .projects-choice-funnel>div p span { font-size:14px; }
+              .projects-mapping-gap { grid-template-columns:1fr; }
+              .projects-mapping-gap>div>small,.projects-mapping-gap>div:last-child p span { font-size:16px; }
+              .projects-gap-bridge i { height:32px; transform:rotate(90deg); }
+              .projects-gap-bridge strong { font-size:16px; }
+              .projects-decision-formula { flex-direction:column; }
+              .projects-story-goose-logic .projects-decision-formula>div:not(.is-result) { flex-basis:auto; width:100%; min-width:0; min-height:125px; }
+              .projects-decision-formula>span { transform:rotate(90deg); }
+              .projects-decision-formula strong { font-size:19px; }
+              .projects-decision-formula small { font-size:15px; }
+              .projects-decision-notes { grid-template-columns:1fr; gap:15px; }
+              .projects-decision-notes strong { font-size:17px; }
+              .projects-decision-notes small { font-size:15px; }
+              .projects-narrow-inputs { grid-template-columns:1fr; }
+              .projects-narrow-inputs strong { font-size:18px; }
+              .projects-narrow-flow>div:not(.projects-narrow-inputs) { flex-basis:auto; width:100%; }
+              .projects-signal-map>div { grid-template-columns:repeat(2,minmax(0,1fr)); }
+              .projects-signal-map p:nth-child(even) { margin-top:0; }
+              .projects-signal-map p b { font-size:13px; }
+              .projects-signal-map p small { font-size:15px; }
+              .projects-signal-map>strong b { font-size:17px; }
+              .projects-signal-map>strong small { font-size:16px; }
+              .projects-iteration-journey article { grid-template-columns:1fr; gap:8px; }
+              .projects-iteration-journey article header { grid-column:1; }
+              .projects-iteration-journey article p { font-size:16px; }
+              .projects-iteration-journey article>i { justify-self:center; transform:rotate(90deg); }
+              .projects-before-after article>div { grid-template-columns:1fr; }
+              .projects-before-after p { font-size:16px; }
+              .projects-before-after article small { border:0; border-left:1px dashed var(--projects-border); padding:7px 11px; }
+              .projects-exploration-shift article p,.projects-exploration-shift article small { font-size:16px; }
+              .projects-story footer { align-items:flex-start; flex-direction:column; }
+              .projects-story footer strong { font-size:16px; }
+              .projects-story footer small { font-size:13px; }
+            }
+            @media (prefers-reduced-motion:reduce) {
+              .projects-modal-backdrop,.projects-modal-panel { animation:none; }
+              .projects-chapter { transition:none; }
             }
           `}</style>
 
@@ -1940,13 +2695,19 @@
                     aria-label={copy.projects.selectAria(project.title)}
                     aria-pressed={isActive}
                     data-active={isActive}
-                    onClick={() => setActiveProjectId(project.id)}
+                    onClick={() => { setActiveProjectId(project.id); setActiveModalId(null); }}
                     className="projects-index-card"
                     style={{ '--index-accent': project.accent, '--index-soft': project.soft }}
                   >
                     <span className="projects-index-number">{project.number}</span>
-                    <span className="projects-index-title">{project.title}</span>
-                    <span className="projects-index-subtitle">{project.subtitle}</span>
+                    <span className="projects-index-identity">
+                      {project.id === 'goose' ? (
+                        <span className="projects-index-goose" aria-hidden="true"><img src="assets/goose-on-home.png" alt="" /></span>
+                      ) : (
+                        <span className={'projects-index-mark projects-index-mark-' + project.id} aria-hidden="true">{project.selectorMark}</span>
+                      )}
+                      <span><span className="projects-index-title">{project.title}</span><span className="projects-index-subtitle">{project.subtitle}</span></span>
+                    </span>
                     <span className="projects-index-tags">{(project.indexTags || project.tags).map((tag) => <span key={tag}>{tag}</span>)}</span>
                     <span className="projects-index-arrow" aria-hidden="true">→</span>
                   </button>
@@ -1963,6 +2724,7 @@
                     <p className="projects-project-subtitle">{activeProject.subtitle}</p>
                     <p className="projects-project-hero">{activeProject.hero}</p>
                     {activeProject.support && <p className="projects-project-support">{activeProject.support}</p>}
+                    {activeProject.core && <p className="projects-project-core"><span aria-hidden="true">⌑</span>{activeProject.core}</p>}
                     <div className="projects-case-tags">{activeProject.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
                     <div className="projects-live-row">
                       <a href={activeProject.demoUrl} target="_blank" rel="noopener noreferrer" className="projects-live-button" aria-label={copy.projects.liveAria(activeProject.title)}>
@@ -1975,26 +2737,46 @@
                 </div>
 
                 <div className="projects-detail">
-                  <div className="projects-tabs" role="tablist" aria-label={copy.projects.tabsAria(activeProject.title)}>
-                    {copy.projects.tabs.map((tab) => (
+                  <div className="projects-chapters" role="group" aria-label={copy.projects.tabsAria(activeProject.title)}>
+                    {copy.projects.tabs.map((chapter) => (
                       <button
-                        key={tab.id}
+                        key={chapter.id}
                         type="button"
-                        role="tab"
-                        aria-selected={activeTabId === tab.id}
-                        aria-controls={`projects-panel-${activeProject.id}`}
-                        onClick={() => setActiveTabId(tab.id)}
-                        className="projects-tab"
-                      >{tab.label}</button>
+                        aria-haspopup="dialog"
+                        aria-controls={`projects-modal-${activeProject.id}-${chapter.id}`}
+                        onClick={(event) => { modalTriggerRef.current = event.currentTarget; setActiveModalId(chapter.id); }}
+                        className="projects-chapter"
+                      >
+                        <span className="projects-chapter-number">{chapter.number} <i>/ {chapter.eyebrow}</i></span>
+                        <strong>{chapter.label}</strong>
+                        <span className="projects-chapter-subtitle">{chapter.subtitle}</span>
+                        <span className="projects-chapter-arrow" aria-hidden="true">↘</span>
+                      </button>
                     ))}
-                  </div>
-                  <div key={`${activeProject.id}-${activeTabId}`} id={`projects-panel-${activeProject.id}`} role="tabpanel" className="projects-tab-panel">
-                    <ProjectTabContent project={activeProject} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          {activeModalId && ReactDOM.createPortal(
+            <div className="projects-modal-backdrop" style={themeStyle} onMouseDown={(event) => { if (event.target === event.currentTarget) setActiveModalId(null); }}>
+              <article key={`${activeProject.id}-${activeModalId}`} id={`projects-modal-${activeProject.id}-${activeModalId}`} role="dialog" aria-modal="true" aria-labelledby="projects-modal-title" className="projects-modal-panel">
+                <header className="projects-modal-header">
+                  <span className="projects-modal-identity">
+                    {activeProject.id === 'goose' ? (
+                      <span className="projects-index-goose" aria-hidden="true"><img src="assets/goose-on-home.png" alt="" /></span>
+                    ) : (
+                      <span className={'projects-index-mark projects-index-mark-' + activeProject.id} aria-hidden="true">{activeProject.selectorMark}</span>
+                    )}
+                    <span><strong>{activeProject.title}</strong><small>{activeProject.subtitle}</small></span>
+                  </span>
+                  <div className="projects-modal-chapter"><small>{copy.projects.tabs.find((chapter) => chapter.id === activeModalId).number} / {copy.projects.tabs.find((chapter) => chapter.id === activeModalId).eyebrow}</small><h3 id="projects-modal-title">{copy.projects.tabs.find((chapter) => chapter.id === activeModalId).label}</h3></div>
+                  <button ref={modalCloseRef} type="button" className="projects-modal-close" aria-label={copy.projects.modalCloseAria} onClick={() => setActiveModalId(null)}>×</button>
+                </header>
+                <div className="projects-modal-content"><ProjectModalContent project={activeProject} /></div>
+              </article>
+            </div>, document.body
+          )}
         </section>
       );
     }
